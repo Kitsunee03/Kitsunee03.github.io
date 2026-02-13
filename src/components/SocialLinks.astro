@@ -1,0 +1,33 @@
+---
+import { SOCIAL_LINKS } from "@/consts";
+import { Icon } from "astro-icon/components";
+
+type Props = {
+  size?: string;
+  className?: string;
+};
+
+const { size = "w-6 h-6", className = "" } = Astro.props;
+
+const socials = [
+  { name: "GitHub", href: SOCIAL_LINKS.github, icon: "simple-icons:github" },
+  { name: "Itch.io", href: SOCIAL_LINKS.itchio, icon: "simple-icons:itchdotio" },
+  { name: "LinkedIn", href: SOCIAL_LINKS.linkedin, icon: "simple-icons:linkedin" },
+  { name: "Instagram", href: SOCIAL_LINKS.instagram, icon: "simple-icons:instagram" },
+  { name: "TikTok", href: SOCIAL_LINKS.tiktok, icon: "simple-icons:tiktok" },
+];
+---
+
+<div class={`flex items-center gap-4 ${className}`}>
+  {socials.map((social) => (
+    <a
+      href={social.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      title={social.name}
+      class="text-[var(--text-muted)] hover:text-white transition-colors duration-200"
+    >
+      <Icon name={social.icon} class={size} />
+    </a>
+  ))}
+</div>

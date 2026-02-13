@@ -1,0 +1,219 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Section from "@/components/Section.astro";
+import SocialLinks from "@/components/SocialLinks.astro";
+import { Icon } from "astro-icon/components";
+import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
+---
+
+<Layout title={`Contact — ${FULL_NAME}`}>
+  <Section title="Contact" variant="primary" full_screen>
+    <div class="max-w-3xl mx-auto space-y-10">
+      <!-- Avatar -->
+      <div class="flex justify-center">
+        <div class="w-32 h-32 rounded-full border-2 border-[var(--border-color)] overflow-hidden bg-[var(--bg-card)] grid place-items-center">
+          <span class="text-5xl text-[var(--text-muted)]">A</span>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="text-center space-y-3">
+        <h2 class="text-xl text-[var(--text-secondary)]">Email</h2>
+        <div class="flex items-center justify-center gap-3">
+          <code class="text-lg md:text-xl bg-[var(--bg-card)] border border-[var(--border-color)] px-5 py-3 select-all rounded-lg">
+            {EMAIL}
+          </code>
+          <button
+            id="copy-email"
+            class="border border-[var(--border-color)] hover:border-white p-3 transition-all hover:bg-white hover:text-black group rounded-lg"
+            title="Copy email"
+            data-email={EMAIL}
+          >
+            <Icon name="mdi:content-copy" class="w-5 h-5" />
+          </button>
+        </div>
+        <p id="copy-feedback" class="text-sm text-[var(--text-muted)] h-5"></p>
+      </div>
+
+      <!-- Professional Links -->
+      <div class="space-y-3">
+        <h2 class="text-xl text-[var(--text-secondary)] text-center">
+          Professional
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <a
+            href={SOCIAL_LINKS.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="border border-[var(--border-color)] hover:border-white bg-[var(--bg-card)] p-5 flex flex-col items-center gap-3 transition-all group hover:bg-white hover:text-black rounded-lg"
+          >
+            <Icon name="simple-icons:github" class="w-8 h-8" />
+            <div class="text-center">
+              <p class="font-bold">GitHub</p>
+              <p class="text-xs text-[var(--text-muted)] group-hover:text-black/60">@Kitsunee03</p>
+            </div>
+          </a>
+          <a
+            href={SOCIAL_LINKS.itchio}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="border border-[var(--border-color)] hover:border-white bg-[var(--bg-card)] p-5 flex flex-col items-center gap-3 transition-all group hover:bg-white hover:text-black rounded-lg"
+          >
+            <Icon name="simple-icons:itchdotio" class="w-8 h-8" />
+            <div class="text-center">
+              <p class="font-bold">Itch.io</p>
+              <p class="text-xs text-[var(--text-muted)] group-hover:text-black/60">@Kitsunee03</p>
+            </div>
+          </a>
+          <a
+            href={SOCIAL_LINKS.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="border border-[var(--border-color)] hover:border-white bg-[var(--bg-card)] p-5 flex flex-col items-center gap-3 transition-all group hover:bg-white hover:text-black rounded-lg"
+          >
+            <Icon name="simple-icons:linkedin" class="w-8 h-8" />
+            <div class="text-center">
+              <p class="font-bold">LinkedIn</p>
+              <p class="text-xs text-[var(--text-muted)] group-hover:text-black/60">Arnau Miragall</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Social Media -->
+      <div class="space-y-3">
+        <h2 class="text-xl text-[var(--text-secondary)] text-center">
+          Social Media
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto">
+          <a
+            href={SOCIAL_LINKS.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="border border-[var(--border-color)] hover:border-white bg-[var(--bg-card)] p-5 flex items-center gap-4 transition-all group hover:bg-white hover:text-black rounded-lg"
+          >
+            <Icon name="simple-icons:instagram" class="w-7 h-7" />
+            <div>
+              <p class="font-bold">Instagram</p>
+              <p class="text-xs text-[var(--text-muted)] group-hover:text-black/60">@kitsunee03</p>
+            </div>
+          </a>
+          <a
+            href={SOCIAL_LINKS.tiktok}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="border border-[var(--border-color)] hover:border-white bg-[var(--bg-card)] p-5 flex items-center gap-4 transition-all group hover:bg-white hover:text-black rounded-lg"
+          >
+            <Icon name="simple-icons:tiktok" class="w-7 h-7" />
+            <div>
+              <p class="font-bold">TikTok</p>
+              <p class="text-xs text-[var(--text-muted)] group-hover:text-black/60">@kitsunee03</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Direct Contact Form -->
+      <div class="space-y-3">
+        <h2 class="text-xl text-[var(--text-secondary)] text-center">
+          Direct Message
+        </h2>
+        <form
+          action="https://formspree.io/f/YOUR_FORM_ID"
+          method="POST"
+          class="max-w-lg mx-auto space-y-4"
+          id="contact-form"
+        >
+          <div>
+            <label for="contact-name" class="block text-sm text-[var(--text-muted)] mb-1">Name</label>
+            <input
+              type="text"
+              id="contact-name"
+              name="name"
+              required
+              class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] focus:border-white px-4 py-2.5 text-white outline-none transition-colors rounded-lg"
+              placeholder="Your name"
+            />
+          </div>
+          <div>
+            <label for="contact-email" class="block text-sm text-[var(--text-muted)] mb-1">Email</label>
+            <input
+              type="email"
+              id="contact-email"
+              name="email"
+              required
+              class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] focus:border-white px-4 py-2.5 text-white outline-none transition-colors rounded-lg"
+              placeholder="your@email.com"
+            />
+          </div>
+          <div>
+            <label for="contact-message" class="block text-sm text-[var(--text-muted)] mb-1">Message</label>
+            <textarea
+              id="contact-message"
+              name="message"
+              required
+              rows="5"
+              class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] focus:border-white px-4 py-2.5 text-white outline-none transition-colors resize-none rounded-lg"
+              placeholder="Write your message..."
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="w-full border border-[var(--border-color)] hover:border-white bg-[var(--bg-card)] hover:bg-white hover:text-black py-3 font-bold transition-all rounded-lg"
+          >
+            Send Message
+          </button>
+          <p id="form-feedback" class="text-sm text-center text-[var(--text-muted)] h-5"></p>
+        </form>
+        <p class="text-center text-xs text-[var(--text-muted)]">
+          Powered by <a href="https://formspree.io" target="_blank" rel="noopener" class="underline hover:text-white">Formspree</a>. Replace <code>YOUR_FORM_ID</code> with your Formspree endpoint.
+        </p>
+      </div>
+    </div>
+  </Section>
+</Layout>
+
+<script>
+  function initContactPage() {
+    // Copy email
+    const copyBtn = document.getElementById("copy-email");
+    const feedback = document.getElementById("copy-feedback");
+    copyBtn?.addEventListener("click", async () => {
+      const email = copyBtn.getAttribute("data-email") || "";
+      try {
+        await navigator.clipboard.writeText(email);
+        if (feedback) {
+          feedback.textContent = "✓ Copied to clipboard!";
+          setTimeout(() => { feedback.textContent = ""; }, 2000);
+        }
+      } catch {
+        if (feedback) feedback.textContent = "Failed to copy. Select the email manually.";
+      }
+    });
+
+    // Form submission with fetch
+    const form = document.getElementById("contact-form") as HTMLFormElement | null;
+    const formFeedback = document.getElementById("form-feedback");
+    form?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: data,
+          headers: { Accept: "application/json" },
+        });
+        if (res.ok) {
+          if (formFeedback) formFeedback.textContent = "✓ Message sent! I'll get back to you soon.";
+          form.reset();
+        } else {
+          if (formFeedback) formFeedback.textContent = "Something went wrong. Try emailing directly.";
+        }
+      } catch {
+        if (formFeedback) formFeedback.textContent = "Network error. Try emailing directly.";
+      }
+    });
+  }
+  initContactPage();
+  document.addEventListener("astro:after-swap", initContactPage);
+</script>

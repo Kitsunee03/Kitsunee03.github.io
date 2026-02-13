@@ -1,0 +1,96 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Section from "@/components/Section.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import ContactSummary from "@/components/ContactSummary.astro";
+import { ENGINES, FULL_NAME } from "@/consts";
+
+const allProjects = (await getCollection("projects")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Layout title={`Projects — ${FULL_NAME}`}>
+  <Section title="Projects" variant="primary">
+    <!-- Engine Filters -->
+    <div class="flex flex-wrap gap-3 justify-center mb-10">
+      <button
+        class="engine-filter active border border-white bg-white text-black px-4 py-1.5 text-sm transition-all hover:bg-white hover:text-black rounded-md"
+        data-engine="all"
+      >
+        All
+      </button>
+      {ENGINES.map((engine) => (
+        <button
+          class="engine-filter border border-[var(--border-color)] px-4 py-1.5 text-sm transition-all hover:bg-white hover:text-black text-[var(--text-secondary)] rounded-md"
+          data-engine={engine}
+        >
+          {engine}
+        </button>
+      ))}
+    </div>
+
+    <!-- Project Grid -->
+    <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {allProjects.map((project) => (
+        <div class="project-item" data-engine={project.data.engine}>
+          <ProjectCard
+            title={project.data.title}
+            description={project.data.description}
+            tags={project.data.tags}
+            engine={project.data.engine}
+            image={project.data.image}
+            link={project.data.link}
+          />
+        </div>
+      ))}
+    </div>
+
+    <!-- Empty state -->
+    <div id="no-projects" class="hidden text-center py-16 text-[var(--text-muted)]">
+      <p class="text-lg">No projects found for this engine.</p>
+    </div>
+  </Section>
+
+  <Section title="Contact" variant="secondary">
+    <ContactSummary compact />
+  </Section>
+</Layout>
+
+<script>
+  const filterBtns = document.querySelectorAll(".engine-filter");
+  const projectItems = document.querySelectorAll(".project-item");
+  const noProjects = document.getElementById("no-projects");
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const engine = btn.getAttribute("data-engine");
+
+      // Update active button styles
+      filterBtns.forEach((b) => {
+        b.classList.remove("active", "bg-white", "text-black", "border-white");
+        b.classList.add("border-[var(--border-color)]", "text-[var(--text-secondary)]");
+      });
+      btn.classList.add("active", "bg-white", "text-black", "border-white");
+      btn.classList.remove("border-[var(--border-color)]", "text-[var(--text-secondary)]");
+
+      // Filter projects
+      let visibleCount = 0;
+      projectItems.forEach((item) => {
+        const itemEngine = item.getAttribute("data-engine");
+        if (engine === "all" || itemEngine === engine) {
+          (item as HTMLElement).style.display = "";
+          visibleCount++;
+        } else {
+          (item as HTMLElement).style.display = "none";
+        }
+      });
+
+      // Show/hide empty state
+      if (noProjects) {
+        noProjects.classList.toggle("hidden", visibleCount > 0);
+      }
+    });
+  });
+</script>

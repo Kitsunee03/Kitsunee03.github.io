@@ -1,0 +1,26 @@
+---
+import { Icon } from "astro-icon/components";
+
+type Props = {
+  name: string;
+  icon: string;
+  color?: string;
+  description?: string;
+};
+
+const { name, icon, color, description } = Astro.props;
+---
+
+<div class="relative flex flex-col items-center gap-2 group transition-transform duration-200 hover:scale-110 hover:z-10">
+  <div class="w-16 h-16 grid place-items-center rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)] group-hover:border-[var(--border-hover)] transition-all duration-200">
+    <Icon name={icon} class="w-9 h-9" style={color ? `color: ${color}` : ""} />
+  </div>
+  <span class="text-xs text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] transition-colors text-center">
+    {name}
+  </span>
+  {description && (
+    <div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-48 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg p-3 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-20 shadow-lg">
+      <p class="text-xs text-[var(--text-muted)] text-center leading-relaxed">{description}</p>
+    </div>
+  )}
+</div>

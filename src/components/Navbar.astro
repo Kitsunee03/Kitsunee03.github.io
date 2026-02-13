@@ -2,9 +2,9 @@
 import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
 ---
 
-<nav class="w-full !z-[9999] py-5 px-4 bg-black/90 backdrop-blur-sm">
+<nav class="w-full !z-[9999] py-4 px-4 bg-black/90 backdrop-blur-sm">
   <div
-    class="w-full grid gap-4 md:px-5 place-items-center grid-cols-1 md:flex md:justify-between md:px-4"
+    class="max-w-6xl mx-auto flex items-center justify-between px-4 md:px-8"
   >
     <a href="/">
       <div
@@ -14,30 +14,78 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
         {SITE_TITLE}
       </div>
     </a>
-    <div class="flex flex-wrap gap-4 md:pr-5">
-      <div class="hidden md:block">/</div>
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-1">
+      <span class="text-[var(--text-muted)]">/</span>
       {
-        links.map((link) => {
-          const href =
-            link.href ?? link.title.toLowerCase().replaceAll(" ", "-");
+        links.map((link, i) => {
+          const href = link.href;
           const pathname = Astro.url.pathname.replace(
             import.meta.env.BASE_URL,
             "",
           );
-          const subpath = pathname.match(/[^\/]+/g);
           const isActive =
-            href === pathname || href === "/" + (subpath?.[0] || "");
+            href === "/" 
+              ? pathname === "" || pathname === "/" 
+              : pathname.startsWith(href.slice(1));
           return (
             <>
               <a
-                class:list={[{ "bg-white text-black": isActive }]}
-                class="hover:bg-white hover:text-black transition-all ease-in-out px-2 max-w-fit"
-                href={`/${href}`}
+                class:list={[
+                  "hover:bg-white hover:text-black transition-all ease-in-out px-3 py-1 rounded-md",
+                  { "bg-white text-black": isActive },
+                ]}
+                href={href}
               >
-                <div>{link.title}</div>
+                {link.title}
               </a>
-              <div class="hidden md:block">/</div>
+              <span class="text-[var(--text-muted)]">/</span>
             </>
+          );
+        })
+      }
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button
+      id="mobile-menu-btn"
+      class="md:hidden flex flex-col gap-1.5 p-2 hover:bg-white/10 transition-colors"
+      aria-label="Menu"
+    >
+      <span class="block w-6 h-0.5 bg-white transition-transform" id="bar1"></span>
+      <span class="block w-6 h-0.5 bg-white transition-opacity" id="bar2"></span>
+      <span class="block w-6 h-0.5 bg-white transition-transform" id="bar3"></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden max-w-6xl mx-auto mt-4 px-4 pb-2 border-t border-[var(--border-color)]"
+  >
+    <div class="flex flex-col gap-2 pt-4">
+      {
+        links.map((link) => {
+          const href = link.href;
+          const pathname = Astro.url.pathname.replace(
+            import.meta.env.BASE_URL,
+            "",
+          );
+          const isActive =
+            href === "/"
+              ? pathname === "" || pathname === "/"
+              : pathname.startsWith(href.slice(1));
+          return (
+            <a
+              class:list={[
+                "hover:bg-white hover:text-black transition-all ease-in-out px-3 py-2 text-lg rounded-md",
+                { "bg-white text-black": isActive },
+              ]}
+              href={href}
+            >
+              {link.title}
+            </a>
           );
         })
       }
@@ -55,6 +103,26 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
     } else {
       logo.className =
         "pt-2 pb-1 !grid !place-items-center select-none leading-none hover:bg-black bg-white scale-110 hover:text-white text-black px-4 transition-all ease-in-out";
+    }
+  });
+
+  const menuBtn = document.getElementById("mobile-menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const bar1 = document.getElementById("bar1");
+  const bar2 = document.getElementById("bar2");
+  const bar3 = document.getElementById("bar3");
+
+  menuBtn?.addEventListener("click", () => {
+    const isOpen = !mobileMenu?.classList.contains("hidden");
+    mobileMenu?.classList.toggle("hidden");
+    if (!isOpen) {
+      bar1?.classList.add("rotate-45", "translate-y-2");
+      bar2?.classList.add("opacity-0");
+      bar3?.classList.add("-rotate-45", "-translate-y-2");
+    } else {
+      bar1?.classList.remove("rotate-45", "translate-y-2");
+      bar2?.classList.remove("opacity-0");
+      bar3?.classList.remove("-rotate-45", "-translate-y-2");
     }
   });
 </script>

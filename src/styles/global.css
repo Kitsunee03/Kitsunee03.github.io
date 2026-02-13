@@ -1,3 +1,16 @@
+:root {
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --bg-tertiary: #141414;
+  --bg-card: #111111;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --text-muted: #666666;
+  --border-color: #2a2a2a;
+  --border-hover: #444444;
+  --accent: #e0e0e0;
+}
+
 @font-face {
   font-family: "VCR";
   src: url("/fonts/VCRosdNEUE.ttf") format("truetype");
@@ -28,6 +41,19 @@ code {
   width: 8px;
 }
 
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
 img,
 .no-selection {
   -webkit-tap-highlight-color: transparent;
@@ -47,4 +73,37 @@ img,
   opacity: 0.02;
   font-size: 3rem;
   user-select: none;
+}
+
+/* Carousel animation */
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 30s linear infinite;
+}
+
+/* Carousel fade edges */
+.carousel-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+}
+
+/* Smooth section transitions */
+section {
+  transition: background-color 0.3s ease;
 }

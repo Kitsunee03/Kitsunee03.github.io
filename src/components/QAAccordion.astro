@@ -1,0 +1,44 @@
+---
+type Props = {
+  question: string;
+  answer: string;
+  index: number;
+};
+
+const { question, answer, index } = Astro.props;
+const accordionId = `qa-${index}`;
+---
+
+<div class="border border-[var(--border-color)] hover:border-[var(--border-hover)] transition-colors rounded-lg">
+  <button
+    class="qa-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors"
+    data-target={accordionId}
+    aria-expanded="false"
+  >
+    <span class="text-[var(--text-secondary)] pr-4">{`❯ ${question}`}</span>
+    <span class="qa-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">▼</span>
+  </button>
+  <div
+    id={accordionId}
+    class="qa-content hidden px-5 pb-4"
+  >
+    <p class="text-[var(--text-muted)] text-sm leading-relaxed pl-4 border-l border-[var(--border-color)]">
+      {answer}
+    </p>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll(".qa-toggle").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-target");
+      const content = document.getElementById(targetId!);
+      const chevron = btn.querySelector(".qa-chevron");
+      const isExpanded = btn.getAttribute("aria-expanded") === "true";
+
+      btn.setAttribute("aria-expanded", String(!isExpanded));
+      content?.classList.toggle("hidden");
+      chevron?.classList.toggle("rotate-180");
+    });
+  });
+</script>
