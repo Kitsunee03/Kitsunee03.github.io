@@ -1,51 +1,181 @@
 ---
 import { getCollection } from "astro:content";
 import Hero from "@/components/Hero.astro";
-import Breadcrumb from "@/components/Breadcrumb.astro";
 import Section from "@/components/Section.astro";
-import BlogPostCard from "@/components/BlogPostCard.astro";
 import Layout from "@/layouts/Layout.astro";
-import { KNOWN_TECH, ABOUT_ME } from "@/consts";
-const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+import ProjectCard from "@/components/ProjectCard.astro";
+import ToolCarousel from "@/components/ToolCarousel.astro";
+import ContactSummary from "@/components/ContactSummary.astro";
+import { Icon } from "astro-icon/components";
+import { ABOUT_ME_SHORT, FULL_NAME } from "@/consts";
+import { SKILLS } from "@/data/skills";
+import { EDUCATION } from "@/data/education";
+
+const allProjects = await getCollection("projects");
+const featuredProjects = allProjects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const categoryLabels = {
+  engine: "Game Engines",
+  programming: "Programming Languages",
+  tools: "Tools & Workflow",
+};
+const dropdownCategories = ["engine", "programming", "tools"] as const;
 ---
 
-<Layout title="Token - Astro + Tailwind Portfolio Template">
+<Layout title={`${FULL_NAME} — Portfolio`}>
   <Hero />
-  <Section
-    title="My Posts"
-    className={"bg-gradient-to-b from-black/70 from-[5%] to-black via-black"}
-  >
-    <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-      {
-        posts.map((post) => (
-          <BlogPostCard
-            slug={post.id}
-            title={post.data.title}
-            excerpt={post.data.description}
-            date={post.data.pubDate}
-          />
-        ))
-      }
-    </div>
+
+  <!-- Tool Carousel -->
+  <Section title="Tools & Technologies" variant="secondary">
+    <ToolCarousel />
   </Section>
-  <Section title="Technologies I Know" full_screen={false}>
-    <div class="w-full grid place-items-center">
-      <div
-        class="w-full gap-4 flex flex-wrap px-3 max-w-xl text-lg justify-center"
-      >
-        {KNOWN_TECH.map((x) => <Breadcrumb title={x} />)}
+
+  <!-- About Me Preview -->
+  <Section title="About Me" variant="primary">
+    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+      <div class="md:col-span-1 flex justify-center">
+        <div class="w-48 h-48 md:w-56 md:h-auto md:aspect-square rounded-lg border border-[var(--border-color)] overflow-hidden bg-[var(--bg-card)] grid place-items-center">
+          <span class="text-6xl text-[var(--text-muted)]">A</span>
+        </div>
+      </div>
+      <div class="md:col-span-2 space-y-4">
+        <p class="text-[var(--text-secondary)] leading-relaxed">
+          {ABOUT_ME_SHORT}
+        </p>
+        <a
+          href="/about"
+          class="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-white transition-colors border-b border-[var(--border-color)] hover:border-white pb-0.5"
+        >
+          Read more about me →
+        </a>
       </div>
     </div>
   </Section>
-  <Section title="About Me">
-    <div class="w-full grid place-items-center">
-      <div
-        class="max-w-4xl text-xl md:text-lg opacity-90 text-center justify-evenly"
+
+  <!-- Featured Projects -->
+  <Section title="Featured Projects" variant="secondary">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {featuredProjects.map((project) => (
+        <ProjectCard
+          title={project.data.title}
+          description={project.data.description}
+          tags={project.data.tags}
+          engine={project.data.engine}
+          image={project.data.image}
+          link={project.data.link}
+        />
+      ))}
+    </div>
+    <div class="flex justify-center mt-8">
+      <a
+        href="/projects"
+        class="border border-[var(--border-color)] hover:border-white px-8 py-3 rounded-md transition-all hover:bg-white hover:text-black text-sm"
       >
-        <p>{ABOUT_ME}</p>
+        View All Projects →
+      </a>
+    </div>
+  </Section>
+
+  <!-- About Me & My Work — Dropdowns -->
+  <Section title="About Me & My Work" variant="primary">
+    <div class="max-w-3xl mx-auto space-y-3">
+      {dropdownCategories.map((cat, i) => {
+        const items = SKILLS.filter((s) => s.category === cat);
+        return (
+          <div class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors">
+            <button
+              class="home-dropdown-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
+              data-target={`home-dd-${i}`}
+              aria-expanded="false"
+            >
+              <span class="text-[var(--text-secondary)]">{`❯ ${categoryLabels[cat]}`}</span>
+              <span class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">▼</span>
+            </button>
+            <div id={`home-dd-${i}`} class="home-dd-content hidden px-5 pb-5">
+              <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 pt-2">
+                {items.map((skill) => (
+                  <div class="relative flex flex-col items-center gap-2 group transition-transform duration-200 hover:scale-110 hover:z-10">
+                    <div class="w-14 h-14 grid place-items-center rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] group-hover:border-[var(--border-hover)] transition-all duration-200">
+                      <Icon name={skill.icon} class="w-8 h-8" style={skill.color ? `color: ${skill.color}` : ""} />
+                    </div>
+                    <span class="text-xs text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] transition-colors text-center">{skill.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+
+      <!-- My Education -->
+      <div class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors">
+        <button
+          class="home-dropdown-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
+          data-target="home-dd-edu"
+          aria-expanded="false"
+        >
+          <span class="text-[var(--text-secondary)]">❯ My Education</span>
+          <span class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">▼</span>
+        </button>
+        <div id="home-dd-edu" class="home-dd-content hidden px-5 pb-5">
+          <div class="space-y-3 pt-2">
+            {EDUCATION.map((edu) => (
+              <div class="flex gap-3 items-start">
+                <Icon name={edu.icon} class="w-5 h-5 text-[var(--text-muted)] mt-0.5 shrink-0" />
+                <div>
+                  <p class="text-sm text-[var(--text-secondary)]">{edu.title}</p>
+                  <p class="text-xs text-[var(--text-muted)]">{edu.institution} · {edu.period}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Teamwork -->
+      <div class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors">
+        <button
+          class="home-dropdown-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
+          data-target="home-dd-team"
+          aria-expanded="false"
+        >
+          <span class="text-[var(--text-secondary)]">❯ Teamwork</span>
+          <span class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">▼</span>
+        </button>
+        <div id="home-dd-team" class="home-dd-content hidden px-5 pb-5">
+          <p class="text-sm text-[var(--text-muted)] leading-relaxed pt-2 pl-4 border-l border-[var(--border-color)]">
+            Experienced in multidisciplinary teams using Agile methodologies (Scrum/Kanban).
+            Proficient with Jira, GitLab, and GitHub for project management and CI/CD.
+            Strong communication skills and ability to bridge programming, design, and production roles.
+          </p>
+        </div>
       </div>
     </div>
+  </Section>
+
+  <!-- Contact Summary -->
+  <Section title="Contact" variant="secondary">
+    <ContactSummary />
   </Section>
 </Layout>
+
+<script>
+  function initHomeDropdowns() {
+    document.querySelectorAll(".home-dropdown-toggle").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-target");
+        const content = document.getElementById(targetId!);
+        const chevron = btn.querySelector(".home-dd-chevron");
+        const isExpanded = btn.getAttribute("aria-expanded") === "true";
+
+        btn.setAttribute("aria-expanded", String(!isExpanded));
+        content?.classList.toggle("hidden");
+        chevron?.classList.toggle("rotate-180");
+      });
+    });
+  }
+  initHomeDropdowns();
+  document.addEventListener("astro:after-swap", initHomeDropdowns);
+</script>

@@ -1,0 +1,71 @@
+---
+import { Icon } from "astro-icon/components";
+
+type Props = {
+  title: string;
+  description: string;
+  tags: string[];
+  engine: string;
+  image: string;
+  link?: string;
+};
+
+const { title, description, tags, engine, image, link } = Astro.props;
+
+const engineIcons: Record<string, string> = {
+  "Unity": "simple-icons:unity",
+  "Unreal Engine": "simple-icons:unrealengine",
+  "Phaser": "mdi:gamepad-variant-outline",
+  "C++": "devicon:cplusplus",
+};
+---
+
+<div class="group border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-[var(--border-hover)] transition-all duration-300 overflow-hidden rounded-lg">
+  <!-- Image -->
+  <div class="relative overflow-hidden aspect-video bg-[var(--bg-tertiary)]">
+    <img
+      src={image}
+      alt={title}
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+      loading="lazy"
+      onerror="this.style.display='none'"
+    />
+    <!-- Engine badge -->
+    <div class="absolute top-3 right-3 flex items-center gap-1.5 bg-black/80 backdrop-blur-sm px-2 py-1 text-xs rounded-md">
+      <Icon name={engineIcons[engine] || "mdi:gamepad-variant"} class="w-3.5 h-3.5" />
+      <span>{engine}</span>
+    </div>
+    <!-- Placeholder when no image -->
+    <div class="absolute inset-0 flex items-center justify-center text-[var(--text-muted)] pointer-events-none">
+      <Icon name="mdi:image-outline" class="w-12 h-12 opacity-30" />
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="p-5 space-y-3">
+    <h3 class="text-xl font-bold group-hover:text-white transition-colors">{title}</h3>
+
+    <!-- Tags -->
+    <div class="flex flex-wrap gap-1.5">
+      {tags.map((tag) => (
+        <span class="bg-white/10 text-[var(--text-secondary)] text-xs px-2 py-0.5 rounded-full">
+          {tag}
+        </span>
+      ))}
+    </div>
+
+    <p class="text-[var(--text-muted)] text-sm leading-relaxed line-clamp-2">{description}</p>
+
+    {link && (
+      <a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-white transition-colors pt-1"
+      >
+        <span>View Project</span>
+        <Icon name="mdi:arrow-top-right" class="w-4 h-4" />
+      </a>
+    )}
+  </div>
+</div>

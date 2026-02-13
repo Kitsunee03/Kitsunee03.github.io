@@ -1,0 +1,217 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Section from "@/components/Section.astro";
+import SkillCard from "@/components/SkillCard.astro";
+import QAAccordion from "@/components/QAAccordion.astro";
+import Timeline from "@/components/Timeline.astro";
+import ContactSummary from "@/components/ContactSummary.astro";
+import SocialLinks from "@/components/SocialLinks.astro";
+import { Icon } from "astro-icon/components";
+import { ABOUT_ME_FULL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
+import { SPECIALIZATIONS } from "@/data/specializations";
+import { EDUCATION } from "@/data/education";
+import { SKILLS } from "@/data/skills";
+import { QA_ITEMS } from "@/data/qa";
+
+const categoryLabels = {
+  programming: "Programming Languages",
+  engine: "Engines & Frameworks",
+  design: "Design Tools",
+  tools: "Dev Tools",
+};
+const categories = ["programming", "engine", "design", "tools"] as const;
+
+// Placeholder images — replace with your own photos in public/images/
+const profileImages = [
+  "/images/profile-1.jpg",
+  "/images/profile-2.jpg",
+  "/images/profile-3.jpg",
+];
+---
+
+<Layout title={`About Me — ${FULL_NAME}`}>
+  <!-- Photo + Description -->
+  <Section title="About Me" variant="primary">
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
+      <div class="md:col-span-1 flex justify-center">
+        <div class="relative w-56 h-56 md:w-full md:h-auto md:aspect-square">
+          <!-- Image carousel -->
+          <div class="w-full h-full rounded-lg border border-[var(--border-color)] overflow-hidden bg-[var(--bg-card)]">
+            {profileImages.map((img, i) => (
+              <img
+                src={img}
+                alt={`Profile photo ${i + 1}`}
+                class:list={[
+                  "about-profile-img absolute inset-0 w-full h-full object-cover transition-opacity duration-300",
+                  i === 0 ? "opacity-100" : "opacity-0",
+                ]}
+                data-index={i}
+                onerror="this.style.display='none'"
+              />
+            ))}
+            <div class="absolute inset-0 flex items-center justify-center text-[var(--text-muted)] pointer-events-none">
+              <span class="text-8xl">A</span>
+            </div>
+          </div>
+          <!-- Arrow controls -->
+          <button
+            id="profile-prev"
+            class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/70 hover:bg-black/90 rounded-full grid place-items-center transition-colors z-10 text-white"
+            aria-label="Previous photo"
+          >
+            ◀
+          </button>
+          <button
+            id="profile-next"
+            class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/70 hover:bg-black/90 rounded-full grid place-items-center transition-colors z-10 text-white"
+            aria-label="Next photo"
+          >
+            ▶
+          </button>
+          <!-- Dots indicator -->
+          <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            {profileImages.map((_, i) => (
+              <div
+                class:list={[
+                  "profile-dot w-2 h-2 rounded-full transition-colors",
+                  i === 0 ? "bg-white" : "bg-white/40",
+                ]}
+                data-index={i}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+      <div class="md:col-span-2 space-y-4">
+        {ABOUT_ME_FULL.split("\n").map((paragraph) => (
+          <p class="text-[var(--text-secondary)] leading-relaxed">{paragraph}</p>
+        ))}
+      </div>
+    </div>
+  </Section>
+
+  <!-- Specializations -->
+  <Section title="Specializations" variant="secondary">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      {SPECIALIZATIONS.map((spec) => (
+        <div class="border border-[var(--border-color)] hover:border-[var(--border-hover)] bg-[var(--bg-card)] p-6 transition-all group rounded-lg">
+          <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] grid place-items-center mb-4 group-hover:bg-white/10 transition-colors">
+            <Icon name={spec.icon} class="w-6 h-6 text-[var(--text-secondary)]" />
+          </div>
+          <h3 class="text-lg mb-2">{spec.title}</h3>
+          <p class="text-[var(--text-muted)] text-sm leading-relaxed">{spec.description}</p>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Education -->
+  <Section title="Education" variant="primary">
+    <div class="max-w-3xl mx-auto">
+      {EDUCATION.map((edu, i) => (
+        <Timeline
+          title={edu.title}
+          institution={edu.institution}
+          period={edu.period}
+          description={edu.description}
+          icon={edu.icon}
+          isLast={i === EDUCATION.length - 1}
+        />
+      ))}
+    </div>
+  </Section>
+
+  <!-- Technologies -->
+  <Section title="Technologies" variant="secondary">
+    <div class="max-w-5xl mx-auto space-y-8">
+      {categories.map((category) => {
+        const categorySkills = SKILLS.filter((s) => s.category === category);
+        return (
+          <div>
+            <h3 class="text-sm text-[var(--text-muted)] mb-4 tracking-wider uppercase">
+              {categoryLabels[category]}
+            </h3>
+            <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4">
+              {categorySkills.map((skill) => (
+                <SkillCard name={skill.name} icon={skill.icon} color={skill.color} description={skill.description} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </Section>
+
+  <!-- Q&A -->
+  <Section title="Q&A" variant="primary">
+    <div class="max-w-3xl mx-auto space-y-3">
+      {QA_ITEMS.map((item, i) => (
+        <QAAccordion question={item.question} answer={item.answer} index={i} />
+      ))}
+    </div>
+  </Section>
+
+  <!-- GitHub & Itch.io -->
+  <Section title="Find Me" variant="secondary">
+    <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+      <a
+        href={SOCIAL_LINKS.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="border border-[var(--border-color)] hover:border-[var(--border-hover)] bg-[var(--bg-card)] p-6 flex items-center gap-4 transition-all group rounded-lg"
+      >
+        <Icon name="simple-icons:github" class="w-10 h-10 text-white" />
+        <div>
+          <h3 class="text-lg group-hover:text-white transition-colors">GitHub</h3>
+          <p class="text-[var(--text-muted)] text-sm">@Kitsunee03</p>
+        </div>
+      </a>
+      <a
+        href={SOCIAL_LINKS.itchio}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="border border-[var(--border-color)] hover:border-[var(--border-hover)] bg-[var(--bg-card)] p-6 flex items-center gap-4 transition-all group rounded-lg"
+      >
+        <Icon name="simple-icons:itchdotio" class="w-10 h-10 text-[#FA5C5C]" />
+        <div>
+          <h3 class="text-lg group-hover:text-white transition-colors">Itch.io</h3>
+          <p class="text-[var(--text-muted)] text-sm">@Kitsunee03</p>
+        </div>
+      </a>
+    </div>
+  </Section>
+
+  <!-- Contact -->
+  <Section title="Contact" variant="primary">
+    <ContactSummary compact />
+  </Section>
+</Layout>
+
+<script>
+  function initProfileCarousel() {
+    const imgs = document.querySelectorAll(".about-profile-img");
+    const dots = document.querySelectorAll(".profile-dot");
+    const prevBtn = document.getElementById("profile-prev");
+    const nextBtn = document.getElementById("profile-next");
+    if (!imgs.length) return;
+
+    let current = 0;
+    const total = imgs.length;
+
+    function showImage(index: number) {
+      imgs.forEach((img, i) => {
+        (img as HTMLElement).style.opacity = i === index ? "1" : "0";
+      });
+      dots.forEach((dot, i) => {
+        dot.classList.toggle("bg-white", i === index);
+        dot.classList.toggle("bg-white/40", i !== index);
+      });
+      current = index;
+    }
+
+    prevBtn?.addEventListener("click", () => showImage((current - 1 + total) % total));
+    nextBtn?.addEventListener("click", () => showImage((current + 1) % total));
+  }
+  initProfileCarousel();
+  document.addEventListener("astro:after-swap", initProfileCarousel);
+</script>

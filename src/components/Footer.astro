@@ -1,20 +1,89 @@
 ---
-import { SITE_TITLE } from "@/consts";
+import { SITE_TITLE, EMAIL, NAV_LINKS, SOCIAL_LINKS } from "@/consts";
 
 const today = new Date();
 ---
 
-<div class="h-28 overflow-hidden">
+<div class="h-20 overflow-hidden">
   <div class="hero-bg">
     1000001100000000101001011011110000000101000011000100111110110100101101101101011000111110111010010000010010101100011001111110010110011010000011001110001100111010010010010011000001001100001111100010100101001010101000000011101000010000000000011101101001010100110111110100001100010100001100010100010110001110001011000001011110010100101011101100001010011100100010000001010000100011111011010110000001010010100000110011000010100001110111101010110010111100111100011001000011011001110000000000101110110001101111101110011011100010111011010001000100101101101100110111010011010110010000101010010000100100110101101110101011011001000111100111001011101000101101001001001011011000011111001001100101110100000111000100010010100001111101100001001110011011111001111101001110000000010000100101101101011011111000011100000010110111001110000110110100110100110011101100000101011101001010111001000000101000010111110101100110000110110001101000101100001110000110110011001010001011011000110100000101111101000011110110100010011110
   </div>
 </div>
-<section
+<footer
   id="footer"
-  class="w-full grid relative place-items-center text-center py-4 bg-white/[0.001]"
+  class="w-full bg-[var(--bg-secondary)] border-t border-[var(--border-color)]"
 >
-  <div class="px-10 py-3 border-2 border-white">
-    &copy; {today.getFullYear()}
-    {SITE_TITLE}. All rights reserved.
+  <div class="max-w-6xl mx-auto px-8 py-10">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Navigation -->
+      <div>
+        <h3 class="text-lg mb-4 text-[var(--text-secondary)]">&lt;Navigation /&gt;</h3>
+        <div class="flex flex-col gap-2">
+          {NAV_LINKS.map((link) => (
+            <a
+              href={link.href}
+              class="text-[var(--text-muted)] hover:text-white transition-colors w-fit"
+            >
+              {`> ${link.title}`}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Social -->
+      <div>
+        <h3 class="text-lg mb-4 text-[var(--text-secondary)]">&lt;Social /&gt;</h3>
+        <div class="flex flex-col gap-2">
+          <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener" class="text-[var(--text-muted)] hover:text-white transition-colors w-fit">&gt; GitHub</a>
+          <a href={SOCIAL_LINKS.itchio} target="_blank" rel="noopener" class="text-[var(--text-muted)] hover:text-white transition-colors w-fit">&gt; Itch.io</a>
+          <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener" class="text-[var(--text-muted)] hover:text-white transition-colors w-fit">&gt; LinkedIn</a>
+          <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener" class="text-[var(--text-muted)] hover:text-white transition-colors w-fit">&gt; Instagram</a>
+          <a href={SOCIAL_LINKS.tiktok} target="_blank" rel="noopener" class="text-[var(--text-muted)] hover:text-white transition-colors w-fit">&gt; TikTok</a>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h3 class="text-lg mb-4 text-[var(--text-secondary)]">&lt;Contact /&gt;</h3>
+        <button
+          id="footer-copy-email"
+          class="text-[var(--text-muted)] hover:text-white transition-colors break-all cursor-pointer text-left"
+          data-email={EMAIL}
+          title="Click to copy email"
+        >
+          {EMAIL}
+        </button>
+        <p id="footer-copy-feedback" class="text-xs text-[var(--text-muted)] h-4 mt-1"></p>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="mt-10 pt-6 border-t border-[var(--border-color)] text-center">
+      <div class="text-[var(--text-muted)] text-sm">
+        &copy; {today.getFullYear()} {SITE_TITLE}. All rights reserved.
+      </div>
+    </div>
   </div>
-</section>
+</footer>
+
+<script>
+  function initFooterCopy() {
+    const btn = document.getElementById("footer-copy-email");
+    const feedback = document.getElementById("footer-copy-feedback");
+    if (!btn) return;
+    btn.addEventListener("click", async () => {
+      const email = btn.getAttribute("data-email") || "";
+      try {
+        await navigator.clipboard.writeText(email);
+        if (feedback) {
+          feedback.textContent = "✓ Copied!";
+          setTimeout(() => { feedback.textContent = ""; }, 2000);
+        }
+      } catch {
+        if (feedback) feedback.textContent = "Failed to copy";
+      }
+    });
+  }
+  initFooterCopy();
+  document.addEventListener("astro:after-swap", initFooterCopy);
+</script>

@@ -3,18 +3,27 @@ type Props = {
   title: string;
   full_screen?: boolean;
   className?: string;
+  variant?: "primary" | "secondary" | "tertiary";
 };
-const { title = "Section", full_screen = false, className = "" } = Astro.props;
+const { title = "Section", full_screen = false, className = "", variant = "primary" } = Astro.props;
+
+const bgMap = {
+  primary: "bg-[var(--bg-primary)]",
+  secondary: "bg-[var(--bg-secondary)]",
+  tertiary: "bg-[var(--bg-tertiary)]",
+};
 ---
 
 <section
   id={title.toLowerCase().replaceAll(" ", "")}
-  class={`${full_screen ? "h-screen" : ""} px-4 py-10 w-screen !overflow-x-hidden ${className}`}
+  class={`${full_screen ? "min-h-screen" : ""} px-4 py-16 w-screen !overflow-x-hidden ${bgMap[variant]} ${className}`}
 >
-  <div class="w-full grid place-items-center">
-    <h2 class="text-4xl md:text-6xl text-center">{`<${title} />`}</h2>
-  </div>
-  <div class="w-full mt-10 px-4">
-    <slot />
+  <div class="max-w-6xl mx-auto">
+    <div class="w-full grid place-items-center mb-10">
+      <h2 class="text-4xl md:text-5xl text-center">{`<${title} />`}</h2>
+    </div>
+    <div class="w-full px-4">
+      <slot />
+    </div>
   </div>
 </section>
