@@ -119,11 +119,14 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
           Direct Message
         </h2>
         <form
-          action="https://formspree.io/f/YOUR_FORM_ID"
+          action="https://api.web3forms.com/submit"
           method="POST"
           class="max-w-lg mx-auto space-y-4"
           id="contact-form"
         >
+          <input type="hidden" name="access_key" value="5fcb267d-6a30-4ebf-aeef-f02ce90e25e9" />
+          <input type="hidden" name="subject" value="New message from Portfolio" />
+          <input type="hidden" name="from_name" value="Portfolio Contact Form" />
           <div>
             <label for="contact-name" class="block text-sm text-[var(--text-muted)] mb-1">Name</label>
             <input
@@ -159,15 +162,13 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
           </div>
           <button
             type="submit"
+            id="submit-btn"
             class="w-full border border-[var(--border-color)] hover:border-white bg-[var(--bg-card)] hover:bg-white hover:text-black py-3 font-bold transition-all rounded-lg"
           >
             Send Message
           </button>
           <p id="form-feedback" class="text-sm text-center text-[var(--text-muted)] h-5"></p>
         </form>
-        <p class="text-center text-xs text-[var(--text-muted)]">
-          Powered by <a href="https://formspree.io" target="_blank" rel="noopener" class="underline hover:text-white">Formspree</a>. Replace <code>YOUR_FORM_ID</code> with your Formspree endpoint.
-        </p>
       </div>
     </div>
   </Section>
@@ -191,26 +192,35 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
       }
     });
 
-    // Form submission with fetch
+    // Form submission via Web3Forms
     const form = document.getElementById("contact-form") as HTMLFormElement | null;
     const formFeedback = document.getElementById("form-feedback");
+    const submitBtn = document.getElementById("submit-btn");
     form?.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const data = new FormData(form);
+      if (submitBtn) {
+        submitBtn.textContent = "Sending...";
+        (submitBtn as HTMLButtonElement).disabled = true;
+      }
       try {
-        const res = await fetch(form.action, {
+        const res = await fetch("https://api.web3forms.com/submit", {
           method: "POST",
-          body: data,
-          headers: { Accept: "application/json" },
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(Object.fromEntries(new FormData(form))),
         });
-        if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
           if (formFeedback) formFeedback.textContent = "✓ Message sent! I'll get back to you soon.";
           form.reset();
         } else {
-          if (formFeedback) formFeedback.textContent = "Something went wrong. Try emailing directly.";
+          if (formFeedback) formFeedback.textContent = "Something went wrong. Try again or email directly.";
         }
       } catch {
-        if (formFeedback) formFeedback.textContent = "Network error. Try emailing directly.";
+        if (formFeedback) formFeedback.textContent = "Network error. Try again later.";
+      }
+      if (submitBtn) {
+        submitBtn.textContent = "Send Message";
+        (submitBtn as HTMLButtonElement).disabled = false;
       }
     });
   }
