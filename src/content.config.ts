@@ -9,6 +9,7 @@ const projects = defineCollection({
     tags: z.array(z.string()),
     engine: z.enum(["Unity", "Unreal Engine", "Phaser", "C++"]),
     image: z.string(),
+    gif: z.string().optional(),
     link: z.string().optional(),
     featured: z.boolean().default(false),
     order: z.number().default(0),
