@@ -5,33 +5,33 @@ export interface QAItem {
 
 export const QA_ITEMS: QAItem[] = [
   {
-    question: "What type of projects are you most interested in?",
+    question: "What type of games are you most interested in?",
     answer:
-      "I'm passionate about game development across all genres. I particularly enjoy creating interactive experiences that blend engaging gameplay with compelling narratives. I'm also interested in serious games and educational applications.",
+      "I gravitate toward survival and open-world experiences. My favorite series include Fallout, Metro, BioShock, Destiny, and The Legend of Zelda, so I enjoy exploration, systems, and strong atmosphere.",
   },
   {
-    question: "Are you open to freelance or contract work?",
+    question: "Are you open to internships or collaborations?",
     answer:
-      "Yes! I'm open to freelance, contract, and full-time opportunities. Whether it's a small indie project or a larger production, I'm always excited to collaborate with teams that share a passion for creating great experiences.",
+      "I'm not actively looking for full-time work yet, but I'm open to messages and collaborations. I'll also be looking for external university internships soon.",
   },
   {
-    question: "What is your preferred role in a development team?",
+    question: "What role do you usually take in a team?",
     answer:
-      "I'm versatile and can adapt to different roles — programmer, designer, or producer. My strongest suit is bridging the gap between technical implementation and creative vision, making sure the final product matches the initial concept.",
+      "Gameplay programmer first, with game design input. I've also led small university teams (3-8 people) as a producer, helping keep scope and priorities clear.",
   },
   {
-    question: "How do you approach learning new technologies?",
+    question: "How do you approach prototyping and iteration?",
     answer:
-      "I believe in learning by doing. When I encounter a new engine or framework, I start by building small prototypes, then gradually take on more complex projects. I also enjoy participating in game jams as a way to rapidly learn and experiment.",
+      "I like to build a small, playable prototype early, then playtest and iterate based on feedback. Level design and player flow are areas I keep refining.",
   },
   {
-    question: "Do you have experience working in teams?",
+    question: "How do you work with teams?",
     answer:
-      "Absolutely. I've worked in multidisciplinary teams of various sizes, from small indie groups to larger academic projects. I value clear communication, organized workflows, and shared creative vision.",
+      "I'm calm and introverted, so I listen first and then give honest feedback. I'm comfortable working in groups and value clear communication and shared decisions.",
   },
   {
-    question: "What makes your portfolio stand out?",
+    question: "What tools do you enjoy using?",
     answer:
-      "My diverse skill set across programming, design, and production allows me to see projects from multiple perspectives. I don't just write code — I understand design principles, user experience, and project management, which helps me deliver well-rounded results.",
+      "Unity, Unreal Engine, and Phaser are my main engines. I code in C# and C++, and I also use Processing for creative coding and Audacity for quick audio edits.",
   },
 ];

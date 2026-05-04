@@ -11,8 +11,15 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
     <div class="max-w-3xl mx-auto space-y-10">
       <!-- Avatar -->
       <div class="flex justify-center">
-        <div class="w-32 h-32 rounded-full border-2 border-[var(--border-color)] overflow-hidden bg-[var(--bg-card)] grid place-items-center">
-          <span class="text-5xl text-[var(--text-muted)]">A</span>
+        <div class="relative w-32 h-32 rounded-full border-2 border-[var(--border-color)] overflow-hidden bg-[var(--bg-card)]">
+          <span class="absolute inset-0 grid place-items-center text-5xl text-[var(--text-muted)] opacity-0 transition-opacity" aria-hidden="true">A</span>
+          <img
+            src="/images/mainPfp.png"
+            alt="Main profile portrait"
+            class="relative z-10 w-full h-full object-cover"
+            loading="lazy"
+            onerror="this.style.display='none'; this.previousElementSibling && this.previousElementSibling.classList.remove('opacity-0')"
+          />
         </div>
       </div>
 

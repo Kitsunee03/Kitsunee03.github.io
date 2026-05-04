@@ -7,17 +7,17 @@ export interface Specialization {
 export const SPECIALIZATIONS: Specialization[] = [
   {
     title: "Programmer",
-    description: "Building robust game systems, mechanics, and tools with clean, efficient code across multiple languages and engines.",
+    description: "Gameplay-focused programmer building systems, prototypes, and player feel with C# and C++ across Unity, Unreal, and Phaser.",
     icon: "mdi:code-braces",
   },
   {
     title: "Designer",
-    description: "Crafting engaging gameplay experiences through level design, game mechanics, UX flows, and visual communication.",
+    description: "Game design foundations with emphasis on mechanics, level design, and playtesting feedback loops.",
     icon: "mdi:palette-outline",
   },
   {
     title: "Producer",
-    description: "Managing project timelines, coordinating teams, and ensuring deliverables meet quality standards on schedule.",
+    description: "Led small university teams (3-8 people), organizing scope, priorities, and decisions around a clear vision.",
     icon: "mdi:chart-gantt",
   },
 ];
