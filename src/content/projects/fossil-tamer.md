@@ -7,5 +7,5 @@ image: "/projects/fossil-tamer.png"
 gif: "/projects/fossil-tamer.gif"
 link: "https://kitsunee03.itch.io/fossil-tamer"
 featured: true
-order: 2
+order: 3
 ---
