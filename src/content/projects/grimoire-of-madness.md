@@ -7,5 +7,5 @@ image: "/projects/grimoire-of-madness.png"
 gif: "/projects/grimoire-of-madness.gif"
 link: "https://kitsunee03.itch.io/grimoireofmadness"
 featured: true
-order: 1
+order: 2
 ---
