@@ -1,19 +1,16 @@
 export const SITE_TITLE = "Arnau Miragall";
 export const FULL_NAME = "Arnau Miragall Torra";
-export const PROFESSIONAL_TITLE = "Programmer, Designer & Producer";
+export const PROFESSIONAL_TITLE = "Gameplay Programmer and Game Dev Student";
 export const EMAIL = "arnaum03@gmail.com";
 export const GITHUB_USERNAME = "Kitsunee03";
 
 export const SITE_DESCRIPTION =
-  `Portfolio of Arnau Miragall Torra — Programmer, Designer & Producer. Specializing in game development with Unity, Unreal Engine, Phaser, and C++.`.trim();
+  `Portfolio of Arnau Miragall Torra — gameplay programmer and game development student. Focused on gameplay systems and game design, with prototypes built in Unity, Unreal Engine, Phaser, C#, and C++.`.trim();
 
 export const ABOUT_ME_SHORT =
-  `Passionate game developer and designer with experience in Unity, Unreal Engine, Phaser, and C++. I love creating interactive experiences that combine technical skill with creative vision. Always looking for new challenges and opportunities to grow.`.trim();
+  `Gameplay programmer and game development student building university and personal prototypes in Unity, Unreal Engine, and Phaser. Calm, collaborative, and focused on solid gameplay feel, level design, and thoughtful systems.`.trim();
 
-export const ABOUT_ME_FULL =
-  `I'm Arnau Miragall Torra, a multidisciplinary game developer passionate about creating interactive experiences that push the boundaries of creativity and technology. With a strong foundation in programming, design, and production, I bring projects from concept to completion.\n\nMy journey spans across multiple engines and frameworks — from Unity and Unreal Engine for immersive 3D experiences, to Phaser for web-based games, and C++ for performance-critical applications. I believe in the power of games as a medium for storytelling, education, and entertainment.\n\nWhether I'm coding gameplay systems, designing levels, or managing production pipelines, I approach every project with curiosity and dedication. I'm always eager to learn new technologies and collaborate with like-minded creators.`.trim();
-
-export const QUOTE = "Creating worlds, one line of code at a time";
+export const QUOTE = "Creating playable worlds, one line of code at a time, refined through playtests";
 
 export const SOCIAL_LINKS = {
   github: `https://github.com/${GITHUB_USERNAME}`,

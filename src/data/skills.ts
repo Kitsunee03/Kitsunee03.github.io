@@ -11,7 +11,7 @@ export const SKILLS: Skill[] = [
   { name: "C#", icon: "devicon:csharp", color: "#239120", category: "programming", description: "Primary language for Unity game development" },
   { name: "C++", icon: "devicon:cplusplus", color: "#00599C", category: "programming", description: "Used in Unreal Engine and low-level systems" },
   { name: "JavaScript", icon: "devicon:javascript", color: "#F7DF1E", category: "programming", description: "Web-based game development with Phaser" },
-  { name: "Python", icon: "devicon:python", color: "#3776AB", category: "programming", description: "Scripting, tools, and automation" },
+  { name: "Processing", icon: "simple-icons:processingfoundation", color: "#006699", category: "programming", description: "Creative coding for university prototypes and experiments" },
   { name: "HTML5", icon: "devicon:html5", color: "#E34F26", category: "programming", description: "Structure for web-based projects" },
   { name: "CSS3", icon: "devicon:css3", color: "#1572B6", category: "programming", description: "Styling and visual design for the web" },
 
@@ -30,5 +30,6 @@ export const SKILLS: Skill[] = [
   { name: "GitHub", icon: "simple-icons:github", color: "#ffffff", category: "tools", description: "Code hosting and collaboration platform" },
   { name: "GitLab", icon: "simple-icons:gitlab", color: "#FC6D26", category: "tools", description: "CI/CD and project management" },
   { name: "Jira", icon: "simple-icons:jira", color: "#0052CC", category: "tools", description: "Agile project management and task tracking" },
+  { name: "Audacity", icon: "simple-icons:audacity", color: "#0000CC", category: "tools", description: "Basic audio editing and cleanup" },
   { name: "Visual Studio", icon: "devicon:visualstudio", color: "#5C2D91", category: "tools", description: "IDE for C# and C++ development" },
 ];

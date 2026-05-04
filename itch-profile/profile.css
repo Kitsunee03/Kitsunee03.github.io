@@ -1,0 +1,280 @@
+@font-face {
+  font-family: VCR;
+  src: url("https://kitsunee03.github.io/fonts/VCRosdNEUE.ttf") format("truetype");
+  font-display: swap;
+}
+
+:root {
+  --ks-bg: #000000;
+  --ks-surface: rgba(17, 20, 30, 0.86);
+  --ks-surface-2: rgba(12, 14, 22, 0.9);
+  --ks-line: #2b3040;
+  --ks-text: #eceff6;
+  --ks-muted: #bbc2d3;
+  --ks-red: #dd4a4a;
+  --ks-red-hover: #ff7070;
+
+  /* Optional GIF layer. Put your GIF URL and set this to 1 if desired. */
+  --ks-gif-url: none;
+  --ks-gif-opacity: 0;
+}
+
+html,
+body {
+  background: var(--ks-bg) !important;
+  color: var(--ks-text) !important;
+}
+
+/* Base animated ambience */
+body {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.8)),
+    radial-gradient(1000px 550px at 10% -10%, rgba(221, 74, 74, 0.14), transparent 65%),
+    radial-gradient(900px 550px at 90% 0%, rgba(255, 255, 255, 0.06), transparent 70%),
+    var(--ks-gif-url);
+  background-size: cover, auto, auto, cover;
+  background-position: center, center, center, center;
+  background-attachment: fixed, fixed, fixed, fixed;
+}
+
+/* Efficient noise layer (single animated transform with steps) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.35) 1px, transparent 0);
+  background-size: 3px 3px;
+  mix-blend-mode: soft-light;
+  animation: ksNoise 1s steps(2) infinite;
+}
+
+/* Optional animated GIF layer control */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--ks-gif-opacity);
+  background-image: var(--ks-gif-url);
+  background-size: cover;
+  background-position: center;
+  filter: contrast(1.08) brightness(0.55);
+}
+
+@keyframes ksNoise {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-1%, 1%); }
+  40% { transform: translate(1%, -1%); }
+  60% { transform: translate(0.5%, 0.5%); }
+  80% { transform: translate(-0.5%, -0.5%); }
+  100% { transform: translate(0, 0); }
+}
+
+#inner_column,
+.main_column,
+.profile_column,
+.game_grid_widget,
+.ks-shell {
+  position: relative;
+  z-index: 1;
+}
+
+a {
+  color: var(--ks-red) !important;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+a:hover {
+  color: var(--ks-red-hover) !important;
+}
+
+.ks-shell {
+  max-width: 940px;
+  margin: 20px auto;
+  padding: 14px;
+  border: 1px solid var(--ks-line);
+  border-radius: 24px;
+  background: linear-gradient(180deg, var(--ks-surface), var(--ks-surface-2));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(6px);
+}
+
+.ks-hero {
+  padding: 18px;
+  border: 1px solid #3a4258;
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(23, 28, 42, 0.9), rgba(15, 18, 28, 0.92));
+  animation: ksFloat 6s ease-in-out infinite;
+}
+
+@keyframes ksFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.ks-handle {
+  margin: 0 0 8px;
+  color: #9ca6bd;
+  font-size: 13px;
+}
+
+.ks-hero h1 {
+  margin: 0;
+  font-family: VCR, monospace;
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1;
+}
+
+.ks-sub {
+  margin: 10px 0 6px;
+  color: #d3d9e7;
+}
+
+.ks-quote {
+  margin: 0 0 14px;
+  color: var(--ks-muted);
+}
+
+.ks-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ks-btn {
+  display: inline-block;
+  padding: 10px 14px;
+  border: 1px solid #3d455d;
+  border-radius: 999px;
+  text-decoration: none !important;
+  font-family: VCR, monospace;
+  font-size: 13px;
+}
+
+.ks-btn-main {
+  color: #ffffff !important;
+  background: var(--ks-red);
+  border-color: var(--ks-red);
+}
+
+.ks-btn-main:hover {
+  background: #ef5a5a;
+  transform: translateY(-1px);
+}
+
+.ks-btn-soft {
+  color: #f2f4fa !important;
+  background: #181d2b;
+}
+
+.ks-btn-soft:hover {
+  border-color: var(--ks-red);
+  transform: translateY(-1px);
+}
+
+.ks-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ks-stats span,
+.ks-tags span {
+  padding: 6px 12px;
+  border: 1px solid #3d455d;
+  border-radius: 999px;
+  background: #181d2b;
+  color: #d6dceb;
+  font-size: 12px;
+}
+
+.ks-panel {
+  margin-top: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--ks-line);
+  border-radius: 16px;
+  background: rgba(18, 22, 34, 0.86);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.ks-panel:hover {
+  transform: translateY(-1px);
+  border-color: #4f5a76;
+}
+
+.ks-panel h2 {
+  margin: 0 0 8px;
+  font-family: VCR, monospace;
+  font-size: 18px;
+}
+
+.ks-panel p {
+  margin: 0;
+  color: var(--ks-muted);
+}
+
+.ks-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Blend with native itch project cards */
+.game_grid_widget .game_cell {
+  border-radius: 16px !important;
+  overflow: hidden;
+  border: 1px solid var(--ks-line) !important;
+  background: #131a28 !important;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.game_grid_widget .game_cell:hover {
+  transform: translateY(-3px) scale(1.01);
+  border-color: #54617f !important;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.36);
+}
+
+.game_grid_widget .game_cell .title,
+.game_grid_widget .game_cell .game_title {
+  color: #f3f5fb !important;
+}
+
+.game_grid_widget .game_cell_data,
+.game_grid_widget .meta_tag {
+  color: #c0c8da !important;
+}
+
+.button,
+button,
+input[type="submit"] {
+  border-radius: 999px !important;
+  border: 1px solid #445273 !important;
+}
+
+@media (max-width: 900px) {
+  .ks-shell {
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  .ks-hero {
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .ks-panel {
+    border-radius: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ks-hero,
+  body::before {
+    animation: none !important;
+  }
+}

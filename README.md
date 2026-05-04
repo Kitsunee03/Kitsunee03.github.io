@@ -1,10 +1,6 @@
 <h1 align="center">Token</h1>
 <h2 align="center">Minimal Astro + Tailwind CSS Starter</h2>
 
-<p align="center">
-    <img alt="hero" width="450" src="public/image.png" />
-</p>
-
 > [!NOTE]
 >
 > `token-template` is a modern and minimalistic Astro + Tailwind CSS starter designed for developers and creators. With a sleek black-and-white terminal-inspired design, it features support for Markdown (MD), MDX, RSS feeds, sitemaps, and fully static content, making it perfect for personal portfolios and blogs.
@@ -36,20 +32,6 @@ npm install
 # Run the development server
 npm run dev
 ```
-
-## 📷 Screenshots
-
-> Here's a working and expected screenshot of **token-template**
-
-| Landing Page                              |
-| ----------------------------------------- |
-| ![Demo](/public/screenshot.png) |
-
-| [Lighthouse Results](https://pagespeed.web.dev/analysis/https-token-template-deno-dev/o4lgrcn8pd?form_factor=desktop)                              |
-| ----------------------------------------- |
-| ![results](/public/lighthouse.png) |
-
----
 
 ## 💻 Contributing
 

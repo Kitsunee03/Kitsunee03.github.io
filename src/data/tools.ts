@@ -11,6 +11,7 @@ export const TOOLS: Tool[] = [
   { name: "C++", icon: "devicon:cplusplus", color: "#00599C" },
   { name: "Phaser", icon: "mdi:gamepad-variant-outline", color: "#336699" },
   { name: "JavaScript", icon: "devicon:javascript", color: "#F7DF1E" },
+  { name: "Processing", icon: "simple-icons:processingfoundation", color: "#006699" },
   { name: "HTML5", icon: "devicon:html5", color: "#E34F26" },
   { name: "CSS3", icon: "devicon:css3", color: "#1572B6" },
   { name: "Git", icon: "devicon:git", color: "#F05032" },
@@ -20,5 +21,6 @@ export const TOOLS: Tool[] = [
   { name: "Photoshop", icon: "simple-icons:adobephotoshop", color: "#31A8FF" },
   { name: "Aseprite", icon: "simple-icons:aseprite", color: "#7D929E" },
   { name: "Jira", icon: "simple-icons:jira", color: "#0052CC" },
+  { name: "Audacity", icon: "simple-icons:audacity", color: "#0000CC" },
   { name: "Visual Studio", icon: "devicon:visualstudio", color: "#5C2D91" },
 ];
