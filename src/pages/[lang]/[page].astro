@@ -1,9 +1,8 @@
 ---
 import { DEFAULT_LANG, LANGUAGES } from "@/i18n/translations";
 
-const pages = ["about", "projects", "contact"] as const;
-
 export function getStaticPaths() {
+  const pages = ["about", "projects", "contact"] as const;
   return LANGUAGES.flatMap((lang) =>
     pages.map((page) => ({
       params: { lang, page },
@@ -13,7 +12,8 @@ export function getStaticPaths() {
 
 const { lang, page } = Astro.params;
 const safeLang = LANGUAGES.includes(lang as (typeof LANGUAGES)[number]) ? lang : DEFAULT_LANG;
-const target = pages.includes(page as (typeof pages)[number]) ? `/${page}` : "/";
+const validPages = ["about", "projects", "contact"] as const;
+const target = validPages.includes(page as (typeof validPages)[number]) ? `/${page}` : "/";
 ---
 
 <html lang={safeLang}>
