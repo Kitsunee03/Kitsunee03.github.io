@@ -6,11 +6,26 @@ type Props = {
   institution: string;
   period: string;
   description: string;
+  titleKey?: string;
+  institutionKey?: string;
+  periodKey?: string;
+  descriptionKey?: string;
   icon: string;
   isLast?: boolean;
 };
 
-const { title, institution, period, description, icon, isLast = false } = Astro.props;
+const {
+  title,
+  institution,
+  period,
+  description,
+  titleKey = "",
+  institutionKey = "",
+  periodKey = "",
+  descriptionKey = "",
+  icon,
+  isLast = false,
+} = Astro.props;
 ---
 
 <div class="flex gap-4">
@@ -24,9 +39,21 @@ const { title, institution, period, description, icon, isLast = false } = Astro.
 
   <!-- Content -->
   <div class={`pb-8 ${isLast ? "" : ""}`}>
-    <span class="text-xs text-[var(--text-muted)] tracking-wider">{period}</span>
-    <h3 class="text-lg mt-1">{title}</h3>
-    <p class="text-[var(--text-secondary)] text-sm mt-0.5">{institution}</p>
-    <p class="text-[var(--text-muted)] text-sm mt-2 leading-relaxed">{description}</p>
+    <span
+      class="text-xs text-[var(--text-muted)] tracking-wider"
+      data-i18n={periodKey || undefined}
+    >
+      {period}
+    </span>
+    <h3 class="text-lg mt-1" data-i18n={titleKey || undefined}>{title}</h3>
+    <p class="text-[var(--text-secondary)] text-sm mt-0.5" data-i18n={institutionKey || undefined}>
+      {institution}
+    </p>
+    <p
+      class="text-[var(--text-muted)] text-sm mt-2 leading-relaxed"
+      data-i18n={descriptionKey || undefined}
+    >
+      {description}
+    </p>
   </div>
 </div>

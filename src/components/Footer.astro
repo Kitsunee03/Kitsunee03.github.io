@@ -17,14 +17,19 @@ const today = new Date();
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <!-- Navigation -->
       <div>
-        <h3 class="text-lg mb-4 text-[var(--text-secondary)]">&lt;Navigation /&gt;</h3>
+        <h3 class="text-lg mb-4 text-[var(--text-secondary)]">
+          <span>&lt;</span>
+          <span data-i18n="footer.nav">Navigation</span>
+          <span> /&gt;</span>
+        </h3>
         <div class="flex flex-col gap-2">
           {NAV_LINKS.map((link) => (
             <a
               href={link.href}
               class="text-[var(--text-muted)] hover:text-white transition-colors w-fit"
             >
-              {`> ${link.title}`}
+              <span aria-hidden="true">&gt; </span>
+              <span data-i18n={link.i18nKey}>{link.title}</span>
             </a>
           ))}
         </div>
@@ -32,7 +37,11 @@ const today = new Date();
 
       <!-- Social -->
       <div>
-        <h3 class="text-lg mb-4 text-[var(--text-secondary)]">&lt;Social /&gt;</h3>
+        <h3 class="text-lg mb-4 text-[var(--text-secondary)]">
+          <span>&lt;</span>
+          <span data-i18n="footer.social">Social</span>
+          <span> /&gt;</span>
+        </h3>
         <div class="flex flex-col gap-2">
           <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener" class="text-[var(--text-muted)] hover:text-white transition-colors w-fit">&gt; GitHub</a>
           <a href={SOCIAL_LINKS.itchio} target="_blank" rel="noopener" class="text-[var(--text-muted)] hover:text-white transition-colors w-fit">&gt; Itch.io</a>
@@ -44,12 +53,17 @@ const today = new Date();
 
       <!-- Contact -->
       <div>
-        <h3 class="text-lg mb-4 text-[var(--text-secondary)]">&lt;Contact /&gt;</h3>
+        <h3 class="text-lg mb-4 text-[var(--text-secondary)]">
+          <span>&lt;</span>
+          <span data-i18n="footer.contact">Contact</span>
+          <span> /&gt;</span>
+        </h3>
         <button
           id="footer-copy-email"
           class="text-[var(--text-muted)] hover:text-white transition-colors break-all cursor-pointer text-left"
           data-email={EMAIL}
           title="Click to copy email"
+          data-i18n-attr="title:footer.copyTitle"
         >
           {EMAIL}
         </button>
@@ -60,7 +74,8 @@ const today = new Date();
     <!-- Copyright -->
     <div class="mt-10 pt-6 border-t border-[var(--border-color)] text-center">
       <div class="text-[var(--text-muted)] text-sm">
-        &copy; {today.getFullYear()} {SITE_TITLE}. All rights reserved.
+        <span>&copy; {today.getFullYear()} {SITE_TITLE}. </span>
+        <span data-i18n="footer.copyright">All rights reserved.</span>
       </div>
     </div>
   </div>
@@ -76,11 +91,13 @@ const today = new Date();
       try {
         await navigator.clipboard.writeText(email);
         if (feedback) {
-          feedback.textContent = "✓ Copied!";
+          feedback.textContent = window.__i18n ? window.__i18n.t("footer.copySuccess") : "✓ Copied!";
           setTimeout(() => { feedback.textContent = ""; }, 2000);
         }
       } catch {
-        if (feedback) feedback.textContent = "Failed to copy";
+        if (feedback) {
+          feedback.textContent = window.__i18n ? window.__i18n.t("footer.copyError") : "Failed to copy";
+        }
       }
     });
   }

@@ -19,6 +19,19 @@ const {
 } = Astro.props;
 ---
 
+<script is:inline>
+  (() => {
+    try {
+      const stored = localStorage.getItem("lang");
+      const lang = stored === "es" || stored === "en" ? stored : "en";
+      document.documentElement.lang = lang;
+      document.documentElement.dataset.lang = lang;
+    } catch {
+      // ignore storage errors
+    }
+  })();
+</script>
+
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />

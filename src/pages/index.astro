@@ -17,9 +17,9 @@ const featuredProjects = allProjects
   .sort((a, b) => a.data.order - b.data.order);
 
 const categoryLabels = {
-  engine: "Game Engines",
-  programming: "Programming Languages",
-  tools: "Tools & Workflow",
+  engine: { label: "Game Engines", key: "home.categories.engine" },
+  programming: { label: "Programming Languages", key: "home.categories.programming" },
+  tools: { label: "Tools & Workflow", key: "home.categories.tools" },
 };
 const dropdownCategories = ["engine", "programming", "tools"] as const;
 ---
@@ -28,12 +28,12 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
   <Hero />
 
   <!-- Tool Carousel -->
-  <Section title="Tools & Technologies" variant="secondary">
+  <Section title="Tools & Technologies" titleKey="home.sections.tools" variant="secondary">
     <ToolCarousel />
   </Section>
 
   <!-- About Me Preview -->
-  <Section title="About Me" variant="primary">
+  <Section title="About Me" titleKey="home.sections.about" variant="primary">
     <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
       <div class="md:col-span-1 flex justify-center">
         <div class="relative w-48 h-48 md:w-56 md:h-auto md:aspect-square rounded-lg border border-[var(--border-color)] overflow-hidden bg-[var(--bg-card)]">
@@ -41,6 +41,7 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
           <img
             src="/images/mainPfp.png"
             alt="Main profile portrait"
+            data-i18n-attr="alt:images.mainPortrait"
             class="relative z-10 w-full h-full object-cover"
             loading="lazy"
             onerror="this.style.display='none'; this.previousElementSibling && this.previousElementSibling.classList.remove('opacity-0')"
@@ -48,12 +49,13 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
         </div>
       </div>
       <div class="md:col-span-2 space-y-4">
-        <p class="text-[var(--text-secondary)] leading-relaxed">
+        <p class="text-[var(--text-secondary)] leading-relaxed" data-i18n="home.about.short">
           {ABOUT_ME_SHORT}
         </p>
         <a
           href="/about"
           class="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-white transition-colors border-b border-[var(--border-color)] hover:border-white pb-0.5"
+          data-i18n="home.about.readMore"
         >
           Read more about me →
         </a>
@@ -62,7 +64,7 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
   </Section>
 
   <!-- Featured Projects -->
-  <Section title="Featured Projects" variant="secondary">
+  <Section title="Featured Projects" titleKey="home.sections.featured" variant="secondary">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {featuredProjects.map((project) => (
         <ProjectCard
@@ -80,6 +82,7 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
       <a
         href="/projects"
         class="border border-[var(--border-color)] hover:border-white px-8 py-3 rounded-md transition-all hover:bg-white hover:text-black text-sm"
+        data-i18n="home.projects.viewAll"
       >
         View All Projects →
       </a>
@@ -87,7 +90,7 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
   </Section>
 
   <!-- About Me & My Work — Dropdowns -->
-  <Section title="About Me & My Work" variant="primary">
+  <Section title="About Me & My Work" titleKey="home.sections.aboutWork" variant="primary">
     <div class="max-w-3xl mx-auto space-y-3">
       {dropdownCategories.map((cat, i) => {
         const items = SKILLS.filter((s) => s.category === cat);
@@ -98,7 +101,10 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
               data-target={`home-dd-${i}`}
               aria-expanded="false"
             >
-              <span class="text-[var(--text-secondary)]">{`❯ ${categoryLabels[cat]}`}</span>
+              <span class="text-[var(--text-secondary)]">
+                <span aria-hidden="true">❯ </span>
+                <span data-i18n={categoryLabels[cat].key}>{categoryLabels[cat].label}</span>
+              </span>
               <span class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">▼</span>
             </button>
             <div id={`home-dd-${i}`} class="home-dd-content hidden px-5 pb-5">
@@ -124,7 +130,10 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
           data-target="home-dd-edu"
           aria-expanded="false"
         >
-          <span class="text-[var(--text-secondary)]">❯ My Education</span>
+          <span class="text-[var(--text-secondary)]">
+            <span aria-hidden="true">❯ </span>
+            <span data-i18n="home.dropdown.education">My Education</span>
+          </span>
           <span class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">▼</span>
         </button>
         <div id="home-dd-edu" class="home-dd-content hidden px-5 pb-5">
@@ -133,8 +142,14 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
               <div class="flex gap-3 items-start">
                 <Icon name={edu.icon} class="w-5 h-5 text-[var(--text-muted)] mt-0.5 shrink-0" />
                 <div>
-                  <p class="text-sm text-[var(--text-secondary)]">{edu.title}</p>
-                  <p class="text-xs text-[var(--text-muted)]">{edu.institution} · {edu.period}</p>
+                  <p class="text-sm text-[var(--text-secondary)]" data-i18n={`education.${edu.id}.title`}>
+                    {edu.title}
+                  </p>
+                  <p class="text-xs text-[var(--text-muted)]">
+                    <span data-i18n={`education.${edu.id}.institution`}>{edu.institution}</span>
+                    <span aria-hidden="true"> · </span>
+                    <span data-i18n={`education.${edu.id}.period`}>{edu.period}</span>
+                  </p>
                 </div>
               </div>
             ))}
@@ -149,11 +164,17 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
           data-target="home-dd-team"
           aria-expanded="false"
         >
-          <span class="text-[var(--text-secondary)]">❯ Teamwork</span>
+          <span class="text-[var(--text-secondary)]">
+            <span aria-hidden="true">❯ </span>
+            <span data-i18n="home.dropdown.teamwork.title">Teamwork</span>
+          </span>
           <span class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">▼</span>
         </button>
         <div id="home-dd-team" class="home-dd-content hidden px-5 pb-5">
-          <p class="text-sm text-[var(--text-muted)] leading-relaxed pt-2 pl-4 border-l border-[var(--border-color)]">
+          <p
+            class="text-sm text-[var(--text-muted)] leading-relaxed pt-2 pl-4 border-l border-[var(--border-color)]"
+            data-i18n="home.dropdown.teamwork.body"
+          >
             Calm and introverted, so I listen first and share honest feedback when it helps the project.
             Used to university teams (3-8 people) working with Agile methods (Scrum/Kanban) and tools like Jira, GitLab, and GitHub.
             I enjoy bridging gameplay programming, game design, and production to keep the vision coherent.
@@ -164,7 +185,7 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
   </Section>
 
   <!-- Contact Summary -->
-  <Section title="Contact" variant="secondary">
+  <Section title="Contact" titleKey="home.sections.contact" variant="secondary">
     <ContactSummary />
   </Section>
 </Layout>
