@@ -6,5 +6,5 @@ engine: "Unity"
 image: "/projects/geno-the-genocidal.png"
 link: "https://kitsunee03.itch.io/geno-the-genocidal"
 featured: false
-order: 4
+order: 5
 ---

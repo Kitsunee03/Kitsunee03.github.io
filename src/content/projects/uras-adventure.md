@@ -6,6 +6,6 @@ engine: "Unity"
 image: "/projects/uras-adventure.png"
 gif: "/projects/uras-adventure.gif"
 link: "https://kitsunee03.itch.io/uras-adventure"
-featured: true
-order: 3
+featured: false
+order: 4
 ---

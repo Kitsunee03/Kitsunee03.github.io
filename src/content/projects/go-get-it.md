@@ -6,5 +6,5 @@ engine: "Unity"
 image: "/projects/go-get-it.png"
 link: "https://kitsunee03.itch.io/go-get-it"
 featured: false
-order: 5
+order: 6
 ---

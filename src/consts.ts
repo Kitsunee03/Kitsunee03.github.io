@@ -27,5 +27,5 @@ export const NAV_LINKS: Array<{ title: string; href: string; i18nKey: string }> 
   { title: "Contact", href: "/contact", i18nKey: "nav.contact" },
 ];
 
-export const ENGINES = ["Unity", "Unreal Engine", "Phaser", "C++"] as const;
+export const ENGINES = ["Unity", "Unreal Engine"] as const;
 export type Engine = (typeof ENGINES)[number];
