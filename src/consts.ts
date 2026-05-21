@@ -20,11 +20,11 @@ export const SOCIAL_LINKS = {
   tiktok: "https://tiktok.com/@kitsunee03",
 };
 
-export const NAV_LINKS: Array<{ title: string; href: string }> = [
-  { title: "Home", href: "/" },
-  { title: "Projects", href: "/projects" },
-  { title: "About Me", href: "/about" },
-  { title: "Contact", href: "/contact" },
+export const NAV_LINKS: Array<{ title: string; href: string; i18nKey: string }> = [
+  { title: "Home", href: "/", i18nKey: "nav.home" },
+  { title: "Projects", href: "/projects", i18nKey: "nav.projects" },
+  { title: "About Me", href: "/about", i18nKey: "nav.about" },
+  { title: "Contact", href: "/contact", i18nKey: "nav.contact" },
 ];
 
 export const ENGINES = ["Unity", "Unreal Engine", "Phaser", "C++"] as const;

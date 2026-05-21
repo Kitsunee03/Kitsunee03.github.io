@@ -6,9 +6,10 @@ type Props = {
   icon: string;
   color?: string;
   description?: string;
+  descriptionKey?: string;
 };
 
-const { name, icon, color, description } = Astro.props;
+const { name, icon, color, description, descriptionKey = "" } = Astro.props;
 ---
 
 <div class="relative flex flex-col items-center gap-2 group transition-transform duration-200 hover:scale-110 hover:z-30">
@@ -20,7 +21,12 @@ const { name, icon, color, description } = Astro.props;
   </span>
   {description && (
     <div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg p-3 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-lg">
-      <p class="text-xs text-[var(--text-muted)] text-center leading-relaxed">{description}</p>
+      <p
+        class="text-xs text-[var(--text-muted)] text-center leading-relaxed"
+        data-i18n={descriptionKey || undefined}
+      >
+        {description}
+      </p>
     </div>
   )}
 </div>

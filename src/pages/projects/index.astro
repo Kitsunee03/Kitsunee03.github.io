@@ -12,12 +12,13 @@ const allProjects = (await getCollection("projects")).sort(
 ---
 
 <Layout title={`Projects — ${FULL_NAME}`}>
-  <Section title="Projects" variant="primary">
+  <Section title="Projects" titleKey="projects.title" variant="primary">
     <!-- Engine Filters -->
     <div class="flex flex-wrap gap-3 justify-center mb-10">
       <button
         class="engine-filter active border border-white bg-white text-black px-4 py-1.5 text-sm transition-all hover:bg-white hover:text-black rounded-md"
         data-engine="all"
+        data-i18n="projects.filter.all"
       >
         All
       </button>
@@ -50,11 +51,11 @@ const allProjects = (await getCollection("projects")).sort(
 
     <!-- Empty state -->
     <div id="no-projects" class="hidden text-center py-16 text-[var(--text-muted)]">
-      <p class="text-lg">No projects found for this engine.</p>
+      <p class="text-lg" data-i18n="projects.empty">No projects found for this engine.</p>
     </div>
   </Section>
 
-  <Section title="Contact" variant="secondary">
+  <Section title="Contact" titleKey="contact.title" variant="secondary">
     <ContactSummary compact />
   </Section>
 </Layout>

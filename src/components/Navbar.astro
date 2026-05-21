@@ -37,6 +37,7 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
                   { "bg-white text-black": isActive },
                 ]}
                 href={href}
+                data-i18n={link.i18nKey}
               >
                 {link.title}
               </a>
@@ -45,6 +46,18 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
           );
         })
       }
+      <button
+        type="button"
+        data-lang-toggle
+        class="ml-2 flex items-center gap-2 px-2 py-1 rounded-md border border-[var(--border-color)] hover:border-white hover:bg-white/10 transition-all text-xs"
+        aria-label="Change language"
+        title="Change language"
+        data-i18n-attr="aria-label:nav.language.aria;title:nav.language.title"
+      >
+        <span class="lang-option text-white" data-lang="en">EN</span>
+        <span class="text-[var(--text-muted)]">/</span>
+        <span class="lang-option text-[var(--text-muted)]" data-lang="es">ES</span>
+      </button>
     </div>
 
     <!-- Mobile hamburger -->
@@ -52,6 +65,7 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
       id="mobile-menu-btn"
       class="md:hidden flex flex-col gap-1.5 p-2 hover:bg-white/10 transition-colors"
       aria-label="Menu"
+      data-i18n-attr="aria-label:nav.menu"
     >
       <span class="block w-6 h-0.5 bg-white transition-transform" id="bar1"></span>
       <span class="block w-6 h-0.5 bg-white transition-opacity" id="bar2"></span>
@@ -83,12 +97,25 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
                 { "bg-white text-black": isActive },
               ]}
               href={href}
+              data-i18n={link.i18nKey}
             >
               {link.title}
             </a>
           );
         })
       }
+      <button
+        type="button"
+        data-lang-toggle
+        class="mt-2 w-fit flex items-center gap-2 px-3 py-2 rounded-md border border-[var(--border-color)] hover:border-white hover:bg-white/10 transition-all text-sm"
+        aria-label="Change language"
+        title="Change language"
+        data-i18n-attr="aria-label:nav.language.aria;title:nav.language.title"
+      >
+        <span class="lang-option text-white" data-lang="en">EN</span>
+        <span class="text-[var(--text-muted)]">/</span>
+        <span class="lang-option text-[var(--text-muted)]" data-lang="es">ES</span>
+      </button>
     </div>
   </div>
 </nav>
@@ -125,4 +152,45 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
       bar3?.classList.remove("-rotate-45", "-translate-y-2");
     }
   });
+
+  function updateLangToggles() {
+    const api = window.__i18n;
+    if (!api) return;
+    const current = api.getLang();
+    document.querySelectorAll("[data-lang-toggle]").forEach((btn) => {
+      btn.querySelectorAll(".lang-option").forEach((option) => {
+        const isActive = option.getAttribute("data-lang") === current;
+        option.classList.toggle("text-white", isActive);
+        option.classList.toggle("text-[var(--text-muted)]", !isActive);
+      });
+    });
+  }
+
+  function initLangToggles() {
+    const api = window.__i18n;
+    if (!api) return;
+    document.querySelectorAll("[data-lang-toggle]").forEach((btn) => {
+      if ((btn as HTMLElement).dataset.bound === "true") return;
+      (btn as HTMLElement).dataset.bound = "true";
+      btn.addEventListener("click", () => {
+        const current = api.getLang();
+        const next = current === "en" ? "es" : "en";
+        const apply = () => {
+          api.setLang(next);
+          updateLangToggles();
+        };
+        if (document.startViewTransition) {
+          document.startViewTransition(() => apply());
+        } else {
+          apply();
+        }
+      });
+    });
+    updateLangToggles();
+  }
+
+  initLangToggles();
+  document.addEventListener("DOMContentLoaded", initLangToggles);
+  document.addEventListener("astro:after-swap", initLangToggles);
+  window.addEventListener("i18n:changed", updateLangToggles);
 </script>

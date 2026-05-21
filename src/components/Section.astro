@@ -1,14 +1,18 @@
 ---
 type Props = {
   title: string;
+  titleKey?: string;
   titleSuffix?: string;
+  titleSuffixKey?: string;
   full_screen?: boolean;
   className?: string;
   variant?: "primary" | "secondary" | "tertiary";
 };
 const {
   title = "Section",
+  titleKey = "",
   titleSuffix = "",
+  titleSuffixKey = "",
   full_screen = false,
   className = "",
   variant = "primary",
@@ -30,16 +34,24 @@ const bgMap = {
     <div class="w-full grid place-items-center mb-10">
       {hasSuffix ? (
         <h2 class="text-4xl md:text-5xl text-center">
-          <span>{`<${title}`}</span>
+          <span>&lt;</span>
+          <span data-i18n={titleKey || undefined}>{title}</span>
           <span class="section-title-slash">/</span>
-          <span class="section-title-suffix text-3xl md:text-4xl text-[var(--text-secondary)]">
+          <span
+            class="section-title-suffix text-3xl md:text-4xl text-[var(--text-secondary)]"
+            data-i18n={titleSuffixKey || undefined}
+          >
             {titleSuffix}
           </span>
           <span class="section-title-trailing text-3xl md:text-4xl text-[var(--text-secondary)]">/</span>
-          <span>{">"}</span>
+          <span>&gt;</span>
         </h2>
       ) : (
-        <h2 class="text-4xl md:text-5xl text-center">{`<${title} />`}</h2>
+        <h2 class="text-4xl md:text-5xl text-center">
+          <span>&lt;</span>
+          <span data-i18n={titleKey || undefined}>{title}</span>
+          <span> /&gt;</span>
+        </h2>
       )}
     </div>
     <div class="w-full px-4">

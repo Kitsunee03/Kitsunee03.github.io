@@ -2,10 +2,12 @@
 type Props = {
   question: string;
   answer: string;
+  questionKey?: string;
+  answerKey?: string;
   index: number;
 };
 
-const { question, answer, index } = Astro.props;
+const { question, answer, questionKey = "", answerKey = "", index } = Astro.props;
 const accordionId = `qa-${index}`;
 ---
 
@@ -15,14 +17,20 @@ const accordionId = `qa-${index}`;
     data-target={accordionId}
     aria-expanded="false"
   >
-    <span class="text-[var(--text-secondary)] pr-4">{`❯ ${question}`}</span>
+    <span class="text-[var(--text-secondary)] pr-4">
+      <span aria-hidden="true">❯ </span>
+      <span data-i18n={questionKey || undefined}>{question}</span>
+    </span>
     <span class="qa-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">▼</span>
   </button>
   <div
     id={accordionId}
     class="qa-content hidden px-5 pb-4"
   >
-    <p class="text-[var(--text-muted)] text-sm leading-relaxed pl-4 border-l border-[var(--border-color)]">
+    <p
+      class="text-[var(--text-muted)] text-sm leading-relaxed pl-4 border-l border-[var(--border-color)]"
+      data-i18n={answerKey || undefined}
+    >
       {answer}
     </p>
   </div>

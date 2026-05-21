@@ -1,4 +1,5 @@
 export interface Education {
+  id: string;
   title: string;
   institution: string;
   period: string;
@@ -8,6 +9,7 @@ export interface Education {
 
 export const EDUCATION: Education[] = [
   {
+    id: "ddvja",
     title: "DDVJA — Degree in Video Game Design and Development",
     institution: "ENTI (Barcelona)",
     period: "2023 — Present",
@@ -15,6 +17,7 @@ export const EDUCATION: Education[] = [
     icon: "mdi:school-outline",
   },
   {
+    id: "damviod",
     title: "DAM-VIOD — Cross-platform Application Development",
     institution: "ENTI (Barcelona)",
     period: "2021 — 2023",
@@ -22,6 +25,7 @@ export const EDUCATION: Education[] = [
     icon: "mdi:laptop",
   },
   {
+    id: "bachillerato",
     title: "Bachillerato Tecnológico",
     institution: "INS Leonardo da Vinci (Sant Cugat del Vallès)",
     period: "2019 — 2021",

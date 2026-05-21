@@ -1,0 +1,37 @@
+---
+import { DEFAULT_LANG, LANGUAGES } from "@/i18n/translations";
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const safeLang = LANGUAGES.includes(lang as (typeof LANGUAGES)[number]) ? lang : DEFAULT_LANG;
+const target = "/";
+---
+
+<html lang={safeLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>Redirecting...</title>
+  </head>
+  <body data-lang={safeLang} data-target={target}>
+    <script is:inline>
+      (() => {
+        const { lang, target } = document.body.dataset;
+        try {
+          if (lang) localStorage.setItem("lang", lang);
+        } catch {
+          // ignore storage errors
+        }
+        if (target && location.pathname !== target) {
+          location.replace(target);
+        }
+      })();
+    </script>
+    <noscript>
+      <p>Language set. Continue to <a href={target}>{target}</a>.</p>
+    </noscript>
+  </body>
+</html>

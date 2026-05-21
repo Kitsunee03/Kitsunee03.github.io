@@ -7,7 +7,7 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
 ---
 
 <Layout title={`Contact — ${FULL_NAME}`}>
-  <Section title="Contact" variant="primary" full_screen>
+  <Section title="Contact" titleKey="contact.title" variant="primary" full_screen>
     <div class="max-w-3xl mx-auto space-y-10">
       <!-- Avatar -->
       <div class="flex justify-center">
@@ -16,6 +16,7 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
           <img
             src="/images/mainPfp.png"
             alt="Main profile portrait"
+            data-i18n-attr="alt:images.mainPortrait"
             class="relative z-10 w-full h-full object-cover"
             loading="lazy"
             onerror="this.style.display='none'; this.previousElementSibling && this.previousElementSibling.classList.remove('opacity-0')"
@@ -25,7 +26,7 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
 
       <!-- Email -->
       <div class="text-center space-y-3">
-        <h2 class="text-xl text-[var(--text-secondary)]">Email</h2>
+        <h2 class="text-xl text-[var(--text-secondary)]" data-i18n="contact.email.title">Email</h2>
         <div class="flex items-center justify-center gap-3">
           <code class="text-lg md:text-xl bg-[var(--bg-card)] border border-[var(--border-color)] px-5 py-3 select-all rounded-lg">
             {EMAIL}
@@ -35,6 +36,7 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
             class="border border-[var(--border-color)] hover:border-white p-3 transition-all hover:bg-white hover:text-black group rounded-lg"
             title="Copy email"
             data-email={EMAIL}
+            data-i18n-attr="title:contact.email.copyTitle"
           >
             <Icon name="mdi:content-copy" class="w-5 h-5" />
           </button>
@@ -44,7 +46,7 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
 
       <!-- Professional Links -->
       <div class="space-y-3">
-        <h2 class="text-xl text-[var(--text-secondary)] text-center">
+        <h2 class="text-xl text-[var(--text-secondary)] text-center" data-i18n="contact.professional.title">
           Professional
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -89,7 +91,7 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
 
       <!-- Social Media -->
       <div class="space-y-3">
-        <h2 class="text-xl text-[var(--text-secondary)] text-center">
+        <h2 class="text-xl text-[var(--text-secondary)] text-center" data-i18n="contact.social.title">
           Social Media
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md mx-auto">
@@ -122,7 +124,7 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
 
       <!-- Direct Contact Form -->
       <div class="space-y-3">
-        <h2 class="text-xl text-[var(--text-secondary)] text-center">
+        <h2 class="text-xl text-[var(--text-secondary)] text-center" data-i18n="contact.direct.title">
           Direct Message
         </h2>
         <form
@@ -132,10 +134,20 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
           id="contact-form"
         >
           <input type="hidden" name="access_key" value="5fcb267d-6a30-4ebf-aeef-f02ce90e25e9" />
-          <input type="hidden" name="subject" value="New message from Portfolio" />
-          <input type="hidden" name="from_name" value="Portfolio Contact Form" />
+          <input
+            type="hidden"
+            name="subject"
+            value="New message from Portfolio"
+            data-i18n-attr="value:contact.form.subject"
+          />
+          <input
+            type="hidden"
+            name="from_name"
+            value="Portfolio Contact Form"
+            data-i18n-attr="value:contact.form.fromName"
+          />
           <div>
-            <label for="contact-name" class="block text-sm text-[var(--text-muted)] mb-1">Name</label>
+            <label for="contact-name" class="block text-sm text-[var(--text-muted)] mb-1" data-i18n="contact.form.name.label">Name</label>
             <input
               type="text"
               id="contact-name"
@@ -143,10 +155,11 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
               required
               class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] focus:border-white px-4 py-2.5 text-white outline-none transition-colors rounded-lg"
               placeholder="Your name"
+              data-i18n-attr="placeholder:contact.form.name.placeholder"
             />
           </div>
           <div>
-            <label for="contact-email" class="block text-sm text-[var(--text-muted)] mb-1">Email</label>
+            <label for="contact-email" class="block text-sm text-[var(--text-muted)] mb-1" data-i18n="contact.form.email.label">Email</label>
             <input
               type="email"
               id="contact-email"
@@ -154,10 +167,11 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
               required
               class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] focus:border-white px-4 py-2.5 text-white outline-none transition-colors rounded-lg"
               placeholder="your@email.com"
+              data-i18n-attr="placeholder:contact.form.email.placeholder"
             />
           </div>
           <div>
-            <label for="contact-message" class="block text-sm text-[var(--text-muted)] mb-1">Message</label>
+            <label for="contact-message" class="block text-sm text-[var(--text-muted)] mb-1" data-i18n="contact.form.message.label">Message</label>
             <textarea
               id="contact-message"
               name="message"
@@ -165,12 +179,14 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
               rows="5"
               class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] focus:border-white px-4 py-2.5 text-white outline-none transition-colors resize-none rounded-lg"
               placeholder="Write your message..."
+              data-i18n-attr="placeholder:contact.form.message.placeholder"
             ></textarea>
           </div>
           <button
             type="submit"
             id="submit-btn"
             class="w-full border border-[var(--border-color)] hover:border-white bg-[var(--bg-card)] hover:bg-white hover:text-black py-3 font-bold transition-all rounded-lg"
+            data-i18n="contact.form.submit"
           >
             Send Message
           </button>
@@ -183,6 +199,7 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
 
 <script>
   function initContactPage() {
+    const t = (key, fallback) => (window.__i18n ? window.__i18n.t(key) : fallback);
     // Copy email
     const copyBtn = document.getElementById("copy-email");
     const feedback = document.getElementById("copy-feedback");
@@ -191,11 +208,11 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
       try {
         await navigator.clipboard.writeText(email);
         if (feedback) {
-          feedback.textContent = "✓ Copied to clipboard!";
+          feedback.textContent = t("contact.email.copySuccess", "✓ Copied to clipboard!");
           setTimeout(() => { feedback.textContent = ""; }, 2000);
         }
       } catch {
-        if (feedback) feedback.textContent = "Failed to copy. Select the email manually.";
+        if (feedback) feedback.textContent = t("contact.email.copyError", "Failed to copy. Select the email manually.");
       }
     });
 
@@ -206,7 +223,7 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
     form?.addEventListener("submit", async (e) => {
       e.preventDefault();
       if (submitBtn) {
-        submitBtn.textContent = "Sending...";
+        submitBtn.textContent = t("contact.form.sending", "Sending...");
         (submitBtn as HTMLButtonElement).disabled = true;
       }
       try {
@@ -217,16 +234,16 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
         });
         const data = await res.json();
         if (data.success) {
-          if (formFeedback) formFeedback.textContent = "✓ Message sent! I'll get back to you soon.";
+          if (formFeedback) formFeedback.textContent = t("contact.form.success", "✓ Message sent! I'll get back to you soon.");
           form.reset();
         } else {
-          if (formFeedback) formFeedback.textContent = "Something went wrong. Try again or email directly.";
+          if (formFeedback) formFeedback.textContent = t("contact.form.error", "Something went wrong. Try again or email directly.");
         }
       } catch {
-        if (formFeedback) formFeedback.textContent = "Network error. Try again later.";
+        if (formFeedback) formFeedback.textContent = t("contact.form.networkError", "Network error. Try again later.");
       }
       if (submitBtn) {
-        submitBtn.textContent = "Send Message";
+        submitBtn.textContent = t("contact.form.submit", "Send Message");
         (submitBtn as HTMLButtonElement).disabled = false;
       }
     });
