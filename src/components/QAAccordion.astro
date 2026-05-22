@@ -35,18 +35,3 @@ const accordionId = `qa-${index}`;
     </p>
   </div>
 </div>
-
-<script>
-  document.querySelectorAll(".qa-toggle").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const targetId = btn.getAttribute("data-target");
-      const content = document.getElementById(targetId!);
-      const chevron = btn.querySelector(".qa-chevron");
-      const isExpanded = btn.getAttribute("aria-expanded") === "true";
-
-      btn.setAttribute("aria-expanded", String(!isExpanded));
-      content?.classList.toggle("hidden");
-      chevron?.classList.toggle("rotate-180");
-    });
-  });
-</script>

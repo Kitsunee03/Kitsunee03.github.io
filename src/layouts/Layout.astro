@@ -1,10 +1,9 @@
 ---
-import type { CollectionEntry } from "astro:content";
 import BaseHead from "@/components/BaseHead.astro";
 import Navbar from "@/components/Navbar.astro";
 import Footer from "@/components/Footer.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
-import runtimeUrl from "@/i18n/runtime.ts?url";
+import { DEFAULT_LANG, LANGUAGES, translations } from "@/i18n/translations";
 
 const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
 ---
@@ -18,6 +17,108 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     <header class="fixed top-0 w-screen z-[9999]"><Navbar /></header>
     <main class="pt-28 md:pt-20"><slot /></main>
     <footer class="w-screen bottom-0 overflow-x-hidden"><Footer /></footer>
-    <script type="module" src={runtimeUrl}></script>
+    <script is:inline define:vars={{ DEFAULT_LANG, LANGUAGES, translations }}>
+      const STORAGE_KEY = "lang";
+
+      const normalizeLang = (value) =>
+        LANGUAGES.includes(value) ? value : DEFAULT_LANG;
+
+      const getLang = () => {
+        try {
+          return normalizeLang(localStorage.getItem(STORAGE_KEY));
+        } catch {
+          return DEFAULT_LANG;
+        }
+      };
+
+      const resolveKey = (dict, key) => {
+        const parts = key.split(".");
+        let current = dict;
+        for (const part of parts) {
+          if (!current || typeof current !== "object") return undefined;
+          current = current[part];
+        }
+        return typeof current === "string" ? current : undefined;
+      };
+
+      const t = (key, lang = getLang()) => {
+        const value =
+          resolveKey(translations[lang], key) ??
+          resolveKey(translations[DEFAULT_LANG], key);
+        return value ?? key;
+      };
+
+      const applyLang = (lang = getLang()) => {
+        document.documentElement.lang = lang;
+        document.documentElement.dataset.lang = lang;
+
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.dataset.i18n;
+          if (!key) return;
+          const value = t(key, lang);
+          if (value !== key) {
+            el.textContent = value;
+          }
+        });
+
+        document.querySelectorAll("[data-i18n-attr]").forEach((el) => {
+          const spec = el.dataset.i18nAttr;
+          if (!spec) return;
+          spec.split(";").forEach((entry) => {
+            const trimmed = entry.trim();
+            if (!trimmed) return;
+            const [attr, keyOverride] = trimmed.includes(":")
+              ? trimmed.split(":")
+              : [trimmed, el.dataset.i18n || ""];
+            const key = keyOverride || el.dataset.i18n || "";
+            if (!key) return;
+            const value = t(key, lang);
+            if (value !== key) {
+              el.setAttribute(attr, value);
+            }
+          });
+        });
+
+        window.dispatchEvent(
+          new CustomEvent("i18n:changed", { detail: { lang } }),
+        );
+      };
+
+      const setLang = (lang) => {
+        const next = normalizeLang(lang);
+        try {
+          localStorage.setItem(STORAGE_KEY, next);
+        } catch {
+          // ignore storage errors
+        }
+        applyLang(next);
+        return next;
+      };
+
+      const init = () => {
+        applyLang(getLang());
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
+      }
+
+      document.addEventListener("astro:after-swap", init);
+
+      window.__i18n = {
+        getLang,
+        setLang,
+        applyLang,
+        t,
+        LANGUAGES,
+        DEFAULT_LANG,
+      };
+
+      window.dispatchEvent(
+        new CustomEvent("i18n:ready", { detail: { lang: getLang() } }),
+      );
+    </script>
   </body>
 </html>
