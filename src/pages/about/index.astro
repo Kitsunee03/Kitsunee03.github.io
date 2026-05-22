@@ -333,3 +333,25 @@ const profileSlides = [
   initProfileCarousel();
   document.addEventListener("astro:after-swap", initProfileCarousel);
 </script>
+
+<script>
+  function initQAToggles() {
+    document.querySelectorAll(".qa-toggle").forEach((btn) => {
+      if (btn.dataset.bound === "true") return;
+      btn.dataset.bound = "true";
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-target");
+        const content = document.getElementById(targetId!);
+        const chevron = btn.querySelector(".qa-chevron");
+        const isExpanded = btn.getAttribute("aria-expanded") === "true";
+
+        btn.setAttribute("aria-expanded", String(!isExpanded));
+        content?.classList.toggle("hidden");
+        chevron?.classList.toggle("rotate-180");
+      });
+    });
+  }
+
+  initQAToggles();
+  document.addEventListener("astro:after-swap", initQAToggles);
+</script>

@@ -12,8 +12,7 @@ export function getStaticPaths() {
 
 const { lang, page } = Astro.params;
 const safeLang = LANGUAGES.includes(lang as (typeof LANGUAGES)[number]) ? lang : DEFAULT_LANG;
-const validPages = ["about", "projects", "contact"] as const;
-const target = validPages.includes(page as (typeof validPages)[number]) ? `/${page}` : "/";
+const target = page ? `/${page}` : "/";
 ---
 
 <html lang={safeLang}>
@@ -32,7 +31,8 @@ const target = validPages.includes(page as (typeof validPages)[number]) ? `/${pa
           // ignore storage errors
         }
         if (target && location.pathname !== target) {
-          location.replace(target);
+          const nextUrl = `${target}${location.search}${location.hash}`;
+          location.replace(nextUrl);
         }
       })();
     </script>

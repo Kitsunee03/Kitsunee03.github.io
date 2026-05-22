@@ -26,7 +26,8 @@ const target = "/";
           // ignore storage errors
         }
         if (target && location.pathname !== target) {
-          location.replace(target);
+          const nextUrl = `${target}${location.search}${location.hash}`;
+          location.replace(nextUrl);
         }
       })();
     </script>

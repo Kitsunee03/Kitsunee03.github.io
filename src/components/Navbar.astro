@@ -189,7 +189,17 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
     updateLangToggles();
   }
 
-  initLangToggles();
+  const onI18nReady = () => {
+    initLangToggles();
+    updateLangToggles();
+  };
+
+  if (window.__i18n) {
+    onI18nReady();
+  } else {
+    window.addEventListener("i18n:ready", onI18nReady, { once: true });
+  }
+
   document.addEventListener("DOMContentLoaded", initLangToggles);
   document.addEventListener("astro:after-swap", initLangToggles);
   window.addEventListener("i18n:changed", updateLangToggles);
