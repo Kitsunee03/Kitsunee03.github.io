@@ -15,7 +15,7 @@ const allProjects = (await getCollection("projects")).sort(
 <Layout title={`Projects — ${FULL_NAME}`}>
   <Section title="Projects" titleKey="projects.title" variant="primary">
     <!-- Engine Filters -->
-    <div class="flex flex-wrap gap-3 justify-center mb-10">
+    <div class="flex flex-wrap gap-3 justify-center mb-10" data-project-filters>
       <button
         class="engine-filter active border border-white bg-white text-black px-4 py-1.5 text-sm transition-all hover:bg-white hover:text-black rounded-md"
         data-engine="all"
@@ -63,38 +63,38 @@ const allProjects = (await getCollection("projects")).sort(
 </Layout>
 
 <script>
-  const filterBtns = document.querySelectorAll(".engine-filter");
-  const projectItems = document.querySelectorAll(".project-item");
-  const noProjects = document.getElementById("no-projects");
+  function initProjectFilters() {
+    const filterRoot = document.querySelector<HTMLElement>('[data-project-filters]');
+    if (!filterRoot || filterRoot.dataset.initialized === "true") return;
 
-  filterBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const engine = btn.getAttribute("data-engine");
+    filterRoot.dataset.initialized = "true";
+    filterRoot.addEventListener("click", (event) => {
+      const target = (event.target as HTMLElement).closest<HTMLButtonElement>(".engine-filter");
+      if (!target) return;
 
-      // Update active button styles
-      filterBtns.forEach((b) => {
-        b.classList.remove("active", "bg-white", "text-black", "border-white");
-        b.classList.add("border-[var(--border-color)]", "text-[var(--text-secondary)]");
+      const filterBtns = filterRoot.querySelectorAll<HTMLButtonElement>(".engine-filter");
+      const projectItems = document.querySelectorAll<HTMLElement>(".project-item");
+      const noProjects = document.getElementById("no-projects");
+      const engine = target.getAttribute("data-engine");
+
+      filterBtns.forEach((button) => {
+        button.classList.remove("active", "bg-white", "text-black", "border-white");
+        button.classList.add("border-[var(--border-color)]", "text-[var(--text-secondary)]");
       });
-      btn.classList.add("active", "bg-white", "text-black", "border-white");
-      btn.classList.remove("border-[var(--border-color)]", "text-[var(--text-secondary)]");
+      target.classList.add("active", "bg-white", "text-black", "border-white");
+      target.classList.remove("border-[var(--border-color)]", "text-[var(--text-secondary)]");
 
-      // Filter projects
       let visibleCount = 0;
       projectItems.forEach((item) => {
-        const itemEngine = item.getAttribute("data-engine");
-        if (engine === "all" || itemEngine === engine) {
-          (item as HTMLElement).style.display = "";
-          visibleCount++;
-        } else {
-          (item as HTMLElement).style.display = "none";
-        }
+        const isVisible = engine === "all" || item.dataset.engine === engine;
+        item.style.display = isVisible ? "" : "none";
+        if (isVisible) visibleCount++;
       });
 
-      // Show/hide empty state
-      if (noProjects) {
-        noProjects.classList.toggle("hidden", visibleCount > 0);
-      }
+      noProjects?.classList.toggle("hidden", visibleCount > 0);
     });
-  });
+  }
+
+  initProjectFilters();
+  document.addEventListener("astro:page-load", initProjectFilters);
 </script>

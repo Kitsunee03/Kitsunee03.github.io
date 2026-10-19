@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://Kitsunee03.github.io/sitemap-index.xml

@@ -1,139 +1,181 @@
 ---
 import { Icon } from "astro-icon/components";
-import type { CollectionEntry } from "astro:content";
+import { render, type CollectionEntry } from "astro:content";
 
 type Props = {
   projects: CollectionEntry<"projects">[];
 };
 
 const { projects } = Astro.props;
+const getYoutubeThumbnail = (url: string) => {
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^?&/]+)/);
+  return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : undefined;
+};
+const getLinkIcon = (link: { kind?: string; url: string }) => {
+  const kind = link.kind?.toLowerCase();
+  if (kind === "itch" || link.url.includes("itch.io")) return "simple-icons:itchdotio";
+  if (kind === "youtube" || link.url.includes("youtu.be") || link.url.includes("youtube.com")) return "simple-icons:youtube";
+  if (kind === "github" || link.url.includes("github.com")) return "simple-icons:github";
+  return "mdi:link-variant";
+};
+const renderedProjects = await Promise.all(
+  projects.map(async (project) => {
+    const { Content } = await render(project);
+    const links = project.data.links?.length
+      ? project.data.links.map((link) => ({
+          ...link,
+          thumbnail: link.thumbnail || getYoutubeThumbnail(link.url),
+        }))
+      : project.data.link
+        ? [{ label: "Visit on itch.io", url: project.data.link, kind: "itch", thumbnail: undefined }]
+        : [];
+
+    return { project, Content, links };
+  }),
+);
 ---
 
 <div
   id="project-detail-modal"
-  class="fixed inset-0 z-[10000] hidden items-center justify-center bg-black/80 p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300"
+  class="fixed inset-0 z-[10000] hidden items-center justify-center overflow-hidden overscroll-contain bg-black/85 p-3 backdrop-blur-sm opacity-0 transition-opacity duration-300 md:p-6"
   aria-hidden="true"
 >
   <div
-    class="project-detail-dialog relative flex max-h-[calc(100vh-2rem)] w-full max-w-5xl translate-y-4 flex-col overflow-hidden rounded-lg border border-[var(--border-hover)] bg-[var(--bg-secondary)] shadow-2xl transition-transform duration-300"
+    class="project-detail-dialog relative flex max-h-[calc(100dvh-1.5rem)] w-full max-w-6xl translate-y-4 flex-col overflow-hidden rounded-lg border border-[var(--border-hover)] bg-[var(--bg-secondary)] shadow-2xl transition-transform duration-300 md:max-h-[calc(100dvh-3rem)]"
     role="dialog"
     aria-modal="true"
     aria-labelledby="project-detail-title"
     tabindex="-1"
   >
-    <button
-      type="button"
-      id="project-detail-close"
-      class="absolute right-4 top-4 z-10 grid h-9 w-9 place-items-center rounded-md border border-white/20 bg-black/70 text-white transition-colors hover:border-white hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-white"
-      aria-label="Close project details"
-      data-i18n-attr="aria-label:projects.modal.close"
-    >
-      <Icon name="mdi:close" class="h-5 w-5" />
-    </button>
+    <div class="flex shrink-0 items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-card)] px-4 py-3 md:px-6">
+      <span class="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">Project log</span>
+      <button
+        type="button"
+        id="project-detail-close"
+        class="grid h-9 w-9 place-items-center rounded-md border border-white/20 text-white transition-colors hover:border-white hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-white"
+        aria-label="Close project details"
+        data-i18n-attr="aria-label:projects.modal.close"
+      >
+        <Icon name="mdi:close" class="h-5 w-5" />
+      </button>
+    </div>
 
-    {projects.map((project) => (
-      <article class="project-detail-view hidden overflow-y-auto" data-project-id={project.id}>
-        <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)]">
-          <div class="relative aspect-video min-h-64 bg-[var(--bg-tertiary)] lg:aspect-auto lg:min-h-[25rem]">
-            <img
-              src={project.data.image}
-              alt={project.data.title}
-              class="absolute inset-0 h-full w-full object-cover"
-              loading="lazy"
-            />
-            {project.data.gif && (
-              <img
-                src={project.data.gif}
-                alt=""
-                class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 hover:opacity-100"
-                loading="lazy"
-              />
-            )}
-            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent px-6 pb-6 pt-16">
-              <p class="mb-2 text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">{project.data.engine}</p>
-              <h2 class="pr-10 text-3xl font-bold text-white" data-project-title>{project.data.title}</h2>
+    {renderedProjects.map(({ project, Content, links }) => (
+      <article class="project-detail-view hidden min-h-0 overflow-y-auto overscroll-contain" data-project-id={project.id}>
+        <div class="grid min-h-full grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18rem]">
+          <div class="min-w-0 space-y-8 p-5 md:p-8">
+            <header class="space-y-4 border-b border-[var(--border-color)] pb-6">
+              <div class="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">
+                <span>{project.data.engine}</span>
+                <span aria-hidden="true">/</span>
+                <span>Devlog</span>
+              </div>
+              <h2 class="text-3xl font-bold text-white md:text-4xl" data-project-title>{project.data.title}</h2>
+              <p class="max-w-3xl text-base leading-relaxed text-[var(--text-secondary)]">{project.data.description}</p>
+              <div class="flex flex-wrap gap-2">
+                {project.data.tags.map((tag) => (
+                  <span class="rounded-full bg-white/10 px-2.5 py-1 text-xs text-[var(--text-secondary)]">{tag}</span>
+                ))}
+              </div>
+            </header>
+
+            <figure class="project-detail-media overflow-hidden rounded-lg border border-[var(--border-color)] bg-[var(--bg-tertiary)]">
+              <img src={project.data.image} alt={project.data.title} class="h-auto max-h-[min(42vh,28rem)] w-full object-contain" loading="lazy" />
+            </figure>
+
+            <div class="project-detail-prose">
+              <Content />
+            </div>
+
+            <div class="space-y-8">
+              <section class="space-y-3">
+                <h3 class="project-detail-label" data-i18n="projects.modal.overview">Overview</h3>
+                <p class="leading-relaxed text-[var(--text-secondary)]">{project.data.overview || project.data.description}</p>
+              </section>
+
+              {project.data.contribution && (
+                <section class="space-y-3 border-l border-white/30 pl-4">
+                  <h3 class="project-detail-label" data-i18n="projects.modal.contribution">My contribution</h3>
+                  <ul class="space-y-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+                    {project.data.contribution.map((item) => <li>{item}</li>)}
+                  </ul>
+                </section>
+              )}
+
+              {project.data.highlights && (
+                <section class="space-y-3">
+                  <h3 class="project-detail-label" data-i18n="projects.modal.highlights">Highlights</h3>
+                  <ul class="grid gap-2 text-sm leading-relaxed text-[var(--text-secondary)] sm:grid-cols-2">
+                    {project.data.highlights.map((item) => <li class="border border-[var(--border-color)] bg-[var(--bg-card)] p-3">{item}</li>)}
+                  </ul>
+                </section>
+              )}
+
+              <div class="grid gap-6 sm:grid-cols-2">
+                {project.data.technologies && (
+                  <section class="space-y-3">
+                    <h3 class="project-detail-label" data-i18n="projects.modal.technologies">Technologies</h3>
+                    <ul class="space-y-1 text-sm text-[var(--text-secondary)]">{project.data.technologies.map((item) => <li>{item}</li>)}</ul>
+                  </section>
+                )}
+                {project.data.controls && (
+                  <section class="space-y-3">
+                    <h3 class="project-detail-label" data-i18n="projects.modal.controls">Controls</h3>
+                    <ul class="space-y-1 text-sm text-[var(--text-secondary)]">{project.data.controls.map((item) => <li>{item}</li>)}</ul>
+                  </section>
+                )}
+              </div>
+
+              {project.data.challenges && (
+                <section class="space-y-3">
+                  <h3 class="project-detail-label" data-i18n="projects.modal.challenges">Challenges</h3>
+                  <ul class="space-y-2 text-sm leading-relaxed text-[var(--text-secondary)]">{project.data.challenges.map((item) => <li>{item}</li>)}</ul>
+                </section>
+              )}
+
+              {project.data.technicalDecisions && (
+                <section class="space-y-3">
+                  <h3 class="project-detail-label" data-i18n="projects.modal.decisions">Technical decisions</h3>
+                  <ul class="space-y-2 text-sm leading-relaxed text-[var(--text-secondary)]">{project.data.technicalDecisions.map((item) => <li>{item}</li>)}</ul>
+                </section>
+              )}
             </div>
           </div>
 
-          <div class="space-y-7 overflow-y-auto p-6 md:p-8">
-            <div class="flex flex-wrap gap-2">
-              {project.data.tags.map((tag) => (
-                <span class="rounded-full bg-white/10 px-2.5 py-1 text-xs text-[var(--text-secondary)]">{tag}</span>
-              ))}
-            </div>
-
-            <div class="space-y-3">
-              <h3 class="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]" data-i18n="projects.modal.overview">Overview</h3>
-              <p class="leading-relaxed text-[var(--text-secondary)]">{project.data.overview || project.data.description}</p>
-            </div>
-
-            {project.data.contribution && (
-              <div class="space-y-3 border-l border-white/30 pl-4">
-                <h3 class="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]" data-i18n="projects.modal.contribution">My contribution</h3>
-                <ul class="space-y-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-                  {project.data.contribution.map((item) => <li>{item}</li>)}
-                </ul>
-              </div>
-            )}
-
-            {project.data.highlights && (
+          <aside class="border-t border-[var(--border-color)] bg-[var(--bg-card)] p-5 lg:border-l lg:border-t-0 lg:p-6">
+            <div class="space-y-6 lg:sticky lg:top-0">
               <div class="space-y-3">
-                <h3 class="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]" data-i18n="projects.modal.highlights">Highlights</h3>
-                <ul class="grid gap-2 text-sm leading-relaxed text-[var(--text-secondary)] sm:grid-cols-2">
-                  {project.data.highlights.map((item) => <li class="border border-[var(--border-color)] bg-[var(--bg-card)] p-3">{item}</li>)}
-                </ul>
-              </div>
-            )}
-
-            <div class="grid gap-6 sm:grid-cols-2">
-              {project.data.technologies && (
-                <div class="space-y-3">
-                  <h3 class="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]" data-i18n="projects.modal.technologies">Technologies</h3>
-                  <ul class="space-y-1 text-sm text-[var(--text-secondary)]">
-                    {project.data.technologies.map((item) => <li>{item}</li>)}
-                  </ul>
+                <h3 class="project-detail-label">Links</h3>
+                <div class="flex flex-col gap-2">
+                  {links.map((link) => (
+                    <a href={link.url} target="_blank" rel="noopener noreferrer" class:list={["group border border-[var(--border-color)] text-sm text-[var(--text-secondary)] transition-colors hover:border-white hover:bg-white hover:text-black", link.thumbnail ? "overflow-hidden" : "inline-flex items-center justify-between gap-3 px-3 py-2.5"]}>
+                      {link.thumbnail && <img src={link.thumbnail} alt={link.alt || link.label} class="aspect-video w-full object-cover" loading="lazy" />}
+                      <span class:list={["flex items-center justify-between gap-3", link.thumbnail ? "px-3 py-2.5" : ""]}>
+                        <span class="flex min-w-0 items-center gap-2">
+                          <Icon name={getLinkIcon(link)} class="h-4 w-4 shrink-0" />
+                          <span>{link.label}</span>
+                        </span>
+                        <Icon name="mdi:arrow-top-right" class="h-4 w-4 shrink-0" />
+                      </span>
+                    </a>
+                  ))}
                 </div>
-              )}
-              {project.data.controls && (
+              </div>
+              {project.data.previews?.length ? (
                 <div class="space-y-3">
-                  <h3 class="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]" data-i18n="projects.modal.controls">Controls</h3>
-                  <ul class="space-y-1 text-sm text-[var(--text-secondary)]">
-                    {project.data.controls.map((item) => <li>{item}</li>)}
-                  </ul>
+                  <h3 class="project-detail-label">Preview</h3>
+                  <div class="grid gap-3">
+                    {project.data.previews.map((preview) => (
+                      <figure class="overflow-hidden rounded border border-[var(--border-color)] bg-[var(--bg-tertiary)]">
+                        <img src={preview.src} alt={preview.alt} class="h-auto w-full object-contain" loading="lazy" />
+                        {preview.caption && <figcaption class="border-t border-[var(--border-color)] px-3 py-2 text-xs text-[var(--text-muted)]">{preview.caption}</figcaption>}
+                      </figure>
+                    ))}
+                  </div>
                 </div>
-              )}
+              ) : project.data.gif ? <img src={project.data.gif} alt="" class="w-full rounded border border-[var(--border-color)] object-contain" loading="lazy" /> : null}
             </div>
-
-            {project.data.challenges && (
-              <div class="space-y-3">
-                <h3 class="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]" data-i18n="projects.modal.challenges">Challenges</h3>
-                <ul class="space-y-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-                  {project.data.challenges.map((item) => <li>{item}</li>)}
-                </ul>
-              </div>
-            )}
-
-            {project.data.technicalDecisions && (
-              <div class="space-y-3">
-                <h3 class="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]" data-i18n="projects.modal.decisions">Technical decisions</h3>
-                <ul class="space-y-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-                  {project.data.technicalDecisions.map((item) => <li>{item}</li>)}
-                </ul>
-              </div>
-            )}
-
-            {project.data.link && (
-              <a
-                href={project.data.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 border border-white bg-white px-4 py-2 text-sm text-black transition-colors hover:bg-transparent hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-              >
-                <span data-i18n="projects.modal.visit">Visit the game on itch.io</span>
-                <Icon name="mdi:arrow-top-right" class="h-4 w-4" />
-              </a>
-            )}
-          </div>
+          </aside>
         </div>
       </article>
     ))}
@@ -141,95 +183,115 @@ const { projects } = Astro.props;
 </div>
 
 <script>
-  let modal = document.getElementById("project-detail-modal");
-  let dialog = modal?.querySelector<HTMLElement>(".project-detail-dialog");
-  let closeButton = document.getElementById("project-detail-close");
+  let modal: HTMLElement | null = null;
+  let dialog: HTMLElement | null = null;
   let lastTrigger: HTMLElement | null = null;
+  let closeTimer = 0;
+  let initialized = false;
 
   const refreshElements = () => {
     modal = document.getElementById("project-detail-modal");
-    dialog = modal?.querySelector<HTMLElement>(".project-detail-dialog");
-    closeButton = document.getElementById("project-detail-close");
+    dialog = modal?.querySelector<HTMLElement>(".project-detail-dialog") || null;
   };
 
-  const closeModal = () => {
-    if (!modal || !dialog) return;
+  const resetModal = () => {
+    window.clearTimeout(closeTimer);
+    modal?.classList.add("hidden");
+    modal?.classList.remove("flex", "opacity-100");
+    dialog?.classList.add("translate-y-4");
+    dialog?.classList.remove("translate-y-0");
+    modal?.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("project-modal-open");
+    lastTrigger = null;
+  };
+
+  const closeModal = (restoreFocus = true) => {
+    if (!modal || !dialog || modal.getAttribute("aria-hidden") !== "false") return;
     modal.classList.remove("opacity-100");
     dialog.classList.remove("translate-y-0");
     dialog.classList.add("translate-y-4");
-    window.setTimeout(() => {
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-      modal.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("project-modal-open");
-      lastTrigger?.focus();
-      lastTrigger = null;
+    closeTimer = window.setTimeout(() => {
+      const triggerToRestore = lastTrigger;
+      resetModal();
+      if (restoreFocus) triggerToRestore?.focus();
     }, 200);
   };
 
   const openModal = (projectId: string, trigger: HTMLElement) => {
+    refreshElements();
     if (!modal || !dialog) return;
-    const project = modal.querySelector<HTMLElement>(`[data-project-id="${projectId}"]`);
+    const project = Array.from(modal.querySelectorAll<HTMLElement>(".project-detail-view"))
+      .find((view) => view.dataset.projectId === projectId);
     if (!project) return;
 
+    window.clearTimeout(closeTimer);
     lastTrigger = trigger;
     modal.querySelectorAll<HTMLElement>(".project-detail-view").forEach((view) => view.classList.add("hidden"));
     project.classList.remove("hidden");
+    project.scrollTop = 0;
     const title = project.querySelector<HTMLElement>("[data-project-title]");
     if (title) {
-      dialog.setAttribute("aria-labelledby", "project-detail-title");
       title.id = "project-detail-title";
+      dialog.setAttribute("aria-labelledby", title.id);
     }
     modal.classList.remove("hidden");
     modal.classList.add("flex");
     modal.setAttribute("aria-hidden", "false");
     document.body.classList.add("project-modal-open");
     requestAnimationFrame(() => {
-      modal.classList.add("opacity-100");
-      dialog.classList.remove("translate-y-4");
-      dialog.classList.add("translate-y-0");
-      closeButton?.focus();
+      modal?.classList.add("opacity-100");
+      dialog?.classList.remove("translate-y-4");
+      dialog?.classList.add("translate-y-0");
+      dialog?.focus();
     });
   };
 
-  document.addEventListener("click", (event) => {
-    const target = event.target as HTMLElement;
-    const trigger = target.closest<HTMLElement>("[data-project-trigger]");
-    if (trigger) {
-      event.preventDefault();
-      const projectId = trigger.dataset.projectId;
-      if (projectId) openModal(projectId, trigger);
-      return;
-    }
-
-    if (target === modal || target.closest("#project-detail-close")) closeModal();
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (modal?.getAttribute("aria-hidden") !== "false" || !dialog) return;
-    if (event.key === "Escape") {
-      closeModal();
-      return;
-    }
-    if (event.key !== "Tab") return;
-
-    const focusable = dialog.querySelectorAll<HTMLElement>(
-      "button:not([disabled]), a[href], [tabindex]:not([tabindex=\"-1\"])",
-    );
-    if (!focusable.length) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
-    }
-  });
-
-  document.addEventListener("astro:after-swap", () => {
-    if (modal?.getAttribute("aria-hidden") === "false") closeModal();
+  const initProjectModal = () => {
     refreshElements();
+    if (initialized) {
+      resetModal();
+      return;
+    }
+    initialized = true;
+    resetModal();
+
+    document.addEventListener("click", (event) => {
+      const target = event.target as HTMLElement;
+      const trigger = target.closest<HTMLElement>("[data-project-trigger]");
+      if (trigger) {
+        event.preventDefault();
+        const projectId = trigger.dataset.projectId;
+        if (projectId) openModal(projectId, trigger);
+        return;
+      }
+      if (target === modal || target.closest("#project-detail-close")) closeModal();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (modal?.getAttribute("aria-hidden") !== "false" || !dialog) return;
+      if (event.key === "Escape") {
+        closeModal();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const focusable = dialog.querySelectorAll<HTMLElement>("button:not([disabled]), a[href], [tabindex]:not([tabindex=\"-1\"])");
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+  };
+
+  initProjectModal();
+  document.addEventListener("astro:page-load", initProjectModal);
+  document.addEventListener("astro:after-swap", () => {
+    refreshElements();
+    resetModal();
   });
 </script>
