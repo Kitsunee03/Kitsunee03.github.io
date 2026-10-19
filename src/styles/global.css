@@ -21,6 +21,10 @@ body {
   font-family: "VCR", monospace !important;
 }
 
+body.project-modal-open {
+  overflow: hidden;
+}
+
 pre,
 code {
   font-family: "VCR", monospace !important;

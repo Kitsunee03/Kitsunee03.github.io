@@ -5,6 +5,12 @@ tags: ["2D", "Platformer", "Action", "Megaman-Style"]
 engine: "Unity"
 image: "/projects/geno-the-genocidal.png"
 link: "https://kitsunee03.itch.io/geno-the-genocidal"
+overview: "A Mega Man-style 2D platformer built for a class assignment, challenging the player to reach the victory screen and attempt a run without losing a life."
+contribution: ["Pending confirmation: replace this line with my specific contribution to the project."]
+highlights: ["2D action-platforming structure", "Class project developed in Unity", "Optional no-lives-lost challenge"]
+technologies: ["Unity"]
+challenges: ["The public description frames the project around completing a class assignment while adding a higher-difficulty challenge for experienced players."]
+technicalDecisions: ["Pending confirmation: document the implementation decisions and systems I owned."]
 featured: false
 order: 5
 ---

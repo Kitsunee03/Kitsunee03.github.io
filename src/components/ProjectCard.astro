@@ -2,6 +2,7 @@
 import { Icon } from "astro-icon/components";
 
 type Props = {
+  projectId: string;
   title: string;
   description: string;
   tags: string[];
@@ -11,7 +12,7 @@ type Props = {
   link?: string;
 };
 
-const { title, description, tags, engine, image, gif, link } = Astro.props;
+const { projectId, title, description, tags, engine, image, gif } = Astro.props;
 
 const engineIcons: Record<string, string> = {
   "Unity": "simple-icons:unity",
@@ -21,9 +22,15 @@ const engineIcons: Record<string, string> = {
 };
 ---
 
-<div class="group border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-[var(--border-hover)] transition-all duration-300 overflow-hidden rounded-lg">
+<article class="group border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-[var(--border-hover)] transition-all duration-300 overflow-hidden rounded-lg">
   <!-- Image -->
-  <div class="relative overflow-hidden aspect-video bg-[var(--bg-tertiary)]">
+  <button
+    type="button"
+    class="relative block w-full overflow-hidden aspect-video bg-[var(--bg-tertiary)] text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+    data-project-trigger
+    data-project-id={projectId}
+    aria-haspopup="dialog"
+  >
     <!-- Placeholder (behind images, lowest z) -->
     <div class="absolute inset-0 flex items-center justify-center text-[var(--text-muted)] pointer-events-none z-0">
       <Icon name="mdi:image-outline" class="w-12 h-12 opacity-30" />
@@ -53,11 +60,21 @@ const engineIcons: Record<string, string> = {
       <Icon name={engineIcons[engine] || "mdi:gamepad-variant"} class="w-3.5 h-3.5" />
       <span>{engine}</span>
     </div>
-  </div>
+  </button>
 
   <!-- Content -->
   <div class="p-5 space-y-3">
-    <h3 class="text-xl font-bold group-hover:text-white transition-colors">{title}</h3>
+    <h3 class="text-xl font-bold group-hover:text-white transition-colors">
+      <button
+        type="button"
+        class="text-left focus:outline-none focus:underline focus:underline-offset-4"
+        data-project-trigger
+        data-project-id={projectId}
+        aria-haspopup="dialog"
+      >
+        {title}
+      </button>
+    </h3>
 
     <!-- Tags -->
     <div class="flex flex-wrap gap-1.5">
@@ -70,16 +87,15 @@ const engineIcons: Record<string, string> = {
 
     <p class="text-[var(--text-muted)] text-sm leading-relaxed line-clamp-2 group-hover:line-clamp-none transition-all duration-300">{description}</p>
 
-    {link && (
-      <a
-        href={link}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-white transition-colors pt-1"
-      >
-        <span data-i18n="projects.view">View Project</span>
-        <Icon name="mdi:arrow-top-right" class="w-4 h-4" />
-      </a>
-    )}
+    <button
+      type="button"
+      class="inline-flex items-center gap-2 pt-1 text-sm text-[var(--text-secondary)] transition-colors hover:text-white focus:outline-none focus:underline focus:underline-offset-4"
+      data-project-trigger
+      data-project-id={projectId}
+      aria-haspopup="dialog"
+    >
+      <span data-i18n="projects.view">View Details</span>
+      <Icon name="mdi:arrow-right" class="h-4 w-4" />
+    </button>
   </div>
-</div>
+</article>
