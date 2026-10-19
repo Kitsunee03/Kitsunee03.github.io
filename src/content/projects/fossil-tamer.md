@@ -6,6 +6,12 @@ engine: "Unity"
 image: "/projects/fossil-tamer.png"
 gif: "/projects/fossil-tamer.gif"
 link: "https://kitsunee03.itch.io/fossil-tamer"
+overview: "A roguelite deck-builder with creature-collection elements. Explore mysterious caverns, revive Fossilmons and use their unique abilities to find a way out."
+contribution: ["Pending confirmation: replace this line with my specific contribution to the project."]
+highlights: ["Roguelite exploration through caverns", "Deck-building combat structure", "Creature collection through revived Fossilmons", "Development build with public feedback encouraged"]
+technologies: ["Unity"]
+challenges: ["The itch.io page presents the game as a development build with unfinished explanations and possible bugs."]
+technicalDecisions: ["Pending confirmation: document the implementation decisions and systems I owned."]
 featured: true
 order: 3
 ---

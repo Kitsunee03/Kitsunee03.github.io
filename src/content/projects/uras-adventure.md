@@ -6,6 +6,13 @@ engine: "Unity"
 image: "/projects/uras-adventure.png"
 gif: "/projects/uras-adventure.gif"
 link: "https://kitsunee03.itch.io/uras-adventure"
+overview: "A 2D platforming metroidvania following Ura, a pumpkin-headed devil searching for his kidnapped sister through a mysterious world."
+contribution: ["Pending confirmation: replace this line with my specific contribution to the project."]
+highlights: ["2D metroidvania exploration", "Pixel-art presentation", "Controller and keyboard support", "Character-focused adventure structure"]
+technologies: ["Unity"]
+challenges: ["The public page communicates the game through its character presentation, movement, attack and jump controls."]
+technicalDecisions: ["Pending confirmation: document the implementation decisions and systems I owned."]
+controls: ["Move: Left stick or arrow keys", "Attack: X", "Jump: A or Spacebar"]
 featured: false
 order: 4
 ---

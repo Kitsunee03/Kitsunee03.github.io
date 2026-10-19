@@ -129,7 +129,7 @@ export const translations: Record<Lang, Dictionary> = {
                 institution: "ENTI-UB (Barcelona)",
                 period: "2023 — Present",
                 description:
-                    "Game development student in third year, focused on gameplay programming, game design, production, and rapid prototyping across multiple engines.",
+                    "Game development student in fourth year, focused on gameplay programming, game design, production, and rapid prototyping across multiple engines.",
             },
             damviod: {
                 title: "DAM-VIOD — Cross-platform Application Development",
@@ -209,7 +209,18 @@ export const translations: Record<Lang, Dictionary> = {
             title: "Projects",
             filter: { all: "All" },
             empty: "No projects found for this engine.",
-            view: "View Project",
+            view: "View Details",
+            modal: {
+                close: "Close project details",
+                overview: "Overview",
+                contribution: "My contribution",
+                highlights: "Highlights",
+                technologies: "Technologies",
+                controls: "Controls",
+                challenges: "Challenges",
+                decisions: "Technical decisions",
+                visit: "Visit the game on itch.io",
+            },
         },
         contact: {
             title: "Contact",
@@ -373,7 +384,7 @@ export const translations: Record<Lang, Dictionary> = {
                 institution: "ENTI-UB (Barcelona)",
                 period: "2023 — Actualidad",
                 description:
-                    "Estudiante de desarrollo de videojuegos en tercer curso, centrado en gameplay, diseño, producción y prototipado rápido en varios motores.",
+                    "Estudiante de desarrollo de videojuegos en cuarto curso, centrado en gameplay, diseño, producción y prototipado rápido en varios motores.",
             },
             damviod: {
                 title: "DAM-VIOD — Desarrollo de Aplicaciones Multiplataforma",
@@ -453,7 +464,18 @@ export const translations: Record<Lang, Dictionary> = {
             title: "Proyectos",
             filter: { all: "Todos" },
             empty: "No se encontraron proyectos para este motor.",
-            view: "Ver proyecto",
+            view: "Ver detalles",
+            modal: {
+                close: "Cerrar detalles del proyecto",
+                overview: "Presentación",
+                contribution: "Mi contribución",
+                highlights: "Puntos destacados",
+                technologies: "Tecnologías",
+                controls: "Controles",
+                challenges: "Retos",
+                decisions: "Decisiones técnicas",
+                visit: "Visitar el juego en itch.io",
+            },
         },
         contact: {
             title: "Contacto",

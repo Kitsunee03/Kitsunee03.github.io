@@ -4,6 +4,7 @@ import Layout from "@/layouts/Layout.astro";
 import Section from "@/components/Section.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import ContactSummary from "@/components/ContactSummary.astro";
+import ProjectDetailModal from "@/components/ProjectDetailModal.astro";
 import { ENGINES, FULL_NAME } from "@/consts";
 
 const allProjects = (await getCollection("projects")).sort(
@@ -37,17 +38,18 @@ const allProjects = (await getCollection("projects")).sort(
       {allProjects.map((project) => (
         <div class="project-item" data-engine={project.data.engine}>
           <ProjectCard
+            projectId={project.id}
             title={project.data.title}
             description={project.data.description}
             tags={project.data.tags}
             engine={project.data.engine}
             image={project.data.image}
             gif={project.data.gif}
-            link={project.data.link}
           />
         </div>
       ))}
     </div>
+    <ProjectDetailModal projects={allProjects} />
 
     <!-- Empty state -->
     <div id="no-projects" class="hidden text-center py-16 text-[var(--text-muted)]">
