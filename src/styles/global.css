@@ -23,6 +23,110 @@ body {
 
 body.project-modal-open {
   overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+.project-detail-view {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
+}
+
+.project-detail-label {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.project-detail-prose:empty {
+  display: none;
+}
+
+.project-detail-prose {
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.project-detail-prose > :first-child {
+  margin-top: 0;
+}
+
+.project-detail-prose h2,
+.project-detail-prose h3,
+.project-detail-prose h4 {
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.project-detail-prose h2 { font-size: 1.5rem; }
+.project-detail-prose h3 { font-size: 1.25rem; }
+.project-detail-prose h4 { font-size: 1rem; }
+
+.project-detail-prose p,
+.project-detail-prose ul,
+.project-detail-prose ol,
+.project-detail-prose blockquote,
+.project-detail-prose pre {
+  margin-top: 1rem;
+}
+
+.project-detail-prose ul,
+.project-detail-prose ol {
+  padding-left: 1.25rem;
+}
+
+.project-detail-prose ul { list-style: disc; }
+.project-detail-prose ol { list-style: decimal; }
+
+.project-detail-prose a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.project-detail-prose img,
+.project-detail-prose video,
+.project-detail-prose iframe {
+  display: block;
+  max-width: 100%;
+  margin: 1.5rem auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+}
+
+.project-detail-prose iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.project-detail-prose code {
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  padding: 0.1rem 0.3rem;
+}
+
+.project-detail-prose pre {
+  overflow-x: auto;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+}
+
+.project-detail-prose pre code {
+  border: 0;
+  padding: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-detail-dialog,
+  #project-detail-modal {
+    transition: none;
+  }
 }
 
 pre,
