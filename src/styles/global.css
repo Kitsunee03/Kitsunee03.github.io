@@ -40,12 +40,18 @@ body.project-modal-open {
   text-transform: uppercase;
 }
 
+.project-detail-lead {
+  color: var(--text-primary);
+  font-size: 1.05rem;
+}
+
 .project-detail-prose:empty {
   display: none;
 }
 
 .project-detail-prose {
   color: var(--text-secondary);
+  font-size: 0.98rem;
   line-height: 1.8;
 }
 
@@ -63,6 +69,11 @@ body.project-modal-open {
   margin-bottom: 0.75rem;
 }
 
+.project-detail-prose h2 {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
 .project-detail-prose h2 { font-size: 1.5rem; }
 .project-detail-prose h3 { font-size: 1.25rem; }
 .project-detail-prose h4 { font-size: 1rem; }
@@ -73,6 +84,38 @@ body.project-modal-open {
 .project-detail-prose blockquote,
 .project-detail-prose pre {
   margin-top: 1rem;
+}
+
+.project-detail-prose details {
+  margin-top: 1.25rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+}
+
+.project-detail-prose summary {
+  cursor: pointer;
+  padding: 1rem 1.1rem;
+  color: var(--text-primary);
+  font-weight: 700;
+  list-style-position: inside;
+}
+
+.project-detail-prose summary::marker {
+  color: var(--text-muted);
+}
+
+.project-detail-prose details > :not(summary) {
+  margin-left: 1.1rem;
+  margin-right: 1.1rem;
+}
+
+.project-detail-prose details > :last-child {
+  margin-bottom: 1.1rem;
+}
+
+.project-detail-facts {
+  border-top: 1px solid var(--border-color);
+  padding-top: 2rem;
 }
 
 .project-detail-prose ul,
