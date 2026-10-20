@@ -16,6 +16,7 @@ const getLinkIcon = (link: { kind?: string; url: string }) => {
   if (kind === "itch" || link.url.includes("itch.io")) return "simple-icons:itchdotio";
   if (kind === "youtube" || link.url.includes("youtu.be") || link.url.includes("youtube.com")) return "simple-icons:youtube";
   if (kind === "github" || link.url.includes("github.com")) return "simple-icons:github";
+  if (kind === "linktree" || link.url.includes("linktr.ee")) return "mdi:link-variant";
   return "mdi:link-variant";
 };
 const renderedProjects = await Promise.all(
@@ -29,8 +30,11 @@ const renderedProjects = await Promise.all(
       : project.data.link
         ? [{ label: "Visit on itch.io", url: project.data.link, kind: "itch", thumbnail: undefined }]
         : [];
+    const allLinks = project.data.link && project.data.links?.length
+      ? [...links, { label: "Visit on itch.io", url: project.data.link, kind: "itch", thumbnail: undefined }]
+      : links;
 
-    return { project, Content, links };
+    return { project, Content, links: allLinks };
   }),
 );
 ---
@@ -63,15 +67,15 @@ const renderedProjects = await Promise.all(
     {renderedProjects.map(({ project, Content, links }) => (
       <article class="project-detail-view hidden min-h-0 overflow-y-auto overscroll-contain" data-project-id={project.id}>
         <div class="grid min-h-full grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18rem]">
-          <div class="min-w-0 space-y-8 p-5 md:p-8">
-            <header class="space-y-4 border-b border-[var(--border-color)] pb-6">
+          <div class="min-w-0 space-y-10 p-5 md:p-10">
+            <header class="space-y-5 border-b border-[var(--border-color)] pb-8">
               <div class="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">
                 <span>{project.data.engine}</span>
                 <span aria-hidden="true">/</span>
                 <span>Devlog</span>
               </div>
               <h2 class="text-3xl font-bold text-white md:text-4xl" data-project-title>{project.data.title}</h2>
-              <p class="max-w-3xl text-base leading-relaxed text-[var(--text-secondary)]">{project.data.description}</p>
+              <p class="project-detail-lead max-w-3xl text-base leading-relaxed text-[var(--text-secondary)]">{project.data.description}</p>
               <div class="flex flex-wrap gap-2">
                 {project.data.tags.map((tag) => (
                   <span class="rounded-full bg-white/10 px-2.5 py-1 text-xs text-[var(--text-secondary)]">{tag}</span>
@@ -83,11 +87,11 @@ const renderedProjects = await Promise.all(
               <img src={project.data.image} alt={project.data.title} class="h-auto max-h-[min(42vh,28rem)] w-full object-contain" loading="lazy" />
             </figure>
 
-            <div class="project-detail-prose">
+            <div class="project-detail-prose max-w-3xl">
               <Content />
             </div>
 
-            <div class="space-y-8">
+            <div class="project-detail-facts space-y-8">
               <section class="space-y-3">
                 <h3 class="project-detail-label" data-i18n="projects.modal.overview">Overview</h3>
                 <p class="leading-relaxed text-[var(--text-secondary)]">{project.data.overview || project.data.description}</p>
@@ -142,8 +146,8 @@ const renderedProjects = await Promise.all(
             </div>
           </div>
 
-          <aside class="border-t border-[var(--border-color)] bg-[var(--bg-card)] p-5 lg:border-l lg:border-t-0 lg:p-6">
-            <div class="space-y-6 lg:sticky lg:top-0">
+          <aside class="border-t border-[var(--border-color)] bg-[var(--bg-card)] p-5 lg:border-l lg:border-t-0 lg:p-7">
+            <div class="space-y-8 lg:sticky lg:top-0">
               <div class="space-y-3">
                 <h3 class="project-detail-label">Links</h3>
                 <div class="flex flex-col gap-2">

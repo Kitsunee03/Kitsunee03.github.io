@@ -1,17 +1,24 @@
 ---
 title: "Junkonaut"
-description: "Satisfying 3D space cleanup game where you vacuum junk, grapple across asteroids, and upgrade tools to feed the Glorious Hole while meeting odd clankers."
+description: "A 3D space-cleanup game where you vacuum junk, grapple across asteroids, and upgrade your equipment while meeting odd clankers."
 tags: ["3D", "Incremental", "Exploration", "Space", "Action"]
 engine: "Unreal Engine"
 image: "/projects/junkonaut/cover.jpg"
 gif: "/projects/junkonaut/junk-cleanup.gif"
 link: "https://polplasher.itch.io/junkonaut"
-overview: "A space-cleanup prototype about turning a satisfying physical task into a playful progression loop: vacuum junk, move between asteroids and feed the Glorious Hole."
-contribution: ["Pending confirmation: replace this line with my specific contribution to the project."]
-highlights: ["Vacuum piles of space junk", "Grapple between planets and asteroids", "Upgrade tools and meet the clankers", "Prototype focused on the core loop, with no save system implemented"]
-technologies: ["Unreal Engine"]
-challenges: ["The public build compresses the intended content into a short prototype experience."]
-technicalDecisions: ["Pending confirmation: document the implementation decisions and systems I owned."]
+links:
+  - label: "3rd year teaser"
+    url: "https://youtu.be/t4dAop3KH8A?si=yAElHc3IJ_0V4RUh"
+    kind: "youtube"
+  - label: "No Name Yeti — Linktree"
+    url: "https://linktr.ee/nonameyeti"
+    kind: "linktree"
+overview: "Junkonaut began as a third-year university project planned as a five-month vertical slice. After evaluating its commercial potential and the work completed by our group, No Name Yeti, ENTI-UB allowed us to continue development in our fourth year. We are using the project as the foundation for our final degree projects, with the goal of releasing a polished and commercially viable game."
+contribution: ["Grapple Gun and its custom dynamic rope system", "Refinement of the gravity system", "NPC dialogue and movement systems", "Mission system", "Inventory and equipment upgrade management using DataTables"]
+highlights: ["Vacuum piles of space junk", "Grapple between planets and asteroids", "Upgrade tools and meet the clankers", "A university project evolving towards a polished commercial release"]
+technologies: ["Unreal Engine", "FMOD", "DataTables"]
+challenges: ["Replacing Unreal Engine's Rope Component after stability and immersion-breaking issues during exploration.", "Making a dynamically generated rope behave as a reliable movement mechanic around obstacles."]
+technicalDecisions: ["Custom dynamic rope points generated through raycasts.", "One-fold-per-tick cleanup using a direct trace between neighbouring points.", "Segment forces, rope-length constraints and pivoting around the nearest fold.", "FMOD for audio and DataTables for inventory and equipment upgrades."]
 controls: ["Vacuum: LMB", "Grapple gun: RMB", "Change shooting mode: Tab, Q or mouse wheel", "Jetpack movement: Space/Shift + WASD"]
 previews:
   - src: "/projects/junkonaut/junk-cleanup.gif"
@@ -38,14 +45,35 @@ featured: true
 order: 1
 ---
 
-## Project notes
+## Project overview
 
 Junkonaut is built around a simple physical loop: collect space junk, feed it to the Glorious Hole, and use the resulting progression to improve the tools that make the next cleanup run faster and more satisfying.
 
-### Movement and tools
+The project started in my third year as an annual assignment intended to become a vertical slice in roughly five months. After evaluating its potential and the work completed by No Name Yeti, ENTI-UB allowed us to continue development during our fourth year. We are now using the project as the foundation for our final degree projects, building on the previous year's work while pushing it towards a polished, commercially viable release.
 
-The vacuum handles the main cleanup interaction, while the grapple gun makes it possible to move between planets and asteroids. The jetpack rounds out the movement system and gives the player control while exploring the surrounding space.
+Our team covers programming, design, art and music, with FMOD integrated into the audio workflow. This year, one of our musicians stayed on to complete their final degree project with us, and a classmate joined as Producer. Her work focuses on that role, helping us turn ideas into concrete priorities and set feasible, realistic goals.
 
-### What to look for
+## My role
 
-The current build focuses on the core interaction loop, the upgrade curve, and the strange characters encountered along the way. It is intentionally presented as a compact prototype, so the page keeps the technical details and controls close to the playable version rather than hiding them in a separate section.
+The developers rotate between features depending on availability and affinity with each subject. My work has focused mainly on the Grapple Gun, gravity refinement, NPC dialogue and movement, missions, and the inventory and equipment upgrade systems. The latter use DataTables as an internal database for defining and managing the available content.
+
+## The Grapple Gun
+
+The Grapple Gun has been the most difficult part of my contributions and the feature with the greatest impact on exploration. Unreal Engine's Rope Component presented limitations and stability problems that frequently broke immersion, so we decided to build our own rope system.
+
+<details>
+<summary>How the custom rope system works</summary>
+
+After many iterations, the system dynamically generates intermediate points that behave as rope folds. Raycasts detect obstacles and create a new point when the rope needs to bend around the environment. Once a point exists, the system checks whether it is still necessary by tracing directly from point A to point C. If that path is clear, the intermediate point B is removed and the iteration stops, limiting changes to a single fold per tick. This keeps only the points required by the current geometry.
+
+The system checks the direction of each segment between points A and B and applies the corresponding force to the player, allowing the rope to directly influence their movement. It also tracks a maximum rope length, updating it as segments are created or removed. When the player exceeds that length, a traction force pulls them back within the constraint.
+
+Movement takes the nearest fold into account, allowing the player to pivot around obstacles and creating behaviour inspired by the response of a real rope.
+
+</details>
+
+## What comes next
+
+The system still needs significant optimisation and refinement, but its complexity and importance within the game make it a likely focus for my final degree project. I hope to explore collision detection, dynamic point management and the player's physical response in greater depth while iterating towards a robust, consistent and polished result.
+
+The current build focuses on the core interaction loop, the upgrade curve, and the strange characters encountered along the way. The Grapple Gun is especially important to the way Junkonaut's exploration feels: it is both a traversal tool and an ongoing technical experiment in making a custom rope system behave consistently in a changing environment.
