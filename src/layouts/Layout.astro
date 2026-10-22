@@ -119,6 +119,205 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
       window.dispatchEvent(
         new CustomEvent("i18n:ready", { detail: { lang: getLang() } }),
       );
+
+      const binaryAnimationState = {
+        initialized: false,
+        frame: 0,
+      };
+      const binaryDigitPositions = new WeakMap();
+
+      const getBinaryFields = () =>
+        document.querySelectorAll("[data-binary-animation]");
+
+      const initRevealSections = () => {
+        const sections = document.querySelectorAll("[data-reveal-section]");
+        if (!("IntersectionObserver" in window)) {
+          sections.forEach((section) => section.classList.add("is-revealed"));
+          return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-revealed");
+            observer.unobserve(entry.target);
+          });
+        }, { threshold: 0.12 });
+
+        sections.forEach((section) => {
+          if (section.classList.contains("is-revealed")) return;
+          observer.observe(section);
+        });
+      };
+
+      const initMagneticLinks = () => {
+        document.querySelectorAll("[data-magnetic-link]").forEach((link) => {
+          if (link.dataset.magneticReady === "true") return;
+          link.dataset.magneticReady = "true";
+
+          link.addEventListener("pointermove", (event) => {
+            if (event.pointerType !== "mouse") return;
+            const bounds = link.getBoundingClientRect();
+            const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 6;
+            const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 6;
+            link.style.setProperty("--magnetic-x", `${x.toFixed(2)}px`);
+            link.style.setProperty("--magnetic-y", `${y.toFixed(2)}px`);
+          });
+
+          link.addEventListener("pointerleave", () => {
+            link.style.setProperty("--magnetic-x", "0px");
+            link.style.setProperty("--magnetic-y", "0px");
+          });
+        });
+      };
+
+      const initInteractiveCards = () => {
+        document.querySelectorAll("[data-interactive-card]").forEach((card) => {
+          if (card.dataset.interactiveReady === "true") return;
+          card.dataset.interactiveReady = "true";
+
+          card.addEventListener("pointermove", (event) => {
+            if (event.pointerType !== "mouse") return;
+            const bounds = card.getBoundingClientRect();
+            const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+            const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+            const responsiveCurve = (value) => Math.sign(value) * Math.sqrt(Math.abs(value * 2));
+            card.style.setProperty("--card-rotate-x", `${(-responsiveCurve(y) * 5).toFixed(2)}deg`);
+            card.style.setProperty("--card-rotate-y", `${(responsiveCurve(x) * 5).toFixed(2)}deg`);
+          });
+
+          card.addEventListener("pointerleave", () => {
+            card.style.setProperty("--card-rotate-x", "0deg");
+            card.style.setProperty("--card-rotate-y", "0deg");
+          });
+        });
+      };
+
+      const initBinaryBackgrounds = () => {
+        const fields = getBinaryFields();
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        fields.forEach((field) => {
+          if (field.dataset.binaryReady === "true") return;
+          field.dataset.binaryReady = "true";
+
+          const update = () => {
+            let binaryText = "";
+            for (let i = 0; i < 1000; i++) {
+              binaryText += Math.floor(Math.random() * 2).toString();
+            }
+            field.innerHTML = [...binaryText].map((digit) =>
+              `<span class="binary-digit" data-value="${digit}">${digit}</span>`
+            ).join("");
+            window.requestAnimationFrame(() => {
+              if (!field.isConnected) return;
+              binaryDigitPositions.set(field, [...field.querySelectorAll(".binary-digit")].map((digit) => {
+                const bounds = digit.getBoundingClientRect();
+                return {
+                  digit,
+                  x: bounds.left + bounds.width / 2,
+                  y: bounds.top + bounds.height / 2,
+                };
+              }));
+            });
+          };
+
+          update();
+          if (!reducedMotion) {
+            const interval = window.setInterval(() => {
+              if (!field.isConnected) {
+                window.clearInterval(interval);
+                return;
+              }
+              update();
+            }, 300);
+          }
+        });
+
+        if (binaryAnimationState.initialized || reducedMotion) return;
+        binaryAnimationState.initialized = true;
+
+        window.addEventListener("pointermove", (event) => {
+          if (binaryAnimationState.frame) return;
+          binaryAnimationState.frame = window.requestAnimationFrame(() => {
+            getBinaryFields().forEach((field) => {
+              const positions = binaryDigitPositions.get(field) || [];
+              const closestDigits = [];
+
+              positions.forEach((entry) => {
+                const distance = Math.hypot(entry.x - event.clientX, entry.y - event.clientY);
+                if (distance >= 45) return;
+
+                const candidate = { digit: entry.digit, distance };
+                let insertAt = closestDigits.findIndex((item) => item.distance > distance);
+                if (insertAt === -1) insertAt = closestDigits.length;
+                closestDigits.splice(insertAt, 0, candidate);
+                if (closestDigits.length > 5) closestDigits.pop();
+              });
+
+              closestDigits.forEach(({ digit }) => {
+                digit.textContent = "1";
+                digit.classList.add("binary-digit-lit");
+                const litUntil = Date.now() + 240;
+                digit.dataset.binaryLitUntil = `${litUntil}`;
+                window.setTimeout(() => {
+                  if (!digit.isConnected || Number(digit.dataset.binaryLitUntil) !== litUntil) return;
+                  digit.textContent = digit.dataset.value || "0";
+                  digit.classList.remove("binary-digit-lit");
+                  delete digit.dataset.binaryLitUntil;
+                }, 240);
+              });
+            });
+            binaryAnimationState.frame = 0;
+          });
+        }, { passive: true });
+
+        const resetBinaryHighlights = () => {
+          getBinaryFields().forEach((field) => {
+            field.querySelectorAll(".binary-digit-lit").forEach((digit) => {
+              digit.textContent = digit.dataset.value || "0";
+              digit.classList.remove("binary-digit-lit");
+            });
+          });
+        };
+
+        window.addEventListener("pointerdown", () => {
+          getBinaryFields().forEach((field) => field.classList.add("binary-pulse"));
+          window.setTimeout(() => {
+            getBinaryFields().forEach((field) => field.classList.remove("binary-pulse"));
+          }, 260);
+        }, { passive: true });
+
+        window.addEventListener("pointerdown", (event) => {
+          if (event.pointerType !== "mouse") return;
+
+          for (let index = 0; index < 6; index += 1) {
+            const glyph = document.createElement("span");
+            const angle = (Math.PI * 2 * index) / 6 + (Math.random() - 0.5) * 0.35;
+            const distance = 18 + Math.random() * 20;
+            glyph.className = "binary-burst-glyph";
+            glyph.textContent = Math.random() > 0.5 ? "1" : "0";
+            glyph.style.left = `${event.clientX}px`;
+            glyph.style.top = `${event.clientY}px`;
+            glyph.style.setProperty("--burst-x", `${Math.cos(angle) * distance}px`);
+            glyph.style.setProperty("--burst-y", `${Math.sin(angle) * distance}px`);
+            document.body.appendChild(glyph);
+            window.setTimeout(() => glyph.remove(), 650);
+          }
+        }, { passive: true });
+
+        window.addEventListener("blur", resetBinaryHighlights);
+        document.addEventListener("pointerleave", resetBinaryHighlights);
+      };
+
+      initInteractiveCards();
+      initRevealSections();
+      initMagneticLinks();
+      initBinaryBackgrounds();
+      document.addEventListener("astro:after-swap", initRevealSections);
+      document.addEventListener("astro:after-swap", initMagneticLinks);
+      document.addEventListener("astro:after-swap", initInteractiveCards);
+      document.addEventListener("astro:after-swap", initBinaryBackgrounds);
     </script>
   </body>
 </html>
