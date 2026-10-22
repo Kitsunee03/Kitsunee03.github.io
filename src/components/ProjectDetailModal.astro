@@ -83,8 +83,8 @@ const renderedProjects = await Promise.all(
               </div>
             </header>
 
-            <figure class="project-detail-media overflow-hidden rounded-lg border border-[var(--border-color)] bg-[var(--bg-tertiary)]">
-              <img src={project.data.image} alt={project.data.title} class="h-auto max-h-[min(42vh,28rem)] w-full object-contain" loading="lazy" />
+            <figure class="project-detail-media w-full overflow-hidden rounded-lg border border-[var(--border-color)] bg-[var(--bg-tertiary)] p-3">
+              <img src={project.data.hero || project.data.image} alt={`${project.data.title} gameplay`} class="block h-auto w-full object-contain" loading="lazy" />
             </figure>
 
             <div class="project-detail-prose max-w-3xl">
@@ -171,7 +171,9 @@ const renderedProjects = await Promise.all(
                   <div class="grid gap-3">
                     {project.data.previews.map((preview) => (
                       <figure class="overflow-hidden rounded border border-[var(--border-color)] bg-[var(--bg-tertiary)]">
-                        <img src={preview.src} alt={preview.alt} class="h-auto w-full object-contain" loading="lazy" />
+                        <div class="flex min-h-24 items-center justify-center p-2">
+                          <img src={preview.src} alt={preview.alt} class="max-h-72 w-auto max-w-full object-contain" loading="lazy" />
+                        </div>
                         {preview.caption && <figcaption class="border-t border-[var(--border-color)] px-3 py-2 text-xs text-[var(--text-muted)]">{preview.caption}</figcaption>}
                       </figure>
                     ))}

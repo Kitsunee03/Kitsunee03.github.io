@@ -1,18 +1,96 @@
 ---
 title: "Grimoire of Madness"
-description: "Fast-paced 2D Bullet Hell & Arena Shooter with a top-down camera. Play as a fallen wizard fighting back up a magical tower, recovering spells and power floor by floor."
+description: "A fast-paced 2D arena roguelite where a fallen wizard fights through a magical tower, absorbing enemy weapons and turning them against increasingly dangerous waves."
 tags: ["2D", "Bullet Hell", "Arena Shooter", "Top-Down", "Pixel Art"]
 engine: "Unity"
-image: "/projects/grimoire-of-madness/grimoire-of-madness.png"
-gif: "/projects/grimoire-of-madness/grimoire-of-madness.gif"
+image: "/projects/grimoire-of-madness/gom_cover.png"
+gif: "/projects/grimoire-of-madness/gom_combat.gif"
+hero: "/projects/grimoire-of-madness/gom_combat.gif"
 link: "https://kitsunee03.itch.io/grimoireofmadness"
-overview: "A fast-paced top-down bullet hell in which a fallen wizard climbs back through a magical tower, recovering spells and power while surviving enemy waves."
-contribution: ["Pending confirmation: replace this line with my specific contribution to the project."]
-highlights: ["Arena-based levels with increasing difficulty", "Recover lost magic to upgrade the mage", "Tactical weapon switching during enemy waves", "Stylized pixel art with dark fantasy influences"]
-technologies: ["Unity"]
-challenges: ["The public page identifies this as a second-year university project and presents it as a learning build rather than a finished product."]
-technicalDecisions: ["Pending confirmation: document the implementation decisions and systems I owned."]
+links:
+  - label: "Grimoire of Madness trailer"
+    url: "https://youtu.be/GPk284ILn_4?si=dU7NVapizIn1G_A8"
+    kind: "youtube"
+overview: "Grimoire of Madness is a university vertical slice developed during our second year, from 2023 to 2024, over six months. Our group, Team Slay, built an arena roguelite around a fallen wizard who uses a living grimoire to absorb weapons from defeated enemies and reproduce them with limited ammunition."
+contribution: ["Gameplay systems, player systems and lighting", "Skill Tree layout, upgrade design and balancing", "Combat iteration across weapons, ammunition and enemy encounters", "Supporting level design and the overall gameplay workflow as part of a three-person programming team"]
+highlights: ["Arena roguelite combat with increasingly demanding enemy waves", "Absorb enemy weapons with a living grimoire and use them as limited ammunition", "A Skill Tree with three distinct magic paths and active or passive upgrades", "Pixel-art atmosphere built from carefully adapted external assets", "A six-month university vertical slice developed by Team Slay"]
+technologies: ["Unity", "C#"]
+challenges: ["Designing a fast and varied combat system that could remain readable and engaging across repeated arena encounters.", "Creating a coherent pixel-art atmosphere and lighting direction without an in-house art team.", "Balancing the intended audience and design goals with feedback and scope constraints during university development."]
+technicalDecisions: ["The living grimoire follows the player and acts as their combat companion, reducing the emotional pressure of difficult encounters while reinforcing the game's identity.", "Enemy weapons are absorbed and mimicked through a limited ammunition system, connecting enemy design, combat variety and resource management.", "The Skill Tree uses combat currency to unlock linear nodes across Green, Black and Blue magic paths, combining persistent passive upgrades with equippable active abilities.", "Sprites were sourced from Itch.io and adapted when necessary to maintain a consistent pixel-art direction.", "Audio was sourced from Soundsnap and other websites offering free-to-use assets."]
 controls: ["Move: WASD", "Aim and shoot: Mouse", "Switch weapon: 1, 2, Tab or mouse wheel", "Dash: Shift or right click", "Interact: E"]
+previews:
+  - src: "/projects/grimoire-of-madness/gom_combatWave.png"
+    alt: "Grimoire of Madness arena combat"
+    caption: "Fighting through enemy waves"
+  - src: "/projects/grimoire-of-madness/gom_bossFight.png"
+    alt: "Grimoire of Madness boss encounter"
+    caption: "Facing a powerful enemy"
+  - src: "/projects/grimoire-of-madness/gom_shootingRange.png"
+    alt: "Grimoire of Madness shooting range"
+    caption: "Testing magical weapons"
+  - src: "/projects/grimoire-of-madness/gom_lavaArena.png"
+    alt: "Grimoire of Madness lava arena"
+    caption: "Surviving the lava arena"
+  - src: "/projects/grimoire-of-madness/gom_lastShot.png"
+    alt: "Grimoire of Madness final shot"
+    caption: "Making the last shot count"
+  - src: "/projects/grimoire-of-madness/gom_tutorial.png"
+    alt: "Grimoire of Madness tutorial"
+    caption: "Learning the core mechanics"
+  - src: "/projects/grimoire-of-madness/gom_skilltree.gif"
+    alt: "Grimoire of Madness skill tree"
+    caption: "Choosing upgrades in the Skill Tree"
 featured: true
 order: 2
 ---
+
+## Project overview
+
+Grimoire of Madness is a university vertical slice developed in our second year, from 2023 to 2024, over six months. Our group, Team Slay, consisted of three programmers: one teammate focused on UI and level design, one teammate focused on combat, and me, focused mainly on gameplay systems, player systems and lighting.
+
+Because we were a small team still learning how to find the most effective workflow, our responsibilities naturally overlapped and we all ended up contributing to a broad range of features. That flexibility was essential for keeping the project moving and for turning an ambitious concept into a playable vertical slice within the available time.
+
+## My role
+
+My main focus was gameplay systems, player behaviour and lighting, while also supporting the rest of the team wherever needed. Working in a three-person programming team meant that I was involved in several parts of the game's implementation and had to think about how the individual systems supported the overall combat experience.
+
+## Building the game's identity
+
+We did not have a dedicated art team, so all of the game's sprites were sourced from Itch.io. We looked for assets that shared a pixel-art sensibility and adapted them when necessary using our limited graphic-design knowledge. The platform offered enough suitable resources for a small student team to create a surprisingly strong visual result without investing money in custom art.
+
+The audio followed a similar approach. We sourced sounds from Soundsnap and other websites providing free-to-use assets. The main challenge was not simply finding individual assets, but making them work together as part of a coherent atmosphere.
+
+Our initial visual direction aimed for a mixture of influences from games such as *Cult of the Lamb* and *Octopath Traveler*. Once reduced to a scope we could realistically achieve, that direction became the pixel-art aesthetic and lighting treatment visible in the final build.
+
+## Combat design
+
+The hardest part of the project was designing the combat. Grimoire of Madness is an arena roguelite built around fast and frantic encounters in which the player absorbs weapons from defeated enemies with their grimoire and mimics them using limited ammunition.
+
+That premise created a demanding design problem: the combat needed to feel quick and exciting without becoming repetitive, while the enemies needed to provide meaningful challenges without overwhelming the player. We iterated repeatedly on weapon behaviours, ammunition and enemy encounters to find a balance between variety, readability and difficulty.
+
+## Designing the Skill Tree
+
+I was responsible for the Skill Tree's layout, upgrade design and balancing. Upgrades are purchased with the currency earned during arena combat and unlock linear nodes across three different paths: Green magic focuses on healing and health, Black magic focuses on damage, and Blue magic focuses on magical abilities and passive effects.
+
+This system gave the combat a progression layer and encouraged players to develop the wizard according to their preferred playstyle. Active abilities are represented by diamond-shaped nodes, and the player can equip one of them as shown below the selected node's information. Passive abilities remain active after purchase, creating a persistent foundation for the rest of the run.
+
+Despite the limitations of the visual assets, several iterations helped turn the Skill Tree into an engaging feature and one of the game's pillars. We refined its layout and feedback until the state of each node and the routes available to the player were clear at a glance. The final result adds diversity and depth to the combat without overwhelming the player with its underlying structure.
+
+<details>
+<summary>Design constraints and iteration</summary>
+
+One example of the constraints we faced was the weapon-switching interface. Early in development, we considered a radial menu that would have allowed the player to switch weapons quickly and effectively during combat. Our teachers felt that the feature did not match the level of complexity expected by their target audience and rejected the idea, so we had to adapt the design and redirect development time towards a more conventional approach.
+
+This was frustrating because we believed the radial menu could have been a strong improvement to the gameplay, but it also became part of the project's learning process. We had to balance our own design goals with external feedback, the expected audience and the realities of a six-month university schedule.
+
+</details>
+
+## A companion with a purpose
+
+One of the design decisions we liked most was making the player fight alongside their companion rather than treating the grimoire as a simple weapon interface. Having a living book follow the player wherever they go reduces the pressure of a difficult combat adventure and makes the experience feel more dynamic and personal.
+
+We studied games such as *Bloody Hell*, which uses a halo in a similar companion-like role, while developing a solution that fit Grimoire of Madness's identity. The grimoire became both a mechanical pillar and an important part of the game's atmosphere.
+
+## What to look for
+
+The final build brings together the arena combat, enemy-weapon absorption, limited ammunition and pixel-art lighting direction we developed through many iterations. It is available to play on Itch.io, where the relationship between the combat system, the grimoire companion and the visual atmosphere can be experienced directly.
