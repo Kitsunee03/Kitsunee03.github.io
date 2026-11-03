@@ -15,17 +15,18 @@ type Props = {
 const { projectId, title, description, tags, engine, image, gif } = Astro.props;
 
 const engineIcons: Record<string, string> = {
-  "Unity": "simple-icons:unity",
+  Unity: "simple-icons:unity",
   "Unreal Engine": "simple-icons:unrealengine",
-  "Phaser": "mdi:gamepad-variant-outline",
+  Phaser: "mdi:gamepad-variant-outline",
   "C++": "devicon:cplusplus",
 };
 ---
 
 <article
-  class="group interactive-card border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-[var(--border-hover)] transition-all duration-300 overflow-hidden rounded-lg"
+  class="group relative interactive-card border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-[var(--border-hover)] transition-all duration-300 overflow-hidden rounded-lg"
   data-interactive-card
 >
+  <div class="card-glare" aria-hidden="true"></div>
   <!-- Image -->
   <button
     type="button"
@@ -35,7 +36,9 @@ const engineIcons: Record<string, string> = {
     aria-haspopup="dialog"
   >
     <!-- Placeholder (behind images, lowest z) -->
-    <div class="absolute inset-0 flex items-center justify-center text-[var(--text-muted)] pointer-events-none z-0">
+    <div
+      class="absolute inset-0 flex items-center justify-center text-[var(--text-muted)] pointer-events-none z-0"
+    >
       <Icon name="mdi:image-outline" class="w-12 h-12 opacity-30" />
     </div>
     <!-- Static image -->
@@ -44,23 +47,34 @@ const engineIcons: Record<string, string> = {
       alt={title}
       class:list={[
         "absolute inset-0 w-full h-full object-cover transition-all duration-500 z-[1]",
-        gif ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-105",
+        gif
+          ? "group-hover:opacity-0 group-hover:scale-105"
+          : "group-hover:scale-105",
       ]}
       loading="lazy"
+      decoding="async"
       onerror="this.style.display='none'"
     />
     <!-- Animated gif on hover -->
-    {gif && (
-      <img
-        src={gif}
-        alt=""
-        class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-[2]"
-        loading="lazy"
-      />
-    )}
+    {
+      gif && (
+        <img
+          src={gif}
+          alt=""
+          class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-[2]"
+          loading="lazy"
+          decoding="async"
+        />
+      )
+    }
     <!-- Engine badge -->
-    <div class="absolute top-3 right-3 flex items-center gap-1.5 bg-black/80 backdrop-blur-sm px-2 py-1 text-xs rounded-md z-10">
-      <Icon name={engineIcons[engine] || "mdi:gamepad-variant"} class="w-3.5 h-3.5" />
+    <div
+      class="absolute top-3 right-3 flex items-center gap-1.5 bg-black/80 backdrop-blur-sm px-2 py-1 text-xs rounded-md z-10"
+    >
+      <Icon
+        name={engineIcons[engine] || "mdi:gamepad-variant"}
+        class="w-3.5 h-3.5"
+      />
       <span>{engine}</span>
     </div>
   </button>
@@ -81,14 +95,20 @@ const engineIcons: Record<string, string> = {
 
     <!-- Tags -->
     <div class="flex flex-wrap gap-1.5">
-      {tags.map((tag) => (
-        <span class="bg-white/10 text-[var(--text-secondary)] text-xs px-2 py-0.5 rounded-full">
-          {tag}
-        </span>
-      ))}
+      {
+        tags.map((tag) => (
+          <span class="bg-white/10 text-[var(--text-secondary)] text-xs px-2 py-0.5 rounded-full">
+            {tag}
+          </span>
+        ))
+      }
     </div>
 
-    <p class="text-[var(--text-muted)] text-sm leading-relaxed line-clamp-2 group-hover:line-clamp-none transition-all duration-300">{description}</p>
+    <div class="project-description">
+      <p class="text-[var(--text-muted)] text-sm leading-relaxed">
+        {description}
+      </p>
+    </div>
 
     <button
       type="button"

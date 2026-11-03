@@ -19,7 +19,10 @@ const featuredProjects = allProjects
 
 const categoryLabels = {
   engine: { label: "Game Engines", key: "home.categories.engine" },
-  programming: { label: "Programming Languages", key: "home.categories.programming" },
+  programming: {
+    label: "Programming Languages",
+    key: "home.categories.programming",
+  },
   tools: { label: "Tools & Workflow", key: "home.categories.tools" },
 };
 const dropdownCategories = ["engine", "programming", "tools"] as const;
@@ -29,18 +32,29 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
   <Hero />
 
   <!-- Tool Carousel -->
-  <Section title="Tools & Technologies" titleKey="home.sections.tools" variant="secondary">
+  <Section
+    title="Tools & Technologies"
+    titleKey="home.sections.tools"
+    variant="secondary"
+  >
     <ToolCarousel />
   </Section>
 
   <!-- About Me Preview -->
   <Section title="About Me" titleKey="home.sections.about" variant="primary">
-    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+    <div
+      class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center"
+    >
       <div class="md:col-span-1 flex justify-center">
-        <div class="relative w-48 h-48 md:w-56 md:h-auto md:aspect-square rounded-lg border border-[var(--border-color)] overflow-hidden bg-[var(--bg-card)]">
-          <span class="absolute inset-0 grid place-items-center text-6xl text-[var(--text-muted)] opacity-0 transition-opacity" aria-hidden="true">A</span>
+        <div
+          class="relative w-48 h-48 md:w-56 md:h-auto md:aspect-square rounded-lg border border-[var(--border-color)] overflow-hidden bg-[var(--bg-card)]"
+        >
+          <span
+            class="absolute inset-0 grid place-items-center text-6xl text-[var(--text-muted)] opacity-0 transition-opacity"
+            aria-hidden="true">A</span
+          >
           <img
-            src="/images/mainPfp.png"
+            src="/images/mainPfp.webp"
             alt="Main profile portrait"
             data-i18n-attr="alt:images.mainPortrait"
             class="relative z-10 w-full h-full object-cover"
@@ -50,7 +64,10 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
         </div>
       </div>
       <div class="md:col-span-2 space-y-4">
-        <p class="text-[var(--text-secondary)] leading-relaxed" data-i18n="home.about.short">
+        <p
+          class="text-[var(--text-secondary)] leading-relaxed"
+          data-i18n="home.about.short"
+        >
           {ABOUT_ME_SHORT}
         </p>
         <a
@@ -65,19 +82,25 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
   </Section>
 
   <!-- Featured Projects -->
-  <Section title="Featured Projects" titleKey="home.sections.featured" variant="secondary">
+  <Section
+    title="Featured Projects"
+    titleKey="home.sections.featured"
+    variant="secondary"
+  >
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {featuredProjects.map((project) => (
-        <ProjectCard
-          projectId={project.id}
-          title={project.data.title}
-          description={project.data.description}
-          tags={project.data.tags}
-          engine={project.data.engine}
-          image={project.data.image}
-          gif={project.data.gif}
-        />
-      ))}
+      {
+        featuredProjects.map((project) => (
+          <ProjectCard
+            projectId={project.id}
+            title={project.data.title}
+            description={project.data.description}
+            tags={project.data.tags}
+            engine={project.data.engine}
+            image={project.data.image}
+            gif={project.data.gif}
+          />
+        ))
+      }
     </div>
     <ProjectDetailModal projects={featuredProjects} />
     <div class="flex justify-center mt-8">
@@ -93,41 +116,59 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
   </Section>
 
   <!-- About Me & My Work — Dropdowns -->
-  <Section title="About Me & My Work" titleKey="home.sections.aboutWork" variant="primary">
+  <Section
+    title="About Me & My Work"
+    titleKey="home.sections.aboutWork"
+    variant="primary"
+  >
     <div class="max-w-3xl mx-auto space-y-3">
-      {dropdownCategories.map((cat, i) => {
-        const items = SKILLS.filter((s) => s.category === cat);
-        return (
-          <div class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors">
-            <button
-              class="home-dropdown-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
-              data-target={`home-dd-${i}`}
-              aria-expanded="false"
-            >
-              <span class="text-[var(--text-secondary)]">
-                <span aria-hidden="true">❯ </span>
-                <span data-i18n={categoryLabels[cat].key}>{categoryLabels[cat].label}</span>
-              </span>
-              <span class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">▼</span>
-            </button>
-            <div id={`home-dd-${i}`} class="home-dd-content hidden px-5 pb-5">
-              <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 pt-2">
-                {items.map((skill) => (
-                  <div class="relative flex flex-col items-center gap-2 group transition-transform duration-200 hover:scale-110 hover:z-10">
-                    <div class="w-14 h-14 grid place-items-center rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] group-hover:border-[var(--border-hover)] transition-all duration-200">
-                      <Icon name={skill.icon} class="w-8 h-8" style={skill.color ? `color: ${skill.color}` : ""} />
+      {
+        dropdownCategories.map((cat, i) => {
+          const items = SKILLS.filter((s) => s.category === cat);
+          return (
+            <div class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors">
+              <button
+                class="home-dropdown-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
+                data-target={`home-dd-${i}`}
+                aria-expanded="false"
+              >
+                <span class="text-[var(--text-secondary)]">
+                  <span aria-hidden="true">❯ </span>
+                  <span data-i18n={categoryLabels[cat].key}>
+                    {categoryLabels[cat].label}
+                  </span>
+                </span>
+                <span class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">
+                  ▼
+                </span>
+              </button>
+              <div id={`home-dd-${i}`} class="home-dd-content hidden px-5 pb-5">
+                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 pt-2">
+                  {items.map((skill) => (
+                    <div class="relative flex flex-col items-center gap-2 group transition-transform duration-200 hover:scale-110 hover:z-10">
+                      <div class="w-14 h-14 grid place-items-center rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-color)] group-hover:border-[var(--border-hover)] transition-all duration-200">
+                        <Icon
+                          name={skill.icon}
+                          class="w-8 h-8"
+                          style={skill.color ? `color: ${skill.color}` : ""}
+                        />
+                      </div>
+                      <span class="text-xs text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] transition-colors text-center">
+                        {skill.name}
+                      </span>
                     </div>
-                    <span class="text-xs text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] transition-colors text-center">{skill.name}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })
+      }
 
       <!-- My Education -->
-      <div class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors">
+      <div
+        class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors"
+      >
         <button
           class="home-dropdown-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
           data-target="home-dd-edu"
@@ -137,31 +178,48 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
             <span aria-hidden="true">❯ </span>
             <span data-i18n="home.dropdown.education">My Education</span>
           </span>
-          <span class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">▼</span>
+          <span
+            class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0"
+            >▼</span
+          >
         </button>
         <div id="home-dd-edu" class="home-dd-content hidden px-5 pb-5">
           <div class="space-y-3 pt-2">
-            {EDUCATION.map((edu) => (
-              <div class="flex gap-3 items-start">
-                <Icon name={edu.icon} class="w-5 h-5 text-[var(--text-muted)] mt-0.5 shrink-0" />
-                <div>
-                  <p class="text-sm text-[var(--text-secondary)]" data-i18n={`education.${edu.id}.title`}>
-                    {edu.title}
-                  </p>
-                  <p class="text-xs text-[var(--text-muted)]">
-                    <span data-i18n={`education.${edu.id}.institution`}>{edu.institution}</span>
-                    <span aria-hidden="true"> · </span>
-                    <span data-i18n={`education.${edu.id}.period`}>{edu.period}</span>
-                  </p>
+            {
+              EDUCATION.map((edu) => (
+                <div class="flex gap-3 items-start">
+                  <Icon
+                    name={edu.icon}
+                    class="w-5 h-5 text-[var(--text-muted)] mt-0.5 shrink-0"
+                  />
+                  <div>
+                    <p
+                      class="text-sm text-[var(--text-secondary)]"
+                      data-i18n={`education.${edu.id}.title`}
+                    >
+                      {edu.title}
+                    </p>
+                    <p class="text-xs text-[var(--text-muted)]">
+                      <span data-i18n={`education.${edu.id}.institution`}>
+                        {edu.institution}
+                      </span>
+                      <span aria-hidden="true"> · </span>
+                      <span data-i18n={`education.${edu.id}.period`}>
+                        {edu.period}
+                      </span>
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            }
           </div>
         </div>
       </div>
 
       <!-- Teamwork -->
-      <div class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors">
+      <div
+        class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors"
+      >
         <button
           class="home-dropdown-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
           data-target="home-dd-team"
@@ -171,16 +229,21 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
             <span aria-hidden="true">❯ </span>
             <span data-i18n="home.dropdown.teamwork.title">Teamwork</span>
           </span>
-          <span class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">▼</span>
+          <span
+            class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0"
+            >▼</span
+          >
         </button>
         <div id="home-dd-team" class="home-dd-content hidden px-5 pb-5">
           <p
             class="text-sm text-[var(--text-muted)] leading-relaxed pt-2 pl-4 border-l border-[var(--border-color)]"
             data-i18n="home.dropdown.teamwork.body"
           >
-            Calm and introverted, so I listen first and share honest feedback when it helps the project.
-            Used to university teams (3-8 people) working with Agile methods (Scrum/Kanban) and tools like Jira, GitLab, and GitHub.
-            I enjoy bridging gameplay programming, game design, and production to keep the vision coherent.
+            Calm and introverted, so I listen first and share honest feedback
+            when it helps the project. Used to university teams (3-8 people)
+            working with Agile methods (Scrum/Kanban) and tools like Jira,
+            GitLab, and GitHub. I enjoy bridging gameplay programming, game
+            design, and production to keep the vision coherent.
           </p>
         </div>
       </div>

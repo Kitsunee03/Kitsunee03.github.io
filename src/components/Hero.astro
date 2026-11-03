@@ -7,18 +7,27 @@ import { FULL_NAME, PROFESSIONAL_TITLE, QUOTE } from "@/consts";
   data-binary-animation
   aria-hidden="true"
   transition:persist="hero-bg"
-></div>
+>
+</div>
 <section
   class="min-h-screen !z-[20] relative w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-center"
   id="hero"
 >
   <div class="grid place-items-center">
-    <div class="text-center md:text-left space-y-4 -mt-10 px-8 md:pl-16 md:pr-4">
+    <div
+      class="text-center md:text-left space-y-4 -mt-10 px-8 md:pl-16 md:pr-4"
+    >
       <h1 class="font-bold text-5xl md:text-7xl">{`<${FULL_NAME} />`}</h1>
-      <h2 class="text-xl md:text-2xl text-[var(--text-secondary)]" data-i18n="hero.subtitle">
+      <h2
+        class="text-xl md:text-2xl text-[var(--text-secondary)]"
+        data-i18n="hero.subtitle"
+      >
         {PROFESSIONAL_TITLE}
       </h2>
-      <p class="text-sm md:text-base text-[var(--text-muted)] max-w-lg pt-2" data-i18n="hero.quote">
+      <p
+        class="text-sm md:text-base text-[var(--text-muted)] max-w-lg pt-2"
+        data-i18n="hero.quote"
+      >
         {QUOTE}
       </p>
       <div class="pt-6 flex gap-4 justify-center md:justify-start flex-wrap">
@@ -43,7 +52,7 @@ import { FULL_NAME, PROFESSIONAL_TITLE, QUOTE } from "@/consts";
   </div>
   <div class="hidden md:flex justify-center items-center">
     <img
-      src="/images/evangelionAscii.png"
+      src="/images/evangelionAscii.webp"
       alt="Hero"
       class="brightness-200 w-full max-w-xl scale-110 invert"
     />
