@@ -3,7 +3,7 @@ title: "Grimoire of Madness"
 description: "A fast-paced 2D arena roguelite where a fallen wizard fights through a magical tower, absorbing enemy weapons and turning them against increasingly dangerous waves."
 tags: ["2D", "Bullet Hell", "Arena Shooter", "Top-Down", "Pixel Art"]
 engine: "Unity"
-image: "/projects/grimoire-of-madness/gom_cover.png"
+image: "/projects/grimoire-of-madness/gom_cover.webp"
 gif: "/projects/grimoire-of-madness/gom_combat.gif"
 hero: "/projects/grimoire-of-madness/gom_combat.gif"
 link: "https://kitsunee03.itch.io/grimoireofmadness"
@@ -12,29 +12,61 @@ links:
     url: "https://youtu.be/GPk284ILn_4?si=dU7NVapizIn1G_A8"
     kind: "youtube"
 overview: "Grimoire of Madness is a university vertical slice developed during our second year, from 2023 to 2024, over six months. Our group, Team Slay, built an arena roguelite around a fallen wizard who uses a living grimoire to absorb weapons from defeated enemies and reproduce them with limited ammunition."
-contribution: ["Gameplay systems, player systems and lighting", "Skill Tree layout, upgrade design and balancing", "Combat iteration across weapons, ammunition and enemy encounters", "Supporting level design and the overall gameplay workflow as part of a three-person programming team"]
-highlights: ["Arena roguelite combat with increasingly demanding enemy waves", "Absorb enemy weapons with a living grimoire and use them as limited ammunition", "A Skill Tree with three distinct magic paths and active or passive upgrades", "Pixel-art atmosphere built from carefully adapted external assets", "A six-month university vertical slice developed by Team Slay"]
+contribution:
+  [
+    "Gameplay systems, player systems and lighting",
+    "Skill Tree layout, upgrade design and balancing",
+    "Combat iteration across weapons, ammunition and enemy encounters",
+    "Supporting level design and the overall gameplay workflow as part of a three-person programming team",
+  ]
+highlights:
+  [
+    "Arena roguelite combat with increasingly demanding enemy waves",
+    "Absorb enemy weapons with a living grimoire and use them as limited ammunition",
+    "A Skill Tree with three distinct magic paths and active or passive upgrades",
+    "Pixel-art atmosphere built from carefully adapted external assets",
+    "A six-month university vertical slice developed by Team Slay",
+  ]
 technologies: ["Unity", "C#"]
-challenges: ["Designing a fast and varied combat system that could remain readable and engaging across repeated arena encounters.", "Creating a coherent pixel-art atmosphere and lighting direction without an in-house art team.", "Balancing the intended audience and design goals with feedback and scope constraints during university development."]
-technicalDecisions: ["The living grimoire follows the player and acts as their combat companion, reducing the emotional pressure of difficult encounters while reinforcing the game's identity.", "Enemy weapons are absorbed and mimicked through a limited ammunition system, connecting enemy design, combat variety and resource management.", "The Skill Tree uses combat currency to unlock linear nodes across Green, Black and Blue magic paths, combining persistent passive upgrades with equippable active abilities.", "Sprites were sourced from Itch.io and adapted when necessary to maintain a consistent pixel-art direction.", "Audio was sourced from Soundsnap and other websites offering free-to-use assets."]
-controls: ["Move: WASD", "Aim and shoot: Mouse", "Switch weapon: 1, 2, Tab or mouse wheel", "Dash: Shift or right click", "Interact: E"]
+challenges:
+  [
+    "Designing a fast and varied combat system that could remain readable and engaging across repeated arena encounters.",
+    "Creating a coherent pixel-art atmosphere and lighting direction without an in-house art team.",
+    "Balancing the intended audience and design goals with feedback and scope constraints during university development.",
+  ]
+technicalDecisions:
+  [
+    "The living grimoire follows the player and acts as their combat companion, reducing the emotional pressure of difficult encounters while reinforcing the game's identity.",
+    "Enemy weapons are absorbed and mimicked through a limited ammunition system, connecting enemy design, combat variety and resource management.",
+    "The Skill Tree uses combat currency to unlock linear nodes across Green, Black and Blue magic paths, combining persistent passive upgrades with equippable active abilities.",
+    "Sprites were sourced from Itch.io and adapted when necessary to maintain a consistent pixel-art direction.",
+    "Audio was sourced from Soundsnap and other websites offering free-to-use assets.",
+  ]
+controls:
+  [
+    "Move: WASD",
+    "Aim and shoot: Mouse",
+    "Switch weapon: 1, 2, Tab or mouse wheel",
+    "Dash: Shift or right click",
+    "Interact: E",
+  ]
 previews:
-  - src: "/projects/grimoire-of-madness/gom_combatWave.png"
+  - src: "/projects/grimoire-of-madness/gom_combatWave.webp"
     alt: "Grimoire of Madness arena combat"
     caption: "Fighting through enemy waves"
-  - src: "/projects/grimoire-of-madness/gom_bossFight.png"
+  - src: "/projects/grimoire-of-madness/gom_bossFight.webp"
     alt: "Grimoire of Madness boss encounter"
     caption: "Facing a powerful enemy"
-  - src: "/projects/grimoire-of-madness/gom_shootingRange.png"
+  - src: "/projects/grimoire-of-madness/gom_shootingRange.webp"
     alt: "Grimoire of Madness shooting range"
     caption: "Testing magical weapons"
-  - src: "/projects/grimoire-of-madness/gom_lavaArena.png"
+  - src: "/projects/grimoire-of-madness/gom_lavaArena.webp"
     alt: "Grimoire of Madness lava arena"
     caption: "Surviving the lava arena"
-  - src: "/projects/grimoire-of-madness/gom_lastShot.png"
+  - src: "/projects/grimoire-of-madness/gom_lastShot.webp"
     alt: "Grimoire of Madness final shot"
     caption: "Making the last shot count"
-  - src: "/projects/grimoire-of-madness/gom_tutorial.png"
+  - src: "/projects/grimoire-of-madness/gom_tutorial.webp"
     alt: "Grimoire of Madness tutorial"
     caption: "Learning the core mechanics"
   - src: "/projects/grimoire-of-madness/gom_skilltree.gif"
@@ -60,7 +92,7 @@ We did not have a dedicated art team, so all of the game's sprites were sourced 
 
 The audio followed a similar approach. We sourced sounds from Soundsnap and other websites providing free-to-use assets. The main challenge was not simply finding individual assets, but making them work together as part of a coherent atmosphere.
 
-Our initial visual direction aimed for a mixture of influences from games such as *Cult of the Lamb* and *Octopath Traveler*. Once reduced to a scope we could realistically achieve, that direction became the pixel-art aesthetic and lighting treatment visible in the final build.
+Our initial visual direction aimed for a mixture of influences from games such as _Cult of the Lamb_ and _Octopath Traveler_. Once reduced to a scope we could realistically achieve, that direction became the pixel-art aesthetic and lighting treatment visible in the final build.
 
 ## Combat design
 
@@ -89,7 +121,7 @@ This was frustrating because we believed the radial menu could have been a stron
 
 One of the design decisions we liked most was making the player fight alongside their companion rather than treating the grimoire as a simple weapon interface. Having a living book follow the player wherever they go reduces the pressure of a difficult combat adventure and makes the experience feel more dynamic and personal.
 
-We studied games such as *Bloody Hell*, which uses a halo in a similar companion-like role, while developing a solution that fit Grimoire of Madness's identity. The grimoire became both a mechanical pillar and an important part of the game's atmosphere.
+We studied games such as _Bloody Hell_, which uses a halo in a similar companion-like role, while developing a solution that fit Grimoire of Madness's identity. The grimoire became both a mechanical pillar and an important part of the game's atmosphere.
 
 ## What to look for
 
