@@ -10,11 +10,15 @@ import { Icon } from "astro-icon/components";
 import { FULL_NAME, SOCIAL_LINKS } from "@/consts";
 import { SPECIALIZATIONS } from "@/data/specializations";
 import { EDUCATION } from "@/data/education";
+import { EXPERIENCE } from "@/data/experience";
 import { SKILLS } from "@/data/skills";
 import { QA_ITEMS } from "@/data/qa";
 
 const categoryLabels = {
-  programming: { label: "Programming Languages", key: "about.categories.programming" },
+  programming: {
+    label: "Programming Languages",
+    key: "about.categories.programming",
+  },
   engine: { label: "Engines & Frameworks", key: "about.categories.engine" },
   design: { label: "Design Tools", key: "about.categories.design" },
   tools: { label: "Dev Tools", key: "about.categories.tools" },
@@ -24,7 +28,7 @@ const categories = ["programming", "engine", "design", "tools"] as const;
 const profileSlides = [
   {
     id: "professional",
-    image: "/images/firstPfp.png",
+    image: "/images/firstPfp.webp",
     titleSuffix: "Professional",
     titleSuffixKey: "about.profile.professional.suffix",
     alt: "Professional profile portrait",
@@ -40,7 +44,7 @@ const profileSlides = [
   },
   {
     id: "personal",
-    image: "/images/secondPfp.png",
+    image: "/images/secondPfp.webp",
     titleSuffix: "Personal",
     titleSuffixKey: "about.profile.personal.suffix",
     alt: "Personal profile portrait",
@@ -49,14 +53,11 @@ const profileSlides = [
       "I'm calm and introverted, so I tend to listen first and then share honest feedback when it helps the project. I enjoy teams where ideas are discussed openly and decisions are explained.",
       "Japanese culture inspires a lot of my aesthetic choices, and I want this portfolio to feel personal rather than generic.",
     ],
-    paragraphKeys: [
-      "about.profile.personal.p1",
-      "about.profile.personal.p2",
-    ],
+    paragraphKeys: ["about.profile.personal.p1", "about.profile.personal.p2"],
   },
   {
     id: "projects",
-    image: "/images/thirdPfp.png",
+    image: "/images/thirdPfp.webp",
     titleSuffix: "Projects & Experience",
     titleSuffixKey: "about.profile.projects.suffix",
     alt: "Project-focused profile portrait",
@@ -65,10 +66,7 @@ const profileSlides = [
       "All the projects here are prototypes made at university or in my free time. I enjoy level design, playtesting sessions, and iterating based on feedback.",
       "Tools I use most are Unity, Unreal Engine, Phaser, C#, C++, and Processing. I also use Audacity for basic audio editing.",
     ],
-    paragraphKeys: [
-      "about.profile.projects.p1",
-      "about.profile.projects.p2",
-    ],
+    paragraphKeys: ["about.profile.projects.p1", "about.profile.projects.p2"],
   },
 ];
 ---
@@ -82,28 +80,36 @@ const profileSlides = [
     titleSuffixKey={profileSlides[0].titleSuffixKey}
     variant="primary"
   >
-    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
+    <div
+      class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-start"
+    >
       <div class="md:col-span-1 flex justify-center">
         <div class="relative w-56 h-56 md:w-full md:h-auto md:aspect-square">
           <!-- Image carousel -->
-          <div class="relative w-full h-full rounded-lg border border-[var(--border-color)] overflow-hidden bg-[var(--bg-card)]">
-            {profileSlides.map((slide, i) => (
-              <img
-                src={slide.image}
-                alt={slide.alt}
-                class:list={[
-                  "about-profile-img absolute inset-0 w-full h-full object-cover rounded-lg transition-opacity duration-300",
-                  i === 0 ? "opacity-100" : "opacity-0",
-                ]}
-                data-index={i}
-                data-title={slide.titleSuffix}
-                data-title-key={slide.titleSuffixKey}
-                data-i18n-attr={`alt:${slide.altKey}`}
-                loading="lazy"
-                onerror="this.dataset.failed='true'; this.style.display='none'"
-              />
-            ))}
-            <div class="about-profile-fallback absolute inset-0 flex items-center justify-center text-[var(--text-muted)] pointer-events-none opacity-0 transition-opacity">
+          <div
+            class="relative w-full h-full rounded-lg border border-[var(--border-color)] overflow-hidden bg-[var(--bg-card)]"
+          >
+            {
+              profileSlides.map((slide, i) => (
+                <img
+                  src={slide.image}
+                  alt={slide.alt}
+                  class:list={[
+                    "about-profile-img absolute inset-0 w-full h-full object-cover rounded-lg transition-opacity duration-300",
+                    i === 0 ? "opacity-100" : "opacity-0",
+                  ]}
+                  data-index={i}
+                  data-title={slide.titleSuffix}
+                  data-title-key={slide.titleSuffixKey}
+                  data-i18n-attr={`alt:${slide.altKey}`}
+                  loading="lazy"
+                  onerror="this.dataset.failed='true'; this.style.display='none'"
+                />
+              ))
+            }
+            <div
+              class="about-profile-fallback absolute inset-0 flex items-center justify-center text-[var(--text-muted)] pointer-events-none opacity-0 transition-opacity"
+            >
               <span class="text-8xl">A</span>
             </div>
           </div>
@@ -125,117 +131,192 @@ const profileSlides = [
             ▶
           </button>
           <!-- Dots indicator -->
-          <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
-            {profileSlides.map((_, i) => (
-              <div
-                class:list={[
-                  "profile-dot w-2 h-2 rounded-full transition-colors",
-                  i === 0 ? "bg-white" : "bg-white/40",
-                ]}
-                data-index={i}
-              />
-            ))}
+          <div
+            class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10"
+          >
+            {
+              profileSlides.map((_, i) => (
+                <div
+                  class:list={[
+                    "profile-dot w-2 h-2 rounded-full transition-colors",
+                    i === 0 ? "bg-white" : "bg-white/40",
+                  ]}
+                  data-index={i}
+                />
+              ))
+            }
           </div>
         </div>
       </div>
       <div class="md:col-span-2">
-        {profileSlides.map((slide, i) => (
-          <div
-            class:list={["about-profile-text space-y-4", i === 0 ? "block" : "hidden"]}
-            data-index={i}
-          >
-            {slide.paragraphs.map((paragraph, pIndex) => (
-              <p
-                class="text-[var(--text-secondary)] leading-relaxed"
-                data-i18n={slide.paragraphKeys[pIndex]}
-              >
-                {paragraph}
-              </p>
-            ))}
-          </div>
-        ))}
+        {
+          profileSlides.map((slide, i) => (
+            <div
+              class:list={[
+                "about-profile-text space-y-4",
+                i === 0 ? "block" : "hidden",
+              ]}
+              data-index={i}
+            >
+              {slide.paragraphs.map((paragraph, pIndex) => (
+                <p
+                  class="text-[var(--text-secondary)] leading-relaxed"
+                  data-i18n={slide.paragraphKeys[pIndex]}
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          ))
+        }
       </div>
     </div>
   </Section>
 
   <!-- Specializations -->
-  <Section title="Specializations" titleKey="about.sections.specializations" variant="secondary">
+  <Section
+    title="Specializations"
+    titleKey="about.sections.specializations"
+    variant="secondary"
+  >
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-      {SPECIALIZATIONS.map((spec) => (
-        <div class="border border-[var(--border-color)] hover:border-[var(--border-hover)] bg-[var(--bg-card)] p-6 transition-all group rounded-lg">
-          <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] grid place-items-center mb-4 group-hover:bg-white/10 transition-colors">
-            <Icon name={spec.icon} class="w-6 h-6 text-[var(--text-secondary)]" />
+      {
+        SPECIALIZATIONS.map((spec) => (
+          <div class="border border-[var(--border-color)] hover:border-[var(--border-hover)] bg-[var(--bg-card)] p-6 transition-all group rounded-lg">
+            <div class="w-12 h-12 rounded-lg bg-[var(--bg-tertiary)] grid place-items-center mb-4 group-hover:bg-white/10 transition-colors">
+              <Icon
+                name={spec.icon}
+                class="w-6 h-6 text-[var(--text-secondary)]"
+              />
+            </div>
+            <h3
+              class="text-lg mb-2"
+              data-i18n={`specializations.${spec.id}.title`}
+            >
+              {spec.title}
+            </h3>
+            <p
+              class="text-[var(--text-muted)] text-sm leading-relaxed"
+              data-i18n={`specializations.${spec.id}.description`}
+            >
+              {spec.description}
+            </p>
           </div>
-          <h3 class="text-lg mb-2" data-i18n={`specializations.${spec.id}.title`}>
-            {spec.title}
-          </h3>
-          <p class="text-[var(--text-muted)] text-sm leading-relaxed" data-i18n={`specializations.${spec.id}.description`}>
-            {spec.description}
-          </p>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </Section>
 
-  <!-- Education -->
-  <Section title="Education" titleKey="about.sections.education" variant="primary">
-    <div class="max-w-3xl mx-auto">
-      {EDUCATION.map((edu, i) => (
-        <Timeline
-          title={edu.title}
-          institution={edu.institution}
-          period={edu.period}
-          description={edu.description}
-          titleKey={`education.${edu.id}.title`}
-          institutionKey={`education.${edu.id}.institution`}
-          periodKey={`education.${edu.id}.period`}
-          descriptionKey={`education.${edu.id}.description`}
-          icon={edu.icon}
-          isLast={i === EDUCATION.length - 1}
-        />
-      ))}
+  <!-- Education and Experience -->
+  <Section
+    title="Education & Experience"
+    titleKey="about.sections.educationExperience"
+    showTitle={false}
+    variant="primary"
+  >
+    <div
+      class="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-2 md:gap-10 lg:gap-16"
+    >
+      <div>
+        <h2 class="mb-8 text-2xl font-normal text-white md:text-3xl">
+          <span data-i18n="about.sections.education">{`Education`}</span>
+        </h2>
+        {
+          EDUCATION.map((edu, i) => (
+            <Timeline
+              title={edu.title}
+              institution={edu.institution}
+              period={edu.period}
+              description={edu.description}
+              titleKey={`education.${edu.id}.title`}
+              institutionKey={`education.${edu.id}.institution`}
+              periodKey={`education.${edu.id}.period`}
+              descriptionKey={`education.${edu.id}.description`}
+              icon={edu.icon}
+              isLast={i === EDUCATION.length - 1}
+            />
+          ))
+        }
+      </div>
+      <div>
+        <h2 class="mb-8 text-2xl font-normal text-white md:text-3xl">
+          <span data-i18n="about.sections.experience">Experience</span>
+        </h2>
+        {
+          EXPERIENCE.map((job, i) => (
+            <Timeline
+              title={job.title}
+              institution={job.institution}
+              period={job.period}
+              description={job.description}
+              titleKey={`experience.${job.id}.title`}
+              institutionKey={`experience.${job.id}.institution`}
+              periodKey={`experience.${job.id}.period`}
+              descriptionKey={`experience.${job.id}.description`}
+              mark={job.mark}
+              logo={job.logo}
+              link={job.url}
+              linkLabel="View company"
+              linkLabelKey="experience.viewCompany"
+              icon={job.icon}
+              isLast={i === EXPERIENCE.length - 1}
+            />
+          ))
+        }
+      </div>
     </div>
   </Section>
 
   <!-- Technologies -->
-  <Section title="Technologies" titleKey="about.sections.technologies" variant="secondary" className="relative z-10">
+  <Section
+    title="Technologies"
+    titleKey="about.sections.technologies"
+    variant="secondary"
+    className="relative z-10"
+  >
     <div class="max-w-5xl mx-auto space-y-8">
-      {categories.map((category) => {
-        const categorySkills = SKILLS.filter((s) => s.category === category);
-        return (
-          <div>
-            <h3 class="text-sm text-[var(--text-muted)] mb-4 tracking-wider uppercase">
-              <span data-i18n={categoryLabels[category].key}>{categoryLabels[category].label}</span>
-            </h3>
-            <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4">
-              {categorySkills.map((skill) => (
-                <SkillCard
-                  name={skill.name}
-                  icon={skill.icon}
-                  color={skill.color}
-                  description={skill.description}
-                  descriptionKey={`skills.${skill.id}.description`}
-                />
-              ))}
+      {
+        categories.map((category) => {
+          const categorySkills = SKILLS.filter((s) => s.category === category);
+          return (
+            <div>
+              <h3 class="text-sm text-[var(--text-muted)] mb-4 tracking-wider uppercase">
+                <span data-i18n={categoryLabels[category].key}>
+                  {categoryLabels[category].label}
+                </span>
+              </h3>
+              <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4">
+                {categorySkills.map((skill) => (
+                  <SkillCard
+                    name={skill.name}
+                    icon={skill.icon}
+                    color={skill.color}
+                    description={skill.description}
+                    descriptionKey={`skills.${skill.id}.description`}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })
+      }
     </div>
   </Section>
 
   <!-- Q&A -->
   <Section title="Q&A" titleKey="about.sections.qa" variant="primary">
     <div class="max-w-3xl mx-auto space-y-3">
-      {QA_ITEMS.map((item, i) => (
-        <QAAccordion
-          question={item.question}
-          answer={item.answer}
-          questionKey={`qa.${item.id}.question`}
-          answerKey={`qa.${item.id}.answer`}
-          index={i}
-        />
-      ))}
+      {
+        QA_ITEMS.map((item, i) => (
+          <QAAccordion
+            question={item.question}
+            answer={item.answer}
+            questionKey={`qa.${item.id}.question`}
+            answerKey={`qa.${item.id}.answer`}
+            index={i}
+          />
+        ))
+      }
     </div>
   </Section>
 
@@ -250,7 +331,9 @@ const profileSlides = [
       >
         <Icon name="simple-icons:github" class="w-10 h-10 text-white" />
         <div>
-          <h3 class="text-lg group-hover:text-white transition-colors">GitHub</h3>
+          <h3 class="text-lg group-hover:text-white transition-colors">
+            GitHub
+          </h3>
           <p class="text-[var(--text-muted)] text-sm">@Kitsunee03</p>
         </div>
       </a>
@@ -262,7 +345,9 @@ const profileSlides = [
       >
         <Icon name="simple-icons:itchdotio" class="w-10 h-10 text-[#FA5C5C]" />
         <div>
-          <h3 class="text-lg group-hover:text-white transition-colors">Itch.io</h3>
+          <h3 class="text-lg group-hover:text-white transition-colors">
+            Itch.io
+          </h3>
           <p class="text-[var(--text-muted)] text-sm">@Kitsunee03</p>
         </div>
       </a>
@@ -280,10 +365,18 @@ const profileSlides = [
     const imgs = document.querySelectorAll(".about-profile-img");
     const dots = document.querySelectorAll(".profile-dot");
     const textBlocks = document.querySelectorAll(".about-profile-text");
-    const suffixSpan = document.querySelector("#aboutme .section-title-suffix") as HTMLElement | null;
-    const slashSpan = document.querySelector("#aboutme .section-title-slash") as HTMLElement | null;
-    const trailingSpan = document.querySelector("#aboutme .section-title-trailing") as HTMLElement | null;
-    const fallback = document.querySelector(".about-profile-fallback") as HTMLElement | null;
+    const suffixSpan = document.querySelector(
+      "#aboutme .section-title-suffix",
+    ) as HTMLElement | null;
+    const slashSpan = document.querySelector(
+      "#aboutme .section-title-slash",
+    ) as HTMLElement | null;
+    const trailingSpan = document.querySelector(
+      "#aboutme .section-title-trailing",
+    ) as HTMLElement | null;
+    const fallback = document.querySelector(
+      ".about-profile-fallback",
+    ) as HTMLElement | null;
     const prevBtn = document.getElementById("profile-prev");
     const nextBtn = document.getElementById("profile-next");
     if (!imgs.length) return;
@@ -307,7 +400,8 @@ const profileSlides = [
       const activeImg = imgs[index] as HTMLElement | undefined;
       const titleKey = activeImg?.getAttribute("data-title-key") || "";
       const titleFallback = activeImg?.getAttribute("data-title") || "";
-      const titleSuffix = window.__i18n && titleKey ? window.__i18n.t(titleKey) : titleFallback;
+      const titleSuffix =
+        window.__i18n && titleKey ? window.__i18n.t(titleKey) : titleFallback;
       if (suffixSpan) {
         suffixSpan.textContent = titleSuffix;
         suffixSpan.classList.toggle("hidden", !titleSuffix);
@@ -326,7 +420,9 @@ const profileSlides = [
     }
 
     showImage(0);
-    prevBtn?.addEventListener("click", () => showImage((current - 1 + total) % total));
+    prevBtn?.addEventListener("click", () =>
+      showImage((current - 1 + total) % total),
+    );
     nextBtn?.addEventListener("click", () => showImage((current + 1) % total));
     window.addEventListener("i18n:changed", () => showImage(current));
   }

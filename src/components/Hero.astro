@@ -2,31 +2,47 @@
 import { FULL_NAME, PROFESSIONAL_TITLE, QUOTE } from "@/consts";
 ---
 
-<div class="hero-bg hidden md:block h-screen hero-bg-animate absolute top-0" transition:persist="hero-bg"></div>
+<div
+  class="hero-bg hero-binary hidden md:block h-screen hero-bg-animate binary-interactive absolute top-0"
+  data-binary-animation
+  aria-hidden="true"
+  transition:persist="hero-bg"
+>
+</div>
 <section
   class="min-h-screen !z-[20] relative w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-center"
   id="hero"
 >
   <div class="grid place-items-center">
-    <div class="text-center md:text-left space-y-4 -mt-10 px-8 md:pl-16 md:pr-4">
+    <div
+      class="text-center md:text-left space-y-4 -mt-10 px-8 md:pl-16 md:pr-4"
+    >
       <h1 class="font-bold text-5xl md:text-7xl">{`<${FULL_NAME} />`}</h1>
-      <h2 class="text-xl md:text-2xl text-[var(--text-secondary)]" data-i18n="hero.subtitle">
+      <h2
+        class="text-xl md:text-2xl text-[var(--text-secondary)]"
+        data-i18n="hero.subtitle"
+      >
         {PROFESSIONAL_TITLE}
       </h2>
-      <p class="text-sm md:text-base text-[var(--text-muted)] max-w-lg pt-2" data-i18n="hero.quote">
+      <p
+        class="text-sm md:text-base text-[var(--text-muted)] max-w-lg pt-2"
+        data-i18n="hero.quote"
+      >
         {QUOTE}
       </p>
       <div class="pt-6 flex gap-4 justify-center md:justify-start flex-wrap">
         <a
           href="/projects"
-          class="border border-white px-6 py-2.5 rounded-md hover:bg-white hover:text-black transition-all text-sm"
+          class="magnetic-link border border-white px-6 py-2.5 rounded-md hover:bg-white hover:text-black transition-all text-sm"
+          data-magnetic-link
           data-i18n="hero.cta.projects"
         >
           View Projects
         </a>
         <a
           href="/contact"
-          class="border border-[var(--border-color)] px-6 py-2.5 rounded-md hover:border-white transition-all text-sm text-[var(--text-secondary)] hover:text-white"
+          class="magnetic-link border border-[var(--border-color)] px-6 py-2.5 rounded-md hover:border-white transition-all text-sm text-[var(--text-secondary)] hover:text-white"
+          data-magnetic-link
           data-i18n="hero.cta.contact"
         >
           Contact Me
@@ -36,27 +52,9 @@ import { FULL_NAME, PROFESSIONAL_TITLE, QUOTE } from "@/consts";
   </div>
   <div class="hidden md:flex justify-center items-center">
     <img
-      src="/images/evangelionAscii.png"
+      src="/images/evangelionAscii.webp"
       alt="Hero"
       class="brightness-200 w-full max-w-xl scale-110 invert"
     />
   </div>
 </section>
-
-<script is:inline>
-  function initHeroBg() {
-    const hero_bg = document.querySelector(".hero-bg-animate");
-    if (hero_bg && !hero_bg.dataset.initialized) {
-      hero_bg.dataset.initialized = "true";
-      setInterval(() => {
-        let binaryText = "";
-        for (let i = 0; i < 1000; i++) {
-          binaryText += Math.floor(Math.random() * 2).toString();
-        }
-        hero_bg.textContent = binaryText;
-      }, 300);
-    }
-  }
-  initHeroBg();
-  document.addEventListener("astro:after-swap", initHeroBg);
-</script>

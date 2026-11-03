@@ -24,7 +24,8 @@ const { compact = false } = Astro.props;
     </p>
     <a
       href={`mailto:${EMAIL}`}
-      class="inline-flex items-center gap-3 border border-[var(--border-color)] hover:border-white px-6 py-3 transition-all hover:bg-white hover:text-black group rounded-lg"
+      class="magnetic-link inline-flex items-center gap-3 border border-[var(--border-color)] hover:border-white px-6 py-3 transition-all hover:bg-white hover:text-black group rounded-lg"
+      data-magnetic-link
     >
       <Icon name="mdi:email-outline" class="w-5 h-5" />
       <span>{EMAIL}</span>

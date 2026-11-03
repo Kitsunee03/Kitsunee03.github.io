@@ -13,7 +13,7 @@ export const EDUCATION: Education[] = [
     title: "DDVJA — Degree in Video Game Design and Development",
     institution: "ENTI (Barcelona)",
     period: "2023 — Present",
-    description: "Game development student in third year, focused on gameplay programming, game design, production, and rapid prototyping across multiple engines.",
+    description: "Game development student in fourth year, focused on gameplay programming, game design, production, and rapid prototyping across multiple engines.",
     icon: "mdi:school-outline",
   },
   {
