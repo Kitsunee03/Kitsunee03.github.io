@@ -1,5 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import "@fontsource/ibm-plex-mono/latin-400.css";
+import "@fontsource/ibm-plex-mono/latin-700.css";
 import "@/styles/global.css";
 
 interface Props {
@@ -10,6 +12,7 @@ interface Props {
 import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL("/og.png", Astro.site);
 
 const {
   title = SITE_TITLE,
@@ -33,7 +36,8 @@ const {
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="https://emoji-route.deno.dev/svg/🎮" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="theme-color" content="#000000" />
 <meta name="generator" content={Astro.generator} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 
@@ -51,20 +55,31 @@ const {
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
-<meta name="title" content={title} />
 <meta name="description" content={description} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
+<meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
+<meta property="og:image" content={socialImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={socialImage} />
+
+<!-- Without JavaScript nothing reveals the sections, so show them. -->
+<noscript>
+  <style>
+    [data-reveal-section] {
+      opacity: 1 !important;
+    }
+  </style>
+</noscript>
 
 <!-- Google Analytics -->
 <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-ZYV9EVSY5R"></script>

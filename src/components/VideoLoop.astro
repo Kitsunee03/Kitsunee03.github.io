@@ -1,0 +1,32 @@
+---
+/**
+ * A short, silent, looping clip. Nothing is downloaded until a script
+ * calls play(). WebM is listed first because some Chromium builds
+ * (VS Code's built-in browser among them) cannot decode H.264; Safari
+ * skips to the MP4.
+ */
+type Props = {
+  /** Path to the .mp4; a .webm with the same name must sit next to it. */
+  src: string;
+  class?: string;
+  label?: string;
+  [key: string]: unknown;
+};
+
+const { src, class: className, label, ...rest } = Astro.props;
+const webm = src.replace(/\.mp4$/i, ".webm");
+---
+
+<video
+  class={className}
+  muted
+  loop
+  playsinline
+  preload="none"
+  aria-label={label}
+  aria-hidden={label ? undefined : "true"}
+  {...rest}
+>
+  <source src={webm} type="video/webm" />
+  <source src={src} type="video/mp4" />
+</video>

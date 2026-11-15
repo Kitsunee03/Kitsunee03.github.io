@@ -14,6 +14,7 @@ export const translations: Record<Lang, Dictionary> = {
       about: "About Me",
       contact: "Contact",
       menu: "Menu",
+      skip: "Skip to content",
       language: {
         aria: "Change language",
         title: "Change language",
@@ -34,6 +35,7 @@ export const translations: Record<Lang, Dictionary> = {
         about: "About Me",
         featured: "Featured Projects",
         aboutWork: "About Me & My Work",
+        play: "Play",
         contact: "Contact",
       },
       about: {
@@ -224,6 +226,10 @@ export const translations: Record<Lang, Dictionary> = {
       view: "View Details",
       modal: {
         close: "Close project details",
+        log: "Project log",
+        devlog: "Devlog",
+        links: "Links",
+        preview: "Preview",
         overview: "Overview",
         contribution: "My contribution",
         highlights: "Highlights",
@@ -267,6 +273,19 @@ export const translations: Record<Lang, Dictionary> = {
       copyError: "Failed to copy",
       copyright: "All rights reserved.",
     },
+    game: {
+      section: "Play",
+      aria: "Grapple mini-game",
+      title: "A small rope toy",
+      body: "Built on the same idea as the grapple gun I made for Junkonaut. Hold on an anchor (+) to latch and swing, let go to fly, and collect the scrap (*).",
+      controls:
+        "Mouse or touch: hold on an anchor. Keyboard: Space to latch, arrows to steer, Esc to quit.",
+      start: "Start",
+      again: "Play again",
+      over: "Time is up",
+      result: "Scrap collected: {score} · Best: {best}",
+      lost: "While you are here:",
+    },
     notFound: {
       title: "Page Not Found",
       body: "The page you're looking for doesn't exist or has been moved.",
@@ -280,6 +299,7 @@ export const translations: Record<Lang, Dictionary> = {
       about: "Sobre mí",
       contact: "Contacto",
       menu: "Menú",
+      skip: "Saltar al contenido",
       language: {
         aria: "Cambiar idioma",
         title: "Cambiar idioma",
@@ -301,6 +321,7 @@ export const translations: Record<Lang, Dictionary> = {
         about: "Sobre mí",
         featured: "Proyectos destacados",
         aboutWork: "Sobre mí y mi trabajo",
+        play: "Jugar",
         contact: "Contacto",
       },
 
@@ -500,6 +521,10 @@ export const translations: Record<Lang, Dictionary> = {
       view: "Ver detalles",
       modal: {
         close: "Cerrar detalles del proyecto",
+        log: "Registro del proyecto",
+        devlog: "Devlog",
+        links: "Enlaces",
+        preview: "Vista previa",
         overview: "Presentación",
         contribution: "Mi contribución",
         highlights: "Puntos destacados",
@@ -542,6 +567,19 @@ export const translations: Record<Lang, Dictionary> = {
       copySuccess: "✓ ¡Copiado!",
       copyError: "No se pudo copiar",
       copyright: "Todos los derechos reservados.",
+    },
+    game: {
+      section: "Jugar",
+      aria: "Minijuego de gancho",
+      title: "Un pequeño juguete de cuerda",
+      body: "Parte de la misma idea que el gancho que hice para Junkonaut. Mantén pulsado sobre un anclaje (+) para engancharte y balancearte, suelta para volar y recoge la chatarra (*).",
+      controls:
+        "Ratón o táctil: mantén pulsado sobre un anclaje. Teclado: Espacio para engancharte, flechas para dirigir, Esc para salir.",
+      start: "Empezar",
+      again: "Jugar otra vez",
+      over: "Se acabó el tiempo",
+      result: "Chatarra recogida: {score} · Mejor: {best}",
+      lost: "Ya que estás aquí:",
     },
     notFound: {
       title: "Página no encontrada",

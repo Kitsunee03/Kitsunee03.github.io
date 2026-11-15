@@ -2,30 +2,32 @@
 import { FULL_NAME, PROFESSIONAL_TITLE, QUOTE } from "@/consts";
 ---
 
-<div
-  class="hero-bg hero-binary hidden md:block h-screen hero-bg-animate binary-interactive absolute top-0"
-  data-binary-animation
-  aria-hidden="true"
-  transition:persist="hero-bg"
->
-</div>
 <section
-  class="min-h-screen !z-[20] relative w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-center"
+  class="hero relative isolate min-h-[calc(100svh-5rem)] w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-center overflow-hidden"
   id="hero"
 >
+  <canvas
+    class="glyph-canvas absolute inset-0 -z-10 h-full w-full"
+    data-visual="glyph-field"
+    aria-hidden="true"></canvas>
   <div class="grid place-items-center">
     <div
-      class="text-center md:text-left space-y-4 -mt-10 px-8 md:pl-16 md:pr-4"
+      class="text-center md:text-left space-y-4 px-6 py-16 md:pl-16 md:pr-4"
     >
-      <h1 class="font-bold text-5xl md:text-7xl">{`<${FULL_NAME} />`}</h1>
-      <h2
-        class="text-xl md:text-2xl text-[var(--text-secondary)]"
+      <h1
+        class="font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
+        aria-label={FULL_NAME}
+      >
+        <span aria-hidden="true">{`<${FULL_NAME} />`}</span>
+      </h1>
+      <p
+        class="font-display text-xl md:text-2xl text-[var(--text-secondary)]"
         data-i18n="hero.subtitle"
       >
         {PROFESSIONAL_TITLE}
-      </h2>
+      </p>
       <p
-        class="text-sm md:text-base text-[var(--text-muted)] max-w-lg pt-2"
+        class="text-sm md:text-base text-[var(--text-muted)] max-w-lg pt-2 mx-auto md:mx-0"
         data-i18n="hero.quote"
       >
         {QUOTE}
@@ -53,8 +55,11 @@ import { FULL_NAME, PROFESSIONAL_TITLE, QUOTE } from "@/consts";
   <div class="hidden md:flex justify-center items-center">
     <img
       src="/images/evangelionAscii.webp"
-      alt="Hero"
-      class="brightness-200 w-full max-w-xl scale-110 invert"
+      alt=""
+      width="455"
+      height="465"
+      decoding="async"
+      class="ascii-portrait brightness-200 w-full max-w-xl scale-110 invert"
     />
   </div>
 </section>

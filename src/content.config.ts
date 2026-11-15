@@ -9,7 +9,10 @@ const projects = defineCollection({
     tags: z.array(z.string()),
     engine: z.enum(["Unity", "Unreal Engine", "Phaser", "C++"]),
     image: z.string(),
-    gif: z.string().optional(),
+    /** Short muted loop shown on card hover (MP4). */
+    video: z.string().optional(),
+    /** Ambient identity cue drawn behind the project header. */
+    ambient: z.enum(["space", "arcane"]).optional(),
     hero: z.string().optional(),
     link: z.string().optional(),
     links: z.array(z.object({

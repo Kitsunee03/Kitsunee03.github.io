@@ -5,10 +5,15 @@
   --bg-card: #111111;
   --text-primary: #ffffff;
   --text-secondary: #b0b0b0;
-  --text-muted: #666666;
+  /* 5.9:1 on black; the previous #666 (3.7:1) failed WCAG AA for body text. */
+  --text-muted: #8a8a8a;
   --border-color: #2a2a2a;
   --border-hover: #444444;
   --accent: #e0e0e0;
+  /* The single colour accent: focus, selection and lit glyphs only. */
+  --signal: #ff5a36;
+  --font-display: "VCR", monospace;
+  --font-body: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
 }
 
 @font-face {
@@ -18,7 +23,133 @@
   font-display: swap;
 }
 body {
-  font-family: "VCR", monospace !important;
+  font-family: var(--font-display);
+  overflow-x: clip;
+}
+
+/* Long-form text uses a more legible mono; VCR stays for titles and UI. */
+p,
+li,
+dd,
+blockquote,
+input,
+textarea,
+figcaption {
+  font-family: var(--font-body);
+  letter-spacing: 0;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.025em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+main:focus {
+  outline: none;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 10001;
+  padding: 0.5rem 0.9rem;
+  background: #fff;
+  color: #000;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* Navbar */
+.nav-logo {
+  background: #fff;
+  color: #000;
+  scale: 1.1;
+  transition:
+    background-color 150ms ease-in-out,
+    color 150ms ease-in-out,
+    scale 150ms ease-in-out;
+}
+
+.nav-logo:hover,
+.nav-logo[data-scrolled] {
+  background: #000;
+  color: #fff;
+}
+
+.nav-logo[data-scrolled] {
+  scale: 1;
+}
+
+.nav-logo[data-scrolled]:hover {
+  background: #fff;
+  color: #000;
+}
+
+.mobile-menu-btn[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(0.5rem) rotate(45deg);
+}
+.mobile-menu-btn[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+.mobile-menu-btn[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-0.5rem) rotate(-45deg);
+}
+
+.accordion-toggle[aria-expanded="true"] .accordion-chevron {
+  transform: rotate(180deg);
+}
+
+/* Section index: a small counter above each section title. */
+main {
+  counter-reset: section;
+  /* Skill tooltips may poke past the edge on narrow screens. */
+  overflow-x: clip;
+}
+
+.section-index {
+  counter-increment: section;
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  color: var(--text-muted);
+}
+
+.section-index::before {
+  content: "/";
+  color: var(--signal);
+  margin-right: 0.5em;
+}
+
+.section-index::after {
+  content: counter(section, decimal-leading-zero);
+}
+
+/* Canvas visuals never intercept input. */
+canvas[data-visual] {
+  display: block;
+  pointer-events: none;
+}
+
+/* The ASCII portrait prints in line by line, once. */
+.ascii-portrait {
+  animation: portrait-print 1100ms steps(22, end) 150ms both;
+}
+
+@keyframes portrait-print {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
 }
 
 body.project-modal-open {
@@ -184,17 +315,11 @@ body.project-modal-open {
 
 pre,
 code {
-  font-family: "VCR", monospace !important;
-  font-weight: 100;
+  font-family: var(--font-display);
 }
 
 ::selection {
-  background: #fff;
-  color: #000;
-}
-
-::-moz-selection {
-  background: #fff;
+  background: var(--signal);
   color: #000;
 }
 
@@ -227,36 +352,6 @@ img,
   -webkit-user-drag: none;
 }
 
-.hero-bg {
-  z-index: -1;
-  width: 100vw;
-  word-wrap: break-word;
-  color: rgba(255, 255, 255, 0.035);
-  opacity: 1;
-  font-size: 3rem;
-  user-select: none;
-  pointer-events: none;
-}
-
-.binary-interactive {
-  transition: filter 260ms ease;
-}
-
-.binary-digit {
-  transition:
-    color 140ms ease,
-    text-shadow 140ms ease;
-}
-
-.binary-digit-lit {
-  color: rgba(255, 255, 255, 0.42);
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.32);
-}
-
-.binary-interactive.binary-pulse {
-  animation: binary-pulse 260ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
 .interactive-card {
   --card-rotate-x: 0deg;
   --card-rotate-y: 0deg;
@@ -286,9 +381,113 @@ img,
   transition: opacity 220ms ease;
 }
 
-.interactive-card:hover .card-glare,
-.interactive-card:focus-within .card-glare {
+.interactive-card:hover .card-glare {
   opacity: 1;
+}
+
+/* Card media: the preview loop wipes in over the cover in steps. */
+.card-cover {
+  transition: transform 500ms ease;
+}
+
+.interactive-card:hover .card-cover,
+.interactive-card:focus-within .card-cover {
+  transform: scale(1.05);
+}
+
+.card-video {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 320ms steps(8, end);
+}
+
+.interactive-card[data-playing] .card-video {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Mini-game panel */
+.grapple-game {
+  width: 100%;
+  min-width: 0;
+  max-width: 56rem;
+  margin-inline: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: var(--bg-card);
+  transition: border-color 300ms ease;
+}
+
+.grapple-game[data-playing] {
+  border-color: var(--border-hover);
+}
+
+.grapple-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0.9rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+.grapple-stage {
+  position: relative;
+  height: clamp(20rem, 38vw, 25rem);
+  background: #000;
+}
+
+.grapple-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.grapple-game[data-playing] .grapple-canvas {
+  /* While playing, a drag on the canvas is the rope, not a page scroll. */
+  touch-action: none;
+}
+
+.grapple-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.grapple-overlay[hidden] {
+  display: none;
+}
+
+/* A clip the browser cannot play gives way to its still image. */
+video[data-failed] {
+  display: none;
+}
+
+.video-fallback {
+  display: none;
+}
+
+video[data-failed] + .video-fallback {
+  display: block;
+}
+
+figure:has(> div > video[data-failed]) {
+  display: none;
+}
+
+.project-ambient {
+  opacity: 0.9;
+  mask-image: linear-gradient(to right, transparent 0%, black 45%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 45%);
 }
 
 .project-description {
@@ -335,18 +534,6 @@ img,
   }
 }
 
-@keyframes binary-pulse {
-  0% {
-    filter: brightness(1);
-  }
-  45% {
-    filter: brightness(2.2);
-  }
-  100% {
-    filter: brightness(1);
-  }
-}
-
 @keyframes binary-burst {
   0% {
     opacity: 0;
@@ -363,14 +550,6 @@ img,
       )
       scale(1.15);
   }
-}
-
-.hero-binary {
-  position: absolute;
-}
-
-.footer-binary {
-  position: relative;
 }
 
 /* Carousel animation */
@@ -481,12 +660,16 @@ html::view-transition-new(root) {
     will-change: auto;
   }
 
-  .binary-interactive {
-    background: none;
-    transform: none;
-    transition: none;
-    will-change: auto;
+  .ascii-portrait {
     animation: none;
+  }
+
+  .animate-scroll-left {
+    animation: none;
+  }
+
+  .card-video {
+    display: none;
   }
 
   html::view-transition-old(root),

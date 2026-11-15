@@ -52,13 +52,14 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
             id="copy-email"
             class="border border-[var(--border-color)] hover:border-white p-3 transition-all hover:bg-white hover:text-black group rounded-lg"
             title="Copy email"
+            aria-label="Copy email"
             data-email={EMAIL}
-            data-i18n-attr="title:contact.email.copyTitle"
+            data-i18n-attr="title:contact.email.copyTitle;aria-label:contact.email.copyTitle"
           >
             <Icon name="mdi:content-copy" class="w-5 h-5" />
           </button>
         </div>
-        <p id="copy-feedback" class="text-sm text-[var(--text-muted)] h-5"></p>
+        <p id="copy-feedback" class="text-sm text-[var(--text-muted)] h-5" role="status"></p>
       </div>
 
       <!-- Professional Links -->
@@ -254,6 +255,7 @@ import { EMAIL, FULL_NAME, SOCIAL_LINKS } from "@/consts";
           </button>
           <p
             id="form-feedback"
+            role="status"
             class="text-sm text-center text-[var(--text-muted)] h-5"
           >
           </p>
