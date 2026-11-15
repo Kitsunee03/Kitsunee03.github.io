@@ -30,8 +30,6 @@ Always check `npm run build` before merging: the dev server does not guarantee t
 | `src/scripts/` | Client-side behaviour (navigation, cards, accordions, title decode) |
 | `src/visuals/` | Canvas visual systems, each loaded on demand |
 | `public/` | Fonts, images and project media |
-| `docs/ai/` | Notes for AI assistants: handoff and the KIT PLAYGROUND backlog (`CLAUDE.md` stays at the root) |
-| `backup/` | Personal backups that are not part of the site |
 
 ## Adding a project
 
