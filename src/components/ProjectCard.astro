@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import VideoLoop from "./VideoLoop.astro";
 
 type Props = {
   projectId: string;
@@ -8,11 +9,10 @@ type Props = {
   tags: string[];
   engine: string;
   image: string;
-  gif?: string;
-  link?: string;
+  video?: string;
 };
 
-const { projectId, title, description, tags, engine, image, gif } = Astro.props;
+const { projectId, title, description, tags, engine, image, video } = Astro.props;
 
 const engineIcons: Record<string, string> = {
   Unity: "simple-icons:unity",
@@ -41,29 +41,23 @@ const engineIcons: Record<string, string> = {
     >
       <Icon name="mdi:image-outline" class="w-12 h-12 opacity-30" />
     </div>
-    <!-- Static image -->
+    <!-- Cover image -->
     <img
       src={image}
       alt={title}
-      class:list={[
-        "absolute inset-0 w-full h-full object-cover transition-all duration-500 z-[1]",
-        gif
-          ? "group-hover:opacity-0 group-hover:scale-105"
-          : "group-hover:scale-105",
-      ]}
+      class="card-cover absolute inset-0 w-full h-full object-cover z-[1]"
       loading="lazy"
       decoding="async"
       onerror="this.style.display='none'"
     />
-    <!-- Animated gif on hover -->
+    <!-- Preview loop: fetched and played only on hover or focus -->
     {
-      gif && (
-        <img
-          src={gif}
-          alt=""
-          class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-[2]"
-          loading="lazy"
-          decoding="async"
+      video && (
+        <VideoLoop
+          src={video}
+          class="card-video absolute inset-0 w-full h-full object-cover z-[2]"
+          tabindex="-1"
+          data-card-video
         />
       )
     }

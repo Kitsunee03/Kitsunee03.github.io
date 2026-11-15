@@ -1,10 +1,11 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import GrappleGame from "@/components/GrappleGame.astro";
 ---
 
 <Layout title="404 — Page Not Found">
-  <section class="min-h-screen grid place-items-center px-4">
-    <div class="text-center space-y-6 -mt-20">
+  <section class="min-h-screen grid place-items-center px-4 py-16">
+    <div class="w-full text-center space-y-6">
       <h1 class="text-8xl md:text-9xl font-bold text-[var(--text-muted)]">404</h1>
       <p class="text-xl text-[var(--text-secondary)]">
         <span>&lt;</span>
@@ -21,6 +22,10 @@ import Layout from "@/layouts/Layout.astro";
       >
         ← Back to Home
       </a>
+      <p class="pt-10 text-sm text-[var(--text-muted)]" data-i18n="game.lost">
+        While you are here:
+      </p>
+      <GrappleGame />
     </div>
   </section>
 </Layout>

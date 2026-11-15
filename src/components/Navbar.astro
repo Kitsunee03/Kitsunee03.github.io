@@ -2,22 +2,21 @@
 import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
 ---
 
-<nav class="w-full !z-[9999] py-4 px-4 bg-black/90 backdrop-blur-sm">
+<nav class="w-full py-4 px-4 bg-black/90 backdrop-blur-sm" aria-label="Main">
   <div
     class="max-w-6xl mx-auto flex items-center justify-between px-4 md:px-8"
   >
-    <a href="/">
-      <div
-        id="logo"
-        class="pt-2 pb-1 !grid !place-items-center select-none leading-none hover:bg-black bg-white scale-110 hover:text-white text-black px-4 transition-all ease-in-out"
-      >
-        {SITE_TITLE}
-      </div>
+    <a
+      href="/"
+      id="logo"
+      class="nav-logo pt-2 pb-1 grid place-items-center select-none leading-none px-4"
+    >
+      {SITE_TITLE}
     </a>
 
     <!-- Desktop nav -->
     <div class="hidden md:flex items-center gap-1">
-      <span class="text-[var(--text-muted)]">/</span>
+      <span class="text-[var(--text-muted)]" aria-hidden="true">/</span>
       {
         links.map((link, i) => {
           const href = link.href;
@@ -37,12 +36,13 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
                   { "bg-white text-black": isActive },
                 ]}
                 href={href}
+                aria-current={isActive ? "page" : undefined}
                 data-magnetic-link
                 data-i18n={link.i18nKey}
               >
                 {link.title}
               </a>
-              <span class="text-[var(--text-muted)]">/</span>
+              <span class="text-[var(--text-muted)]" aria-hidden="true">/</span>
             </>
           );
         })
@@ -56,21 +56,24 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
         data-i18n-attr="aria-label:nav.language.aria;title:nav.language.title"
       >
         <span class="lang-option text-white" data-lang="en">EN</span>
-        <span class="text-[var(--text-muted)]">/</span>
+        <span class="text-[var(--text-muted)]" aria-hidden="true">/</span>
         <span class="lang-option text-[var(--text-muted)]" data-lang="es">ES</span>
       </button>
     </div>
 
     <!-- Mobile hamburger -->
     <button
+      type="button"
       id="mobile-menu-btn"
-      class="md:hidden flex flex-col gap-1.5 p-2 hover:bg-white/10 transition-colors"
+      class="mobile-menu-btn md:hidden flex flex-col gap-1.5 p-2 hover:bg-white/10 transition-colors"
       aria-label="Menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
       data-i18n-attr="aria-label:nav.menu"
     >
-      <span class="block w-6 h-0.5 bg-white transition-transform" id="bar1"></span>
-      <span class="block w-6 h-0.5 bg-white transition-opacity" id="bar2"></span>
-      <span class="block w-6 h-0.5 bg-white transition-transform" id="bar3"></span>
+      <span class="block w-6 h-0.5 bg-white transition-transform"></span>
+      <span class="block w-6 h-0.5 bg-white transition-opacity"></span>
+      <span class="block w-6 h-0.5 bg-white transition-transform"></span>
     </button>
   </div>
 
@@ -98,6 +101,7 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
                 { "bg-white text-black": isActive },
               ]}
               href={href}
+              aria-current={isActive ? "page" : undefined}
               data-magnetic-link
               data-i18n={link.i18nKey}
             >
@@ -115,7 +119,7 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
         data-i18n-attr="aria-label:nav.language.aria;title:nav.language.title"
       >
         <span class="lang-option text-white" data-lang="en">EN</span>
-        <span class="text-[var(--text-muted)]">/</span>
+        <span class="text-[var(--text-muted)]" aria-hidden="true">/</span>
         <span class="lang-option text-[var(--text-muted)]" data-lang="es">ES</span>
       </button>
     </div>
@@ -123,38 +127,6 @@ import { SITE_TITLE, NAV_LINKS as links } from "@/consts";
 </nav>
 
 <script>
-  window.addEventListener("scroll", () => {
-    const logo = document.getElementById("logo");
-    if (!logo) return;
-    if (window.scrollY > 100) {
-      logo.className =
-        "pt-2 pb-1 !grid !place-items-center select-none leading-none hover:bg-white bg-black scale-100 hover:text-black text-white px-4 transition-all ease-in-out";
-    } else {
-      logo.className =
-        "pt-2 pb-1 !grid !place-items-center select-none leading-none hover:bg-black bg-white scale-110 hover:text-white text-black px-4 transition-all ease-in-out";
-    }
-  });
-
-  const menuBtn = document.getElementById("mobile-menu-btn");
-  const mobileMenu = document.getElementById("mobile-menu");
-  const bar1 = document.getElementById("bar1");
-  const bar2 = document.getElementById("bar2");
-  const bar3 = document.getElementById("bar3");
-
-  menuBtn?.addEventListener("click", () => {
-    const isOpen = !mobileMenu?.classList.contains("hidden");
-    mobileMenu?.classList.toggle("hidden");
-    if (!isOpen) {
-      bar1?.classList.add("rotate-45", "translate-y-2");
-      bar2?.classList.add("opacity-0");
-      bar3?.classList.add("-rotate-45", "-translate-y-2");
-    } else {
-      bar1?.classList.remove("rotate-45", "translate-y-2");
-      bar2?.classList.remove("opacity-0");
-      bar3?.classList.remove("-rotate-45", "-translate-y-2");
-    }
-  });
-
   function updateLangToggles() {
     const api = window.__i18n;
     if (!api) return;

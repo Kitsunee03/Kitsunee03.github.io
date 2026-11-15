@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import VideoLoop from "./VideoLoop.astro";
 import { render, type CollectionEntry } from "astro:content";
 
 type Props = {
@@ -7,6 +8,7 @@ type Props = {
 };
 
 const { projects } = Astro.props;
+const isVideo = (src: string) => /\.(mp4|webm)$/i.test(src);
 const getYoutubeThumbnail = (url: string) => {
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([^?&/]+)/);
   return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : undefined;
@@ -52,7 +54,7 @@ const renderedProjects = await Promise.all(
     tabindex="-1"
   >
     <div class="flex shrink-0 items-center justify-between border-b border-[var(--border-color)] bg-[var(--bg-card)] px-4 py-3 md:px-6">
-      <span class="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">Project log</span>
+      <span class="font-display text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]" data-i18n="projects.modal.log">Project log</span>
       <button
         type="button"
         id="project-detail-close"
@@ -68,11 +70,20 @@ const renderedProjects = await Promise.all(
       <article class="project-detail-view hidden min-h-0 overflow-y-auto overscroll-contain" data-project-id={project.id}>
         <div class="grid min-h-full grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18rem]">
           <div class="min-w-0 space-y-10 p-5 md:p-10">
-            <header class="space-y-5 border-b border-[var(--border-color)] pb-8">
-              <div class="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">
+            <header class="project-detail-header relative isolate space-y-5 border-b border-[var(--border-color)] pb-8">
+              {project.data.ambient && (
+                <canvas
+                  class="project-ambient absolute inset-0 -z-10 h-full w-full"
+                  data-visual="project-ambient"
+                  data-visual-lazy
+                  data-visual-options={JSON.stringify({ mode: project.data.ambient })}
+                  aria-hidden="true"
+                />
+              )}
+              <div class="font-display flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">
                 <span>{project.data.engine}</span>
                 <span aria-hidden="true">/</span>
-                <span>Devlog</span>
+                <span data-i18n="projects.modal.devlog">Devlog</span>
               </div>
               <h2 class="text-3xl font-bold text-white md:text-4xl" data-project-title>{project.data.title}</h2>
               <p class="project-detail-lead max-w-3xl text-base leading-relaxed text-[var(--text-secondary)]">{project.data.description}</p>
@@ -84,7 +95,12 @@ const renderedProjects = await Promise.all(
             </header>
 
             <figure class="project-detail-media w-full overflow-hidden rounded-lg border border-[var(--border-color)] bg-[var(--bg-tertiary)] p-3">
-              <img src={project.data.hero || project.data.image} alt={`${project.data.title} gameplay`} class="block h-auto w-full object-contain" loading="lazy" />
+              {isVideo(project.data.hero || "") ? (
+                <VideoLoop src={project.data.hero!} style="aspect-ratio: auto 16 / 9" label={`${project.data.title} gameplay`} class="block h-auto w-full object-contain" data-modal-video />
+                <img src={project.data.image} alt={`${project.data.title} cover`} class="video-fallback h-auto w-full object-contain" loading="lazy" />
+              ) : (
+                <img src={project.data.hero || project.data.image} alt={`${project.data.title} gameplay`} class="block h-auto w-full object-contain" loading="lazy" />
+              )}
             </figure>
 
             <div class="project-detail-prose max-w-3xl">
@@ -149,7 +165,7 @@ const renderedProjects = await Promise.all(
           <aside class="border-t border-[var(--border-color)] bg-[var(--bg-card)] p-5 lg:border-l lg:border-t-0 lg:p-7">
             <div class="space-y-8 lg:sticky lg:top-0">
               <div class="space-y-3">
-                <h3 class="project-detail-label">Links</h3>
+                <h3 class="project-detail-label" data-i18n="projects.modal.links">Links</h3>
                 <div class="flex flex-col gap-2">
                   {links.map((link) => (
                     <a href={link.url} target="_blank" rel="noopener noreferrer" class:list={["group border border-[var(--border-color)] text-sm text-[var(--text-secondary)] transition-colors hover:border-white hover:bg-white hover:text-black", link.thumbnail ? "overflow-hidden" : "inline-flex items-center justify-between gap-3 px-3 py-2.5"]}>
@@ -167,19 +183,23 @@ const renderedProjects = await Promise.all(
               </div>
               {project.data.previews?.length ? (
                 <div class="space-y-3">
-                  <h3 class="project-detail-label">Preview</h3>
+                  <h3 class="project-detail-label" data-i18n="projects.modal.preview">Preview</h3>
                   <div class="grid gap-3">
                     {project.data.previews.map((preview) => (
                       <figure class="overflow-hidden rounded border border-[var(--border-color)] bg-[var(--bg-tertiary)]">
                         <div class="flex min-h-24 items-center justify-center p-2">
-                          <img src={preview.src} alt={preview.alt} class="max-h-72 w-auto max-w-full object-contain" loading="lazy" />
+                          {isVideo(preview.src) ? (
+                            <VideoLoop src={preview.src} label={preview.alt} class="max-h-72 w-auto max-w-full object-contain" data-modal-video />
+                          ) : (
+                            <img src={preview.src} alt={preview.alt} class="max-h-72 w-auto max-w-full object-contain" loading="lazy" />
+                          )}
                         </div>
                         {preview.caption && <figcaption class="border-t border-[var(--border-color)] px-3 py-2 text-xs text-[var(--text-muted)]">{preview.caption}</figcaption>}
                       </figure>
                     ))}
                   </div>
                 </div>
-              ) : project.data.gif ? <img src={project.data.gif} alt="" class="w-full rounded border border-[var(--border-color)] object-contain" loading="lazy" /> : null}
+              ) : project.data.video && project.data.video !== project.data.hero ? <VideoLoop src={project.data.video} class="w-full rounded border border-[var(--border-color)] object-contain" data-modal-video /> : null}
             </div>
           </aside>
         </div>
@@ -189,6 +209,11 @@ const renderedProjects = await Promise.all(
 </div>
 
 <script>
+  import { mountVisuals, unmountVisuals } from "@/visuals/mount";
+  import { playLoop } from "@/scripts/video";
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
   let modal: HTMLElement | null = null;
   let dialog: HTMLElement | null = null;
   let lastTrigger: HTMLElement | null = null;
@@ -202,6 +227,10 @@ const renderedProjects = await Promise.all(
 
   const resetModal = () => {
     window.clearTimeout(closeTimer);
+    if (modal) {
+      unmountVisuals(modal);
+      modal.querySelectorAll<HTMLVideoElement>("video[data-modal-video]").forEach((video) => video.pause());
+    }
     modal?.classList.add("hidden");
     modal?.classList.remove("flex", "opacity-100");
     dialog?.classList.add("translate-y-4");
@@ -235,6 +264,12 @@ const renderedProjects = await Promise.all(
     modal.querySelectorAll<HTMLElement>(".project-detail-view").forEach((view) => view.classList.add("hidden"));
     project.classList.remove("hidden");
     project.scrollTop = 0;
+    mountVisuals(project, true);
+    project.querySelectorAll<HTMLVideoElement>("video[data-modal-video]").forEach((video) => {
+      // With reduced motion the visitor starts playback themselves.
+      if (reducedMotion.matches) video.controls = true;
+      else playLoop(video);
+    });
     const title = project.querySelector<HTMLElement>("[data-project-title]");
     if (title) {
       title.id = "project-detail-title";

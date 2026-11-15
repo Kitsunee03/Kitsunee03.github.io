@@ -366,13 +366,13 @@ const profileSlides = [
     const dots = document.querySelectorAll(".profile-dot");
     const textBlocks = document.querySelectorAll(".about-profile-text");
     const suffixSpan = document.querySelector(
-      "#aboutme .section-title-suffix",
+      "#about-me .section-title-suffix",
     ) as HTMLElement | null;
     const slashSpan = document.querySelector(
-      "#aboutme .section-title-slash",
+      "#about-me .section-title-slash",
     ) as HTMLElement | null;
     const trailingSpan = document.querySelector(
-      "#aboutme .section-title-trailing",
+      "#about-me .section-title-trailing",
     ) as HTMLElement | null;
     const fallback = document.querySelector(
       ".about-profile-fallback",
@@ -424,30 +424,11 @@ const profileSlides = [
       showImage((current - 1 + total) % total),
     );
     nextBtn?.addEventListener("click", () => showImage((current + 1) % total));
-    window.addEventListener("i18n:changed", () => showImage(current));
-  }
-  initProfileCarousel();
-  document.addEventListener("astro:after-swap", initProfileCarousel);
-</script>
-
-<script>
-  function initQAToggles() {
-    document.querySelectorAll(".qa-toggle").forEach((btn) => {
-      if (btn.dataset.bound === "true") return;
-      btn.dataset.bound = "true";
-      btn.addEventListener("click", () => {
-        const targetId = btn.getAttribute("data-target");
-        const content = document.getElementById(targetId!);
-        const chevron = btn.querySelector(".qa-chevron");
-        const isExpanded = btn.getAttribute("aria-expanded") === "true";
-
-        btn.setAttribute("aria-expanded", String(!isExpanded));
-        content?.classList.toggle("hidden");
-        chevron?.classList.toggle("rotate-180");
-      });
-    });
+    onLangChange = () => showImage(current);
   }
 
-  initQAToggles();
-  document.addEventListener("astro:after-swap", initQAToggles);
+  // One shared listener, so revisiting the page does not stack handlers.
+  let onLangChange: (() => void) | null = null;
+  window.addEventListener("i18n:changed", () => onLangChange?.());
+  document.addEventListener("astro:page-load", initProfileCarousel);
 </script>

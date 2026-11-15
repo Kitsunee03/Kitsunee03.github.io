@@ -25,9 +25,10 @@ const socials = [
       target="_blank"
       rel="noopener noreferrer"
       title={social.name}
+      aria-label={social.name}
       class="text-[var(--text-muted)] hover:text-white transition-colors duration-200"
     >
-      <Icon name={social.icon} class={size} />
+      <Icon name={social.icon} class={size} aria-hidden="true" />
     </a>
   ))}
 </div>

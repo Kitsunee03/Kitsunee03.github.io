@@ -13,15 +13,17 @@ const accordionId = `qa-${index}`;
 
 <div class="border border-[var(--border-color)] hover:border-[var(--border-hover)] transition-colors rounded-lg">
   <button
-    class="qa-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors"
-    data-target={accordionId}
+    type="button"
+    class="accordion-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors"
+    data-accordion-toggle
+    aria-controls={accordionId}
     aria-expanded="false"
   >
     <span class="text-[var(--text-secondary)] pr-4">
       <span aria-hidden="true">❯ </span>
       <span data-i18n={questionKey || undefined}>{question}</span>
     </span>
-    <span class="qa-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">▼</span>
+    <span class="accordion-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0" aria-hidden="true">▼</span>
   </button>
   <div
     id={accordionId}

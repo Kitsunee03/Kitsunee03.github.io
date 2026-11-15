@@ -1,0 +1,133 @@
+---
+/**
+ * Opt-in mini-game. The page only shows a static panel with a start button;
+ * the game module is downloaded and run after the visitor presses it.
+ */
+---
+
+<div class="grapple-game" data-grapple-game>
+  <div class="grapple-bar font-display" aria-hidden="true">
+    <span>grapple.exe</span>
+    <span class="grapple-bar-dots">_ [] x</span>
+  </div>
+  <div class="grapple-stage">
+    <canvas
+      class="grapple-canvas"
+      tabindex="-1"
+      aria-label="Grapple mini-game"
+      data-i18n-attr="aria-label:game.aria"
+      data-grapple-canvas></canvas>
+    <div class="grapple-overlay" data-grapple-overlay>
+      <p class="font-display text-lg text-white" data-grapple-title data-i18n="game.title">
+        A small rope toy
+      </p>
+      <p class="max-w-md text-sm text-[var(--text-secondary)]" data-grapple-body data-i18n="game.body">
+        Built on the same idea as Junkonaut's grapple gun. Hold on an anchor
+        (+) to latch and swing, let go to fly, and collect the scrap (*).
+      </p>
+      <p class="text-xs text-[var(--text-muted)]" data-i18n="game.controls">
+        Mouse or touch: hold on an anchor. Keyboard: Space to latch, arrows to
+        steer, Esc to quit.
+      </p>
+      <button
+        type="button"
+        class="magnetic-link border border-white px-6 py-2.5 rounded-md hover:bg-white hover:text-black transition-all text-sm"
+        data-magnetic-link
+        data-grapple-start
+        data-i18n="game.start"
+      >
+        Start
+      </button>
+    </div>
+  </div>
+  <p class="sr-only" role="status" data-grapple-status></p>
+</div>
+
+<script>
+  import type { Dispose } from "@/visuals/core/lifecycle";
+
+  const STORAGE_KEY = "grapple-best";
+  const t = (key: string, fallback: string) =>
+    window.__i18n ? window.__i18n.t(key) : fallback;
+
+  const readBest = () => {
+    try {
+      return Number(localStorage.getItem(STORAGE_KEY)) || 0;
+    } catch {
+      return 0;
+    }
+  };
+  const writeBest = (value: number) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, String(value));
+    } catch {
+      // Storage unavailable: the best score just is not remembered.
+    }
+  };
+
+  let stopCurrent: (() => void) | null = null;
+
+  function initGrappleGames() {
+    stopCurrent = null;
+    document.querySelectorAll<HTMLElement>("[data-grapple-game]").forEach((root) => {
+      if (root.dataset.ready === "true") return;
+      root.dataset.ready = "true";
+
+      const canvas = root.querySelector<HTMLCanvasElement>("[data-grapple-canvas]")!;
+      const overlay = root.querySelector<HTMLElement>("[data-grapple-overlay]")!;
+      const title = root.querySelector<HTMLElement>("[data-grapple-title]")!;
+      const body = root.querySelector<HTMLElement>("[data-grapple-body]")!;
+      const start = root.querySelector<HTMLButtonElement>("[data-grapple-start]")!;
+      const status = root.querySelector<HTMLElement>("[data-grapple-status]")!;
+      let dispose: Dispose | null = null;
+
+      const stop = () => {
+        dispose?.();
+        dispose = null;
+        root.removeAttribute("data-playing");
+        canvas.tabIndex = -1;
+        overlay.hidden = false;
+        if (stopCurrent === stop) stopCurrent = null;
+      };
+
+      const finish = (score: number) => {
+        const best = Math.max(score, readBest());
+        writeBest(best);
+        const result = t("game.result", "Scrap collected: {score} · Best: {best}")
+          .replace("{score}", String(score))
+          .replace("{best}", String(best));
+        title.textContent = t("game.over", "Time's up");
+        body.textContent = result;
+        status.textContent = result;
+        start.textContent = t("game.again", "Play again");
+        // These now hold a result, not a translatable label.
+        title.removeAttribute("data-i18n");
+        body.removeAttribute("data-i18n");
+        start.removeAttribute("data-i18n");
+        stop();
+        start.focus();
+      };
+
+      start.addEventListener("click", async () => {
+        stopCurrent?.();
+        const { mount } = await import("@/visuals/grapple-game");
+        overlay.hidden = true;
+        root.setAttribute("data-playing", "");
+        canvas.tabIndex = 0;
+        canvas.focus({ preventScroll: true });
+        dispose = mount(canvas, { onEnd: finish });
+        stopCurrent = stop;
+      });
+
+      canvas.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          stop();
+          start.focus();
+        }
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", initGrappleGames);
+  document.addEventListener("astro:before-swap", () => stopCurrent?.());
+</script>

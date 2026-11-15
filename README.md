@@ -1,101 +1,51 @@
-<h1 align="center">Token</h1>
-<h2 align="center">Minimal Astro + Tailwind CSS Starter</h2>
+# Arnau Miragall — Portfolio
 
-> [!NOTE]
->
-> `token-template` is a modern and minimalistic Astro + Tailwind CSS starter designed for developers and creators. With a sleek black-and-white terminal-inspired design, it features support for Markdown (MD), MDX, RSS feeds, sitemaps, and fully static content, making it perfect for personal portfolios and blogs.
+Personal portfolio of Arnau Miragall Torra, gameplay programmer and game development student.
+Live at <https://kitsunee03.github.io/>.
 
-## 🌟 Features
+Built with [Astro](https://astro.build/) (static output), Tailwind CSS and MDX, and deployed to GitHub Pages.
+It started from the [token-template](https://github.com/ArnavK-09/token-template) starter by Arnav K (ISC licence, see `LICENSE`).
 
-> **token-template** features intro:
+## Commands
 
-- **Minimalist Design** – Black-and-white terminal-inspired aesthetics with custom fonts.
-- **Astro + Tailwind CSS** – Built using Astro and styled with Tailwind CSS for easy customization.
-- **Content Support** – Write blog posts or documentation in Markdown (MD) and MDX.
-- **Static and Fast** – Fully static content optimized for performance.
+| Command | What it does |
+|---|---|
+| `npm ci` | Install the exact dependencies from `package-lock.json` |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Build the production site into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run fmt` | Format the code with Prettier |
 
-## 💻 Installation
+Always check `npm run build` before merging: the dev server does not guarantee that the deployed site works.
 
-> [!TIP]
-> Remember to update [`src/consts.ts`](https://github.com/ArnavK-09/token-template/blob/main/src/consts.ts)
+## Structure
 
-###### terminal
+| Path | Contents |
+|---|---|
+| `src/pages/` | Routes: home, projects, about, contact, 404, and the `/en/…` `/es/…` language redirects |
+| `src/components/` | Astro components |
+| `src/content/projects/` | One MDX file per project (front matter is validated in `src/content.config.ts`) |
+| `src/data/` | Skills, tools, education, experience and Q&A |
+| `src/i18n/translations.ts` | English and Spanish interface strings |
+| `src/scripts/` | Client-side behaviour (navigation, cards, accordions, title decode) |
+| `src/visuals/` | Canvas visual systems, each loaded on demand |
+| `public/` | Fonts, images and project media |
+| `docs/ai/` | Notes for AI assistants: handoff and the KIT PLAYGROUND backlog (`CLAUDE.md` stays at the root) |
+| `backup/` | Personal backups that are not part of the site |
 
-```bash
-# Clone the repository
-git clone https://github.com/ArnavK-09/token-template.git my-portfolio
-cd my-portfolio
+## Adding a project
 
-# Install dependencies
-npm install
+Create `src/content/projects/<slug>.mdx`. Required front matter: `title`, `description`, `tags`, `engine`, `image`.
+Optional: `video` (short MP4 loop shown on card hover), `hero`, `links`, `previews`, `overview`, `contribution`, `highlights`, `technologies`, `challenges`, `technicalDecisions`, `controls`, `ambient` (`space` or `arcane`), `featured`, `order`.
 
-# Run the development server
-npm run dev
-```
+Use video for motion, not GIF: the same clip is roughly ten times smaller. Each `.mp4` needs a `.webm` with the same name next to it (`ffmpeg -i clip.mp4 -c:v libvpx-vp9 -crf 33 -b:v 0 -an clip.webm`).
 
-## 💻 Contributing
+## Visual systems
 
-> [!TIP]  
-> We welcome contributions to improve **token-template**! If you have suggestions, bug fixes, or new feature ideas, follow these steps:
+Each effect in `src/visuals/` exports `mount(canvas, options)` and returns a dispose function.
+`src/visuals/core/lifecycle.ts` handles the frame loop, pausing when off-screen or when the tab is hidden, the `devicePixelRatio` cap and `prefers-reduced-motion`.
+Declare one in markup with `<canvas data-visual="glyph-field">`; `src/visuals/mount.ts` loads the module on demand.
 
-1. **Fork the Repository**  
-   Click the **Fork** button at the top-right of the repo page.
+## Deployment
 
-2. **Clone Your Fork**  
-   Clone the repo locally:
-
-   ```bash
-   git clone https://github.com/ArnavK-09/token-template.git
-   ```
-
-3. **Create a Branch**  
-   Create a new branch for your changes:
-
-   ```bash
-   git checkout -b your-feature-branch
-   ```
-
-4. **Make Changes**  
-   Implement your changes (bug fixes, features, etc.).
-
-5. **Commit and Push**  
-   Commit your changes and push the branch:
-
-   ```bash
-   git commit -m "feat(scope): description"
-   git push origin your-feature-branch
-   ```
-
-6. **Open a Pull Request**  
-   Open a PR with a detailed description of your changes.
-
-7. **Collaborate and Merge**  
-   The maintainers will review your PR, request changes if needed, and merge it once approved.
-
-## 🙋‍♂️ Issues
-
-Found a bug or need help? Please create an issue on the [GitHub repository](https://github.com/ArnavK-09/token-template/issues) with a detailed description.
-
-## 👤 Author
-
-<table>
-  <tbody>
-    <tr>
-        <td align="center" valign="top" width="14.28%"><a href="https://github.com/ArnavK-09"><img src="https://github.com/ArnavK-09.png?s=100" width="130px;" alt="Arnav K"/></a><br /><a href="https://github.com/ArnavK-09"<h4><b>Arnav K</b></h3></a></td>
-    </tr>
-  </tbody>
-</table>
-
----
-
-<h2 align="center">📄 License</h2>
-
-<p align="center">
-<strong>token-template</strong> is licensed under the <code>ISC</code> License. See the <a href="https://github.com/ArnavK-09/token-template/blob/main/LICENSE">LICENSE</a> file for more details.
-</p>
-
----
-
-<p align="center">
-    <strong>🌟 If you find this project helpful, please give it a star on GitHub! 🌟</strong>
-</p>
+Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and publishes `dist/` to GitHub Pages.

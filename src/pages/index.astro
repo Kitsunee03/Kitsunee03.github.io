@@ -7,6 +7,7 @@ import ProjectCard from "@/components/ProjectCard.astro";
 import ProjectDetailModal from "@/components/ProjectDetailModal.astro";
 import ToolCarousel from "@/components/ToolCarousel.astro";
 import ContactSummary from "@/components/ContactSummary.astro";
+import GrappleGame from "@/components/GrappleGame.astro";
 import { Icon } from "astro-icon/components";
 import { ABOUT_ME_SHORT, FULL_NAME } from "@/consts";
 import { SKILLS } from "@/data/skills";
@@ -97,7 +98,7 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
             tags={project.data.tags}
             engine={project.data.engine}
             image={project.data.image}
-            gif={project.data.gif}
+            video={project.data.video}
           />
         ))
       }
@@ -128,8 +129,10 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
           return (
             <div class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors">
               <button
-                class="home-dropdown-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
-                data-target={`home-dd-${i}`}
+                type="button"
+                class="accordion-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
+                data-accordion-toggle
+                aria-controls={`home-dd-${i}`}
                 aria-expanded="false"
               >
                 <span class="text-[var(--text-secondary)]">
@@ -138,7 +141,8 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
                     {categoryLabels[cat].label}
                   </span>
                 </span>
-                <span class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0">
+                <span class="accordion-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0"
+            aria-hidden="true">
                   ▼
                 </span>
               </button>
@@ -170,8 +174,10 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
         class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors"
       >
         <button
-          class="home-dropdown-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
-          data-target="home-dd-edu"
+          type="button"
+                class="accordion-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
+          data-accordion-toggle
+          aria-controls="home-dd-edu"
           aria-expanded="false"
         >
           <span class="text-[var(--text-secondary)]">
@@ -179,7 +185,8 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
             <span data-i18n="home.dropdown.education">My Education</span>
           </span>
           <span
-            class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0"
+            class="accordion-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0"
+            aria-hidden="true"
             >▼</span
           >
         </button>
@@ -221,8 +228,10 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
         class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors"
       >
         <button
-          class="home-dropdown-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
-          data-target="home-dd-team"
+          type="button"
+                class="accordion-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
+          data-accordion-toggle
+          aria-controls="home-dd-team"
           aria-expanded="false"
         >
           <span class="text-[var(--text-secondary)]">
@@ -230,7 +239,8 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
             <span data-i18n="home.dropdown.teamwork.title">Teamwork</span>
           </span>
           <span
-            class="home-dd-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0"
+            class="accordion-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0"
+            aria-hidden="true"
             >▼</span
           >
         </button>
@@ -250,27 +260,13 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
     </div>
   </Section>
 
+  <!-- Opt-in mini-game -->
+  <Section title="Play" titleKey="home.sections.play" variant="secondary">
+    <GrappleGame />
+  </Section>
+
   <!-- Contact Summary -->
-  <Section title="Contact" titleKey="home.sections.contact" variant="secondary">
+  <Section title="Contact" titleKey="home.sections.contact" variant="primary">
     <ContactSummary />
   </Section>
 </Layout>
-
-<script>
-  function initHomeDropdowns() {
-    document.querySelectorAll(".home-dropdown-toggle").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const targetId = btn.getAttribute("data-target");
-        const content = document.getElementById(targetId!);
-        const chevron = btn.querySelector(".home-dd-chevron");
-        const isExpanded = btn.getAttribute("aria-expanded") === "true";
-
-        btn.setAttribute("aria-expanded", String(!isExpanded));
-        content?.classList.toggle("hidden");
-        chevron?.classList.toggle("rotate-180");
-      });
-    });
-  }
-  initHomeDropdowns();
-  document.addEventListener("astro:after-swap", initHomeDropdowns);
-</script>
