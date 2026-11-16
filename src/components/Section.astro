@@ -1,25 +1,34 @@
 ---
+import { getLang, useTranslations } from "@/i18n";
+
 type Props = {
+  /** English title; also the source of the section's id. */
   title: string;
   titleKey?: string;
+  /** Already translated suffix shown after the title. */
   titleSuffix?: string;
-  titleSuffixKey?: string;
   full_screen?: boolean;
   showTitle?: boolean;
   className?: string;
   variant?: "primary" | "secondary" | "tertiary";
+  /** Optional background visual for sections with sparse content. */
+  visual?: "lattice";
 };
+
 const {
   title = "Section",
   titleKey = "",
   titleSuffix = "",
-  titleSuffixKey = "",
   full_screen = false,
   showTitle = true,
   className = "",
   variant = "primary",
+  visual,
 } = Astro.props;
-const hasSuffix = Boolean(titleSuffix);
+const t = useTranslations(getLang(Astro.url));
+const heading = titleKey ? t(titleKey) : title;
+// Decorations positioned against the section (e.g. edge ornaments).
+const hasOrnament = Astro.slots.has("ornament");
 const sectionId = title
   .toLowerCase()
   .replace(/&/g, "and")
@@ -35,23 +44,38 @@ const bgMap = {
 
 <section
   id={sectionId}
-  class={`${full_screen ? "min-h-screen" : ""} px-4 py-16 w-full ${bgMap[variant]} ${className}`}
+  class:list={[
+    "px-4 py-16 w-full",
+    bgMap[variant],
+    {
+      "min-h-screen": full_screen,
+      "relative isolate": visual || hasOrnament,
+    },
+    className,
+  ]}
   data-reveal-section
 >
+  {
+    visual && (
+      <canvas
+        class="section-visual absolute inset-0 -z-10 h-full w-full"
+        data-visual={visual}
+        aria-hidden="true"
+      />
+    )
+  }
+  <slot name="ornament" />
   <div class="max-w-6xl mx-auto">
     {
       showTitle && (
         <div class="w-full grid place-items-center gap-3 mb-10">
           <span class="section-index" aria-hidden="true" />
-          {hasSuffix ? (
+          {titleSuffix ? (
             <h2 class="text-4xl md:text-5xl text-center">
               <span aria-hidden="true">&lt;</span>
-              <span data-i18n={titleKey || undefined} data-decode>{title}</span>
+              <span data-decode>{heading}</span>
               <span class="section-title-slash">/</span>
-              <span
-                class="section-title-suffix text-3xl md:text-4xl text-[var(--text-secondary)]"
-                data-i18n={titleSuffixKey || undefined}
-              >
+              <span class="section-title-suffix text-3xl md:text-4xl text-[var(--text-secondary)]">
                 {titleSuffix}
               </span>
               <span class="section-title-trailing text-3xl md:text-4xl text-[var(--text-secondary)]">
@@ -62,7 +86,7 @@ const bgMap = {
           ) : (
             <h2 class="text-4xl md:text-5xl text-center">
               <span aria-hidden="true">&lt;</span>
-              <span data-i18n={titleKey || undefined} data-decode>{title}</span>
+              <span data-decode>{heading}</span>
               <span aria-hidden="true"> /&gt;</span>
             </h2>
           )}

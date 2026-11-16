@@ -1,0 +1,60 @@
+---
+description: "Un juego 3D de limpieza espacial en el que aspiras chatarra, te enganchas de asteroide en asteroide y mejoras tu equipo mientras conoces a unos clankers muy peculiares."
+tags: ["3D", "Incremental", "Exploración", "Espacio", "Acción"]
+links:
+  - label: "Teaser de tercer curso"
+  - label: "No Name Yeti — Linktree"
+controls:
+  [
+    "Aspirar: clic izquierdo",
+    "Gancho: clic derecho",
+    "Cambiar modo de disparo: Tab, Q o rueda del ratón",
+    "Movimiento con jetpack: Espacio/Shift + WASD",
+  ]
+previews:
+  - alt: "Junkonaut explorando el espacio entre planetas"
+    caption: "Explorando el espacio exterior"
+  - alt: "Los personajes clanker de Junkonaut"
+    caption: "Conociendo a los clankers"
+  - alt: "Junkonaut alimentando al Glorious Hole"
+    caption: "Haciendo crecer el Glorious Hole"
+  - alt: "Captura de gameplay de Junkonaut"
+    caption: "Aspirando restos en el espacio abierto"
+  - alt: "Captura de gameplay de Junkonaut"
+    caption: "Navegando entre asteroides"
+  - alt: "Captura de gameplay de Junkonaut"
+    caption: "Usando el gancho para explorar"
+  - alt: "Captura de gameplay de Junkonaut"
+    caption: "Conociendo a los clankers"
+---
+
+## Presentación del proyecto
+
+Junkonaut se basa en un bucle físico sencillo: recoger chatarra espacial, dársela de comer al Glorious Hole y usar la progresión obtenida para mejorar las herramientas que hacen que la siguiente limpieza sea más rápida y satisfactoria.
+
+El proyecto empezó en mi tercer curso como un trabajo anual pensado para convertirse en un vertical slice en unos cinco meses. Tras valorar su potencial y el trabajo realizado por No Name Yeti, ENTI-UB nos permitió continuar el desarrollo durante el cuarto curso. Ahora lo estamos usando como base de nuestros trabajos de final de grado, partiendo de lo hecho el año anterior y llevándolo hacia un lanzamiento pulido y comercialmente viable.
+
+Nuestro equipo abarca programación, diseño, arte y música, con FMOD integrado en el flujo de trabajo de audio. Este año, uno de nuestros músicos se quedó para completar su trabajo de final de grado con nosotros, y una compañera de clase se unió como productora. Su trabajo se centra en ese papel: nos ayuda a convertir las ideas en prioridades concretas y a fijar objetivos factibles y realistas.
+
+## Mi papel
+
+Los desarrolladores rotamos entre funcionalidades según la disponibilidad y la afinidad de cada uno con cada tema. Mi trabajo se ha centrado sobre todo en el gancho, el refinamiento de la gravedad, el diálogo y el movimiento de los NPC, las misiones, y los sistemas de inventario y de mejora del equipo. Estos últimos usan DataTables como base de datos interna para definir y gestionar el contenido disponible.
+
+## El gancho
+
+El gancho (Grapple Gun) ha sido la parte más difícil de mis aportaciones y la funcionalidad con mayor impacto en la exploración. El Rope Component de Unreal Engine presentaba limitaciones y problemas de estabilidad que rompían la inmersión con frecuencia, así que decidimos construir nuestro propio sistema de cuerda.
+
+<details>
+<summary>Cómo funciona el sistema de cuerda propio</summary>
+
+Tras muchas iteraciones, el sistema genera dinámicamente puntos intermedios que se comportan como pliegues de la cuerda. Los raycasts detectan obstáculos y crean un punto nuevo cuando la cuerda tiene que doblarse alrededor del entorno. Una vez creado un punto, el sistema comprueba si sigue siendo necesario trazando directamente del punto A al punto C. Si ese camino está libre, se elimina el punto intermedio B y la iteración se detiene, de modo que solo cambia un pliegue por tick. Así se conservan únicamente los puntos que exige la geometría en cada momento.
+
+El sistema comprueba la dirección de cada segmento entre los puntos A y B y aplica la fuerza correspondiente al jugador, de forma que la cuerda influye directamente en su movimiento. También controla una longitud máxima de cuerda, que se actualiza a medida que se crean o eliminan segmentos. Cuando el jugador supera esa longitud, una fuerza de tracción lo devuelve dentro del límite.
+
+El movimiento tiene en cuenta el pliegue más cercano, lo que permite al jugador pivotar alrededor de los obstáculos y produce un comportamiento inspirado en la respuesta de una cuerda real.
+
+</details>
+
+## Lo que viene
+
+El sistema todavía necesita bastante optimización y refinamiento, pero su complejidad y su importancia dentro del juego hacen probable que sea el eje de mi trabajo de final de grado. Espero profundizar en la detección de colisiones, la gestión dinámica de puntos y la respuesta física del jugador mientras itero hacia un resultado robusto, consistente y pulido.

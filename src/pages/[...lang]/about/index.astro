@@ -1,11 +1,11 @@
 ---
+import { getLang, langStaticPaths, useTranslations } from "@/i18n";
 import Layout from "@/layouts/Layout.astro";
 import Section from "@/components/Section.astro";
 import SkillCard from "@/components/SkillCard.astro";
 import QAAccordion from "@/components/QAAccordion.astro";
 import Timeline from "@/components/Timeline.astro";
 import ContactSummary from "@/components/ContactSummary.astro";
-import SocialLinks from "@/components/SocialLinks.astro";
 import { Icon } from "astro-icon/components";
 import { FULL_NAME, SOCIAL_LINKS } from "@/consts";
 import { SPECIALIZATIONS } from "@/data/specializations";
@@ -14,71 +14,38 @@ import { EXPERIENCE } from "@/data/experience";
 import { SKILLS } from "@/data/skills";
 import { QA_ITEMS } from "@/data/qa";
 
-const categoryLabels = {
-  programming: {
-    label: "Programming Languages",
-    key: "about.categories.programming",
-  },
-  engine: { label: "Engines & Frameworks", key: "about.categories.engine" },
-  design: { label: "Design Tools", key: "about.categories.design" },
-  tools: { label: "Dev Tools", key: "about.categories.tools" },
-};
+export function getStaticPaths() {
+  return langStaticPaths();
+}
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+
 const categories = ["programming", "engine", "design", "tools"] as const;
 
 const profileSlides = [
-  {
-    id: "professional",
-    image: "/images/firstPfp.webp",
-    titleSuffix: "Professional",
-    titleSuffixKey: "about.profile.professional.suffix",
-    alt: "Professional profile portrait",
-    altKey: "about.profile.professional.alt",
-    paragraphs: [
-      "I'm a gameplay programmer and game development student at ENTI in Barcelona. I focus on building gameplay systems, player feel, and rapid prototypes that can be tested early.",
-      "My background in game design helps me translate ideas into mechanics, and I've led small university teams (3-8 people) as a producer, keeping scope and priorities clear.",
-    ],
-    paragraphKeys: [
-      "about.profile.professional.p1",
-      "about.profile.professional.p2",
-    ],
-  },
-  {
-    id: "personal",
-    image: "/images/secondPfp.webp",
-    titleSuffix: "Personal",
-    titleSuffixKey: "about.profile.personal.suffix",
-    alt: "Personal profile portrait",
-    altKey: "about.profile.personal.alt",
-    paragraphs: [
-      "I'm calm and introverted, so I tend to listen first and then share honest feedback when it helps the project. I enjoy teams where ideas are discussed openly and decisions are explained.",
-      "Japanese culture inspires a lot of my aesthetic choices, and I want this portfolio to feel personal rather than generic.",
-    ],
-    paragraphKeys: ["about.profile.personal.p1", "about.profile.personal.p2"],
-  },
-  {
-    id: "projects",
-    image: "/images/thirdPfp.webp",
-    titleSuffix: "Projects & Experience",
-    titleSuffixKey: "about.profile.projects.suffix",
-    alt: "Project-focused profile portrait",
-    altKey: "about.profile.projects.alt",
-    paragraphs: [
-      "All the projects here are prototypes made at university or in my free time. I enjoy level design, playtesting sessions, and iterating based on feedback.",
-      "Tools I use most are Unity, Unreal Engine, Phaser, C#, C++, and Processing. I also use Audacity for basic audio editing.",
-    ],
-    paragraphKeys: ["about.profile.projects.p1", "about.profile.projects.p2"],
-  },
-];
+  { id: "professional", image: "/images/firstPfp.webp" },
+  { id: "personal", image: "/images/secondPfp.webp" },
+  { id: "projects", image: "/images/thirdPfp.webp" },
+].map((slide) => ({
+  ...slide,
+  suffix: t(`about.profile.${slide.id}.suffix`),
+  alt: t(`about.profile.${slide.id}.alt`),
+  paragraphs: [
+    t(`about.profile.${slide.id}.p1`),
+    t(`about.profile.${slide.id}.p2`),
+  ],
+}));
 ---
 
-<Layout title={`About Me — ${FULL_NAME}`}>
+<Layout title={`${t("about.sections.about")} — ${FULL_NAME}`}>
   <!-- Photo + Description -->
   <Section
     title="About Me"
     titleKey="about.sections.about"
-    titleSuffix={profileSlides[0].titleSuffix}
-    titleSuffixKey={profileSlides[0].titleSuffixKey}
+    titleSuffix={profileSlides[0].suffix}
     variant="primary"
+    visual="lattice"
   >
     <div
       class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 items-start"
@@ -99,9 +66,7 @@ const profileSlides = [
                     i === 0 ? "opacity-100" : "opacity-0",
                   ]}
                   data-index={i}
-                  data-title={slide.titleSuffix}
-                  data-title-key={slide.titleSuffixKey}
-                  data-i18n-attr={`alt:${slide.altKey}`}
+                  data-title={slide.suffix}
                   loading="lazy"
                   onerror="this.dataset.failed='true'; this.style.display='none'"
                 />
@@ -115,24 +80,25 @@ const profileSlides = [
           </div>
           <!-- Arrow controls -->
           <button
+            type="button"
             id="profile-prev"
             class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/70 hover:bg-black/90 rounded-full grid place-items-center transition-colors z-10 text-white"
-            aria-label="Previous photo"
-            data-i18n-attr="aria-label:about.profile.prev"
+            aria-label={t("about.profile.prev")}
           >
             ◀
           </button>
           <button
+            type="button"
             id="profile-next"
             class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/70 hover:bg-black/90 rounded-full grid place-items-center transition-colors z-10 text-white"
-            aria-label="Next photo"
-            data-i18n-attr="aria-label:about.profile.next"
+            aria-label={t("about.profile.next")}
           >
             ▶
           </button>
           <!-- Dots indicator -->
           <div
             class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10"
+            aria-hidden="true"
           >
             {
               profileSlides.map((_, i) => (
@@ -148,7 +114,7 @@ const profileSlides = [
           </div>
         </div>
       </div>
-      <div class="md:col-span-2">
+      <div class="md:col-span-2" aria-live="polite">
         {
           profileSlides.map((slide, i) => (
             <div
@@ -158,11 +124,8 @@ const profileSlides = [
               ]}
               data-index={i}
             >
-              {slide.paragraphs.map((paragraph, pIndex) => (
-                <p
-                  class="text-[var(--text-secondary)] leading-relaxed"
-                  data-i18n={slide.paragraphKeys[pIndex]}
-                >
+              {slide.paragraphs.map((paragraph) => (
+                <p class="text-[var(--text-secondary)] leading-relaxed">
                   {paragraph}
                 </p>
               ))}
@@ -187,19 +150,14 @@ const profileSlides = [
               <Icon
                 name={spec.icon}
                 class="w-6 h-6 text-[var(--text-secondary)]"
+                aria-hidden="true"
               />
             </div>
-            <h3
-              class="text-lg mb-2"
-              data-i18n={`specializations.${spec.id}.title`}
-            >
-              {spec.title}
+            <h3 class="text-lg mb-2">
+              {t(`specializations.${spec.id}.title`)}
             </h3>
-            <p
-              class="text-[var(--text-muted)] text-sm leading-relaxed"
-              data-i18n={`specializations.${spec.id}.description`}
-            >
-              {spec.description}
+            <p class="text-[var(--text-muted)] text-sm leading-relaxed">
+              {t(`specializations.${spec.id}.description`)}
             </p>
           </div>
         ))
@@ -213,26 +171,21 @@ const profileSlides = [
     titleKey="about.sections.educationExperience"
     showTitle={false}
     variant="primary"
+    visual="lattice"
   >
     <div
       class="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-2 md:gap-10 lg:gap-16"
     >
       <div>
         <h2 class="mb-8 text-2xl font-normal text-white md:text-3xl">
-          <span data-i18n="about.sections.education">{`Education`}</span>
+          {t("about.sections.education")}
         </h2>
         {
           EDUCATION.map((edu, i) => (
             <Timeline
-              title={edu.title}
-              institution={edu.institution}
-              period={edu.period}
-              description={edu.description}
-              titleKey={`education.${edu.id}.title`}
-              institutionKey={`education.${edu.id}.institution`}
-              periodKey={`education.${edu.id}.period`}
-              descriptionKey={`education.${edu.id}.description`}
+              entryKey={`education.${edu.id}`}
               icon={edu.icon}
+              current={edu.current}
               isLast={i === EDUCATION.length - 1}
             />
           ))
@@ -240,25 +193,17 @@ const profileSlides = [
       </div>
       <div>
         <h2 class="mb-8 text-2xl font-normal text-white md:text-3xl">
-          <span data-i18n="about.sections.experience">Experience</span>
+          {t("about.sections.experience")}
         </h2>
         {
           EXPERIENCE.map((job, i) => (
             <Timeline
-              title={job.title}
-              institution={job.institution}
-              period={job.period}
-              description={job.description}
-              titleKey={`experience.${job.id}.title`}
-              institutionKey={`experience.${job.id}.institution`}
-              periodKey={`experience.${job.id}.period`}
-              descriptionKey={`experience.${job.id}.description`}
+              entryKey={`experience.${job.id}`}
               mark={job.mark}
               logo={job.logo}
               link={job.url}
-              linkLabel="View company"
-              linkLabelKey="experience.viewCompany"
               icon={job.icon}
+              current={job.current}
               isLast={i === EXPERIENCE.length - 1}
             />
           ))
@@ -276,52 +221,48 @@ const profileSlides = [
   >
     <div class="max-w-5xl mx-auto space-y-8">
       {
-        categories.map((category) => {
-          const categorySkills = SKILLS.filter((s) => s.category === category);
-          return (
-            <div>
-              <h3 class="text-sm text-[var(--text-muted)] mb-4 tracking-wider uppercase">
-                <span data-i18n={categoryLabels[category].key}>
-                  {categoryLabels[category].label}
-                </span>
-              </h3>
-              <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4">
-                {categorySkills.map((skill) => (
+        categories.map((category) => (
+          <div>
+            <h3 class="text-sm text-[var(--text-muted)] mb-4 tracking-wider uppercase">
+              {t(`about.categories.${category}`)}
+            </h3>
+            <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4">
+              {SKILLS.filter((skill) => skill.category === category).map(
+                (skill) => (
                   <SkillCard
+                    id={skill.id}
                     name={skill.name}
                     icon={skill.icon}
                     color={skill.color}
-                    description={skill.description}
                     descriptionKey={`skills.${skill.id}.description`}
                   />
-                ))}
-              </div>
+                ),
+              )}
             </div>
-          );
-        })
-      }
-    </div>
-  </Section>
-
-  <!-- Q&A -->
-  <Section title="Q&A" titleKey="about.sections.qa" variant="primary">
-    <div class="max-w-3xl mx-auto space-y-3">
-      {
-        QA_ITEMS.map((item, i) => (
-          <QAAccordion
-            question={item.question}
-            answer={item.answer}
-            questionKey={`qa.${item.id}.question`}
-            answerKey={`qa.${item.id}.answer`}
-            index={i}
-          />
+          </div>
         ))
       }
     </div>
   </Section>
 
+  <!-- Q&A -->
+  <Section
+    title="Q&A"
+    titleKey="about.sections.qa"
+    variant="primary"
+    visual="lattice"
+  >
+    <div class="max-w-3xl mx-auto space-y-3">
+      {QA_ITEMS.map((id, i) => <QAAccordion entryKey={`qa.${id}`} index={i} />)}
+    </div>
+  </Section>
+
   <!-- GitHub & Itch.io -->
-  <Section title="Find Me" titleKey="about.sections.find" variant="secondary">
+  <Section
+    title="Find Me"
+    titleKey="about.sections.find"
+    variant="secondary"
+  >
     <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
       <a
         href={SOCIAL_LINKS.github}
@@ -329,7 +270,11 @@ const profileSlides = [
         rel="noopener noreferrer"
         class="border border-[var(--border-color)] hover:border-[var(--border-hover)] bg-[var(--bg-card)] p-6 flex items-center gap-4 transition-all group rounded-lg"
       >
-        <Icon name="simple-icons:github" class="w-10 h-10 text-white" />
+        <Icon
+          name="simple-icons:github"
+          class="w-10 h-10 text-white"
+          aria-hidden="true"
+        />
         <div>
           <h3 class="text-lg group-hover:text-white transition-colors">
             GitHub
@@ -343,7 +288,11 @@ const profileSlides = [
         rel="noopener noreferrer"
         class="border border-[var(--border-color)] hover:border-[var(--border-hover)] bg-[var(--bg-card)] p-6 flex items-center gap-4 transition-all group rounded-lg"
       >
-        <Icon name="simple-icons:itchdotio" class="w-10 h-10 text-[#FA5C5C]" />
+        <Icon
+          name="simple-icons:itchdotio"
+          class="w-10 h-10 text-[#FA5C5C]"
+          aria-hidden="true"
+        />
         <div>
           <h3 class="text-lg group-hover:text-white transition-colors">
             Itch.io
@@ -355,38 +304,38 @@ const profileSlides = [
   </Section>
 
   <!-- Contact -->
-  <Section title="Contact" titleKey="about.sections.contact" variant="primary">
+  <Section
+    title="Contact"
+    titleKey="about.sections.contact"
+    variant="primary"
+    visual="lattice"
+  >
     <ContactSummary compact />
   </Section>
 </Layout>
 
 <script>
   function initProfileCarousel() {
-    const imgs = document.querySelectorAll(".about-profile-img");
+    const imgs =
+      document.querySelectorAll<HTMLImageElement>(".about-profile-img");
+    if (!imgs.length) return;
     const dots = document.querySelectorAll(".profile-dot");
     const textBlocks = document.querySelectorAll(".about-profile-text");
-    const suffixSpan = document.querySelector(
+    const suffixSpan = document.querySelector<HTMLElement>(
       "#about-me .section-title-suffix",
-    ) as HTMLElement | null;
-    const slashSpan = document.querySelector(
-      "#about-me .section-title-slash",
-    ) as HTMLElement | null;
-    const trailingSpan = document.querySelector(
-      "#about-me .section-title-trailing",
-    ) as HTMLElement | null;
-    const fallback = document.querySelector(
+    );
+    const fallback = document.querySelector<HTMLElement>(
       ".about-profile-fallback",
-    ) as HTMLElement | null;
+    );
     const prevBtn = document.getElementById("profile-prev");
     const nextBtn = document.getElementById("profile-next");
-    if (!imgs.length) return;
 
     let current = 0;
     const total = imgs.length;
 
-    function showImage(index: number) {
+    const showImage = (index: number) => {
       imgs.forEach((img, i) => {
-        (img as HTMLElement).style.opacity = i === index ? "1" : "0";
+        img.style.opacity = i === index ? "1" : "0";
       });
       dots.forEach((dot, i) => {
         dot.classList.toggle("bg-white", i === index);
@@ -397,38 +346,22 @@ const profileSlides = [
         block.classList.toggle("block", i === index);
       });
 
-      const activeImg = imgs[index] as HTMLElement | undefined;
-      const titleKey = activeImg?.getAttribute("data-title-key") || "";
-      const titleFallback = activeImg?.getAttribute("data-title") || "";
-      const titleSuffix =
-        window.__i18n && titleKey ? window.__i18n.t(titleKey) : titleFallback;
-      if (suffixSpan) {
-        suffixSpan.textContent = titleSuffix;
-        suffixSpan.classList.toggle("hidden", !titleSuffix);
-        suffixSpan.classList.toggle("inline", !!titleSuffix);
-      }
-      slashSpan?.classList.toggle("hidden", !titleSuffix);
-      slashSpan?.classList.toggle("inline", !!titleSuffix);
-      trailingSpan?.classList.toggle("hidden", !titleSuffix);
-      trailingSpan?.classList.toggle("inline", !!titleSuffix);
-      const failed = activeImg?.getAttribute("data-failed") === "true";
-      const hidden = activeImg?.style.display === "none";
-      const showFallback = !activeImg || failed || hidden;
+      const activeImg = imgs[index];
+      // The suffix is already translated in the markup.
+      if (suffixSpan) suffixSpan.textContent = activeImg.dataset.title || "";
+      const showFallback =
+        activeImg.dataset.failed === "true" ||
+        activeImg.style.display === "none";
       fallback?.classList.toggle("opacity-0", !showFallback);
       fallback?.classList.toggle("opacity-100", showFallback);
       current = index;
-    }
+    };
 
-    showImage(0);
     prevBtn?.addEventListener("click", () =>
       showImage((current - 1 + total) % total),
     );
     nextBtn?.addEventListener("click", () => showImage((current + 1) % total));
-    onLangChange = () => showImage(current);
   }
 
-  // One shared listener, so revisiting the page does not stack handlers.
-  let onLangChange: (() => void) | null = null;
-  window.addEventListener("i18n:changed", () => onLangChange?.());
   document.addEventListener("astro:page-load", initProfileCarousel);
 </script>

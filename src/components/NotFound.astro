@@ -1,0 +1,39 @@
+---
+import { getLang, localizePath, useTranslations } from "@/i18n";
+import Layout from "@/layouts/Layout.astro";
+import GrappleGame from "@/components/GrappleGame.astro";
+import AsciiLance from "@/components/AsciiLance.astro";
+
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Layout title={`404 — ${t("notFound.title")}`} noindex>
+  <section class="min-h-screen grid place-items-center px-4 py-16">
+    <div class="w-full text-center space-y-6">
+      <div class="flex justify-center overflow-hidden">
+        <AsciiLance length={60} broken class="hidden sm:block" />
+        <AsciiLance length={40} twist={10} broken class="sm:hidden" />
+      </div>
+      <h1 class="text-8xl md:text-9xl font-bold text-[var(--text-muted)]">
+        404
+      </h1>
+      <p class="text-xl text-[var(--text-secondary)]">
+        <span aria-hidden="true">&lt;</span>
+        <span>{t("notFound.title")}</span>
+        <span aria-hidden="true"> /&gt;</span>
+      </p>
+      <p class="text-[var(--text-muted)] max-w-md mx-auto">
+        {t("notFound.body")}
+      </p>
+      <a
+        href={localizePath("/", lang)}
+        class="inline-block border border-white px-6 py-2.5 hover:bg-white hover:text-black transition-all text-sm mt-4"
+      >
+        {t("notFound.back")}
+      </a>
+      <p class="pt-10 text-sm text-[var(--text-muted)]">{t("game.lost")}</p>
+      <GrappleGame />
+    </div>
+  </section>
+</Layout>

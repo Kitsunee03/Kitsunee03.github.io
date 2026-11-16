@@ -1,17 +1,20 @@
 ---
+import { getLang, useTranslations } from "@/i18n";
+
 type Props = {
-  question: string;
-  answer: string;
-  questionKey?: string;
-  answerKey?: string;
+  /** Dictionary prefix holding `question` and `answer`. */
+  entryKey: string;
   index: number;
 };
 
-const { question, answer, questionKey = "", answerKey = "", index } = Astro.props;
+const { entryKey, index } = Astro.props;
 const accordionId = `qa-${index}`;
+const t = useTranslations(getLang(Astro.url));
 ---
 
-<div class="border border-[var(--border-color)] hover:border-[var(--border-hover)] transition-colors rounded-lg">
+<div
+  class="border border-[var(--border-color)] bg-[var(--bg-primary)] hover:border-[var(--border-hover)] transition-colors rounded-lg"
+>
   <button
     type="button"
     class="accordion-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors"
@@ -21,19 +24,18 @@ const accordionId = `qa-${index}`;
   >
     <span class="text-[var(--text-secondary)] pr-4">
       <span aria-hidden="true">❯ </span>
-      <span data-i18n={questionKey || undefined}>{question}</span>
+      <span>{t(`${entryKey}.question`)}</span>
     </span>
-    <span class="accordion-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0" aria-hidden="true">▼</span>
+    <span
+      class="accordion-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0"
+      aria-hidden="true">▼</span
+    >
   </button>
-  <div
-    id={accordionId}
-    class="qa-content hidden px-5 pb-4"
-  >
+  <div id={accordionId} class="qa-content hidden px-5 pb-4">
     <p
       class="text-[var(--text-muted)] text-sm leading-relaxed pl-4 border-l border-[var(--border-color)]"
-      data-i18n={answerKey || undefined}
     >
-      {answer}
+      {t(`${entryKey}.answer`)}
     </p>
   </div>
 </div>

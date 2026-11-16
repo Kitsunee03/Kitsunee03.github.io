@@ -1,35 +1,53 @@
 ---
+import { getLang, useTranslations } from "@/i18n";
 import { EMAIL } from "@/consts";
 import SocialLinks from "./SocialLinks.astro";
 import { Icon } from "astro-icon/components";
+import AsciiLance from "./AsciiLance.astro";
 
 type Props = {
   compact?: boolean;
 };
 
 const { compact = false } = Astro.props;
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<div class={`w-full grid place-items-center ${compact ? "py-4" : "py-10"}`}>
-  <div class={`text-center ${compact ? "space-y-3" : "space-y-6"}`}>
-    {!compact && (
-      <h3 class="text-2xl md:text-3xl text-[var(--text-secondary)]">
-        <span>&lt;</span>
-        <span data-i18n="contactSummary.title">Get In Touch</span>
-        <span> /&gt;</span>
-      </h3>
-    )}
-    <p class="text-[var(--text-muted)] max-w-md mx-auto" data-i18n="contactSummary.body">
-      Not looking for full-time work yet, but open to messages, collaborations, and upcoming university internships.
+<div class={`w-full grid place-items-center ${compact ? "py-4" : "pb-10"}`}>
+  <div class={`text-center ${compact ? "space-y-4" : "space-y-6"}`}>
+    <div class="flex justify-center overflow-hidden pb-2">
+      <AsciiLance
+        length={compact ? 60 : 84}
+        tone="signal"
+        class="hidden md:block"
+      />
+      <AsciiLance length={40} twist={10} tone="signal" class="md:hidden" />
+    </div>
+    <p class="text-[var(--text-muted)] max-w-md mx-auto">
+      {t("contactSummary.body")}
     </p>
-    <a
-      href={`mailto:${EMAIL}`}
-      class="magnetic-link inline-flex items-center gap-3 border border-[var(--border-color)] hover:border-white px-6 py-3 transition-all hover:bg-white hover:text-black group rounded-lg"
-      data-magnetic-link
-    >
-      <Icon name="mdi:email-outline" class="w-5 h-5" />
-      <span>{EMAIL}</span>
-    </a>
+    <div>
+      <button
+        type="button"
+        class="magnetic-link inline-flex items-center gap-3 border border-[var(--border-color)] hover:border-white px-6 py-3 transition-all hover:bg-white hover:text-black group rounded-lg cursor-pointer"
+        title={t("footer.copyTitle")}
+        data-magnetic-link
+        data-copy={EMAIL}
+        data-copy-success={t("footer.copySuccess")}
+        data-copy-error={t("footer.copyError")}
+        data-copy-feedback="contact-summary-copy-feedback"
+      >
+        <Icon name="mdi:content-copy" class="w-5 h-5" aria-hidden="true" />
+        <span>{EMAIL}</span>
+      </button>
+      <p
+        id="contact-summary-copy-feedback"
+        class="text-xs text-[var(--text-muted)] h-4 mt-2"
+        role="status"
+      >
+      </p>
+    </div>
     <div class="pt-2">
       <SocialLinks size="w-5 h-5" className="justify-center" />
     </div>

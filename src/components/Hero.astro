@@ -1,5 +1,8 @@
 ---
-import { FULL_NAME, PROFESSIONAL_TITLE, QUOTE } from "@/consts";
+import { getLang, localizePath, useTranslations } from "@/i18n";
+import { FULL_NAME } from "@/consts";
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <section
@@ -11,44 +14,32 @@ import { FULL_NAME, PROFESSIONAL_TITLE, QUOTE } from "@/consts";
     data-visual="glyph-field"
     aria-hidden="true"></canvas>
   <div class="grid place-items-center">
-    <div
-      class="text-center md:text-left space-y-4 px-6 py-16 md:pl-16 md:pr-4"
-    >
+    <div class="text-center md:text-left space-y-4 px-6 py-16 md:pl-16 md:pr-4">
       <h1
         class="font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
         aria-label={FULL_NAME}
       >
         <span aria-hidden="true">{`<${FULL_NAME} />`}</span>
       </h1>
-      <p
-        class="font-display text-xl md:text-2xl text-[var(--text-secondary)]"
-        data-i18n="hero.subtitle"
-      >
-        {PROFESSIONAL_TITLE}
+      <p class="font-display text-xl md:text-2xl text-[var(--text-secondary)]">
+        {t("hero.subtitle")}
       </p>
       <p
         class="text-sm md:text-base text-[var(--text-muted)] max-w-lg pt-2 mx-auto md:mx-0"
-        data-i18n="hero.quote"
       >
-        {QUOTE}
+        {t("hero.quote")}
       </p>
       <div class="pt-6 flex gap-4 justify-center md:justify-start flex-wrap">
         <a
-          href="/projects"
+          href={localizePath("/projects", lang)}
           class="magnetic-link border border-white px-6 py-2.5 rounded-md hover:bg-white hover:text-black transition-all text-sm"
-          data-magnetic-link
-          data-i18n="hero.cta.projects"
+          data-magnetic-link>{t("hero.cta.projects")}</a
         >
-          View Projects
-        </a>
         <a
-          href="/contact"
+          href={localizePath("/contact", lang)}
           class="magnetic-link border border-[var(--border-color)] px-6 py-2.5 rounded-md hover:border-white transition-all text-sm text-[var(--text-secondary)] hover:text-white"
-          data-magnetic-link
-          data-i18n="hero.cta.contact"
+          data-magnetic-link>{t("hero.cta.contact")}</a
         >
-          Contact Me
-        </a>
       </div>
     </div>
   </div>

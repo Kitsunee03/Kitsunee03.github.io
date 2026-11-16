@@ -1,7 +1,14 @@
 ---
+import { getLang, localizePath, useTranslations } from "@/i18n";
 import { SITE_TITLE, EMAIL, NAV_LINKS, SOCIAL_LINKS } from "@/consts";
 
+// Evaluated at build time: the signature shows when the site was built.
 const today = new Date();
+const buildDate = today.toISOString().slice(0, 10);
+// Shown as DD-MM-YYYY; the machine-readable value stays ISO.
+const buildLabel = buildDate.split("-").reverse().join("-");
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <div class="relative h-20 overflow-hidden" aria-hidden="true">
@@ -20,19 +27,21 @@ const today = new Date();
       <div>
         <h3 class="text-lg mb-4 text-[var(--text-secondary)]">
           <span>&lt;</span>
-          <span data-i18n="footer.nav">Navigation</span>
+          <span>{t("footer.nav")}</span>
           <span> /&gt;</span>
         </h3>
         <div class="flex flex-col gap-2">
-          {NAV_LINKS.map((link) => (
-            <a
-              href={link.href}
-              class="text-[var(--text-muted)] hover:text-white transition-colors w-fit"
-            >
-              <span aria-hidden="true">&gt; </span>
-              <span data-i18n={link.i18nKey}>{link.title}</span>
-            </a>
-          ))}
+          {
+            NAV_LINKS.map((link) => (
+              <a
+                href={localizePath(link.href, lang)}
+                class="text-[var(--text-muted)] hover:text-white transition-colors w-fit"
+              >
+                <span aria-hidden="true">&gt; </span>
+                <span>{t(link.i18nKey)}</span>
+              </a>
+            ))
+          }
         </div>
       </div>
 
@@ -40,15 +49,45 @@ const today = new Date();
       <div>
         <h3 class="text-lg mb-4 text-[var(--text-secondary)]">
           <span>&lt;</span>
-          <span data-i18n="footer.social">Social</span>
+          <span>{t("footer.social")}</span>
           <span> /&gt;</span>
         </h3>
         <div class="flex flex-col gap-2">
-          <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted)] hover:text-white transition-colors w-fit">&gt; GitHub</a>
-          <a href={SOCIAL_LINKS.itchio} target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted)] hover:text-white transition-colors w-fit">&gt; Itch.io</a>
-          <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted)] hover:text-white transition-colors w-fit">&gt; LinkedIn</a>
-          <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted)] hover:text-white transition-colors w-fit">&gt; Instagram</a>
-          <a href={SOCIAL_LINKS.tiktok} target="_blank" rel="noopener noreferrer" class="text-[var(--text-muted)] hover:text-white transition-colors w-fit">&gt; TikTok</a>
+          <a
+            href={SOCIAL_LINKS.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--text-muted)] hover:text-white transition-colors w-fit"
+            >&gt; GitHub</a
+          >
+          <a
+            href={SOCIAL_LINKS.itchio}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--text-muted)] hover:text-white transition-colors w-fit"
+            >&gt; Itch.io</a
+          >
+          <a
+            href={SOCIAL_LINKS.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--text-muted)] hover:text-white transition-colors w-fit"
+            >&gt; LinkedIn</a
+          >
+          <a
+            href={SOCIAL_LINKS.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--text-muted)] hover:text-white transition-colors w-fit"
+            >&gt; Instagram</a
+          >
+          <a
+            href={SOCIAL_LINKS.tiktok}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--text-muted)] hover:text-white transition-colors w-fit"
+            >&gt; TikTok</a
+          >
         </div>
       </div>
 
@@ -56,52 +95,43 @@ const today = new Date();
       <div>
         <h3 class="text-lg mb-4 text-[var(--text-secondary)]">
           <span>&lt;</span>
-          <span data-i18n="footer.contact">Contact</span>
+          <span>{t("footer.contact")}</span>
           <span> /&gt;</span>
         </h3>
         <button
-          id="footer-copy-email"
+          type="button"
           class="text-[var(--text-muted)] hover:text-white transition-colors break-all cursor-pointer text-left"
-          data-email={EMAIL}
-          title="Click to copy email"
-          data-i18n-attr="title:footer.copyTitle"
+          title={t("footer.copyTitle")}
+          data-copy={EMAIL}
+          data-copy-success={t("footer.copySuccess")}
+          data-copy-error={t("footer.copyError")}
+          data-copy-feedback="footer-copy-feedback"
         >
           {EMAIL}
         </button>
-        <p id="footer-copy-feedback" class="text-xs text-[var(--text-muted)] h-4 mt-1" role="status"></p>
+        <p
+          id="footer-copy-feedback"
+          class="text-xs text-[var(--text-muted)] h-4 mt-1"
+          role="status"
+        >
+        </p>
       </div>
     </div>
 
     <!-- Copyright -->
-    <div class="mt-10 pt-6 border-t border-[var(--border-color)] text-center">
+    <div
+      class="mt-10 pt-6 border-t border-[var(--border-color)] flex flex-col items-center gap-2 text-center"
+    >
       <div class="text-[var(--text-muted)] text-sm">
         <span>&copy; {today.getFullYear()} {SITE_TITLE}. </span>
-        <span data-i18n="footer.copyright">All rights reserved.</span>
+        <span>{t("footer.copyright")}</span>
       </div>
+      <p class="footer-signature text-xs text-[var(--text-muted)]">
+        <span class="text-[var(--signal)]" aria-hidden="true">&gt;</span>
+        <span>{t("footer.build")}</span>
+        <time datetime={buildDate}>{buildLabel}</time>
+        <span class="footer-caret" aria-hidden="true">_</span>
+      </p>
     </div>
   </div>
 </footer>
-
-<script>
-  function initFooterCopy() {
-    const btn = document.getElementById("footer-copy-email");
-    const feedback = document.getElementById("footer-copy-feedback");
-    if (!btn) return;
-    btn.addEventListener("click", async () => {
-      const email = btn.getAttribute("data-email") || "";
-      try {
-        await navigator.clipboard.writeText(email);
-        if (feedback) {
-          feedback.textContent = window.__i18n ? window.__i18n.t("footer.copySuccess") : "✓ Copied!";
-          setTimeout(() => { feedback.textContent = ""; }, 2000);
-        }
-      } catch {
-        if (feedback) {
-          feedback.textContent = window.__i18n ? window.__i18n.t("footer.copyError") : "Failed to copy";
-        }
-      }
-    });
-  }
-  initFooterCopy();
-  document.addEventListener("astro:after-swap", initFooterCopy);
-</script>

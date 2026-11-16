@@ -1,31 +1,7 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import GrappleGame from "@/components/GrappleGame.astro";
+// GitHub Pages serves this single file for every missing URL; BaseHead
+// forwards missing Spanish URLs to /es/404/.
+import NotFound from "@/components/NotFound.astro";
 ---
 
-<Layout title="404 — Page Not Found">
-  <section class="min-h-screen grid place-items-center px-4 py-16">
-    <div class="w-full text-center space-y-6">
-      <h1 class="text-8xl md:text-9xl font-bold text-[var(--text-muted)]">404</h1>
-      <p class="text-xl text-[var(--text-secondary)]">
-        <span>&lt;</span>
-        <span data-i18n="notFound.title">Page Not Found</span>
-        <span> /&gt;</span>
-      </p>
-      <p class="text-[var(--text-muted)] max-w-md mx-auto" data-i18n="notFound.body">
-        The page you're looking for doesn't exist or has been moved.
-      </p>
-      <a
-        href="/"
-        class="inline-block border border-white px-6 py-2.5 hover:bg-white hover:text-black transition-all text-sm mt-4"
-        data-i18n="notFound.back"
-      >
-        ← Back to Home
-      </a>
-      <p class="pt-10 text-sm text-[var(--text-muted)]" data-i18n="game.lost">
-        While you are here:
-      </p>
-      <GrappleGame />
-    </div>
-  </section>
-</Layout>
+<NotFound />

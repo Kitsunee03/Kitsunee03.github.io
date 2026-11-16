@@ -6,12 +6,20 @@ export interface Tool {
 
 export const TOOLS: Tool[] = [
   { name: "Unity", icon: "simple-icons:unity", color: "#ffffff" },
-  { name: "Unreal Engine", icon: "simple-icons:unrealengine", color: "#ffffff" },
+  {
+    name: "Unreal Engine",
+    icon: "simple-icons:unrealengine",
+    color: "#ffffff",
+  },
   { name: "C#", icon: "devicon:csharp", color: "#239120" },
   { name: "C++", icon: "devicon:cplusplus", color: "#00599C" },
   { name: "Phaser", icon: "mdi:gamepad-variant-outline", color: "#336699" },
   { name: "JavaScript", icon: "devicon:javascript", color: "#F7DF1E" },
-  { name: "Processing", icon: "simple-icons:processingfoundation", color: "#006699" },
+  {
+    name: "Processing",
+    icon: "simple-icons:processingfoundation",
+    color: "#006699",
+  },
   { name: "HTML5", icon: "devicon:html5", color: "#E34F26" },
   { name: "CSS3", icon: "devicon:css3", color: "#1572B6" },
   { name: "Git", icon: "devicon:git", color: "#F05032" },

@@ -1,48 +1,43 @@
 ---
+import { getLang, useTranslations } from "@/i18n";
 import { Icon } from "astro-icon/components";
 
 type Props = {
-  title: string;
-  institution: string;
-  period: string;
-  description: string;
-  titleKey?: string;
-  institutionKey?: string;
-  periodKey?: string;
-  descriptionKey?: string;
+  /** Dictionary prefix holding title, institution, period and description. */
+  entryKey: string;
   icon: string;
   mark?: string;
   logo?: string;
   link?: string;
-  linkLabel?: string;
   linkLabelKey?: string;
   isLast?: boolean;
+  /** Ongoing entry: the node keeps a slow signal pulse. */
+  current?: boolean;
 };
 
 const {
-  title,
-  institution,
-  period,
-  description,
-  titleKey = "",
-  institutionKey = "",
-  periodKey = "",
-  descriptionKey = "",
+  entryKey,
   icon,
   mark = "",
   logo = "",
   link = "",
-  linkLabel = "View reference",
-  linkLabelKey = "",
+  linkLabelKey = "experience.viewCompany",
   isLast = false,
+  current = false,
 } = Astro.props;
+const t = useTranslations(getLang(Astro.url));
 ---
 
 <div class="flex gap-4">
   <!-- Timeline line -->
   <div class="flex flex-col items-center">
     <div
-      class="w-10 h-10 rounded-full bg-[var(--bg-card)] border border-[var(--border-color)] grid place-items-center shrink-0"
+      class:list={[
+        "w-10 h-10 rounded-full bg-[var(--bg-card)] border grid place-items-center shrink-0",
+        current
+          ? "timeline-live relative border-[var(--signal)]"
+          : "border-[var(--border-color)]",
+      ]}
     >
       {
         logo ? (
@@ -72,25 +67,16 @@ const {
   </div>
 
   <!-- Content -->
-  <div class={`pb-8 ${isLast ? "" : ""}`}>
-    <span
-      class="text-xs text-[var(--text-muted)] tracking-wider"
-      data-i18n={periodKey || undefined}
-    >
-      {period}
+  <div class="pb-8">
+    <span class="text-xs text-[var(--text-muted)] tracking-wider">
+      {t(`${entryKey}.period`)}
     </span>
-    <h3 class="text-lg mt-1" data-i18n={titleKey || undefined}>{title}</h3>
-    <p
-      class="text-[var(--text-secondary)] text-sm mt-0.5"
-      data-i18n={institutionKey || undefined}
-    >
-      {institution}
+    <h3 class="text-lg mt-1">{t(`${entryKey}.title`)}</h3>
+    <p class="text-[var(--text-secondary)] text-sm mt-0.5">
+      {t(`${entryKey}.institution`)}
     </p>
-    <p
-      class="text-[var(--text-muted)] text-sm mt-2 leading-relaxed"
-      data-i18n={descriptionKey || undefined}
-    >
-      {description}
+    <p class="text-[var(--text-muted)] text-sm mt-2 leading-relaxed">
+      {t(`${entryKey}.description`)}
     </p>
     {
       link && (
@@ -98,9 +84,9 @@ const {
           href={link}
           target="_blank"
           rel="noopener noreferrer"
-          class="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--text-secondary)] underline decoration-[var(--border-hover)] underline-offset-4 transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
+          class="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--text-secondary)] underline decoration-[var(--border-hover)] underline-offset-4 transition-colors hover:text-white"
         >
-          <span data-i18n={linkLabelKey || undefined}>{linkLabel}</span>
+          <span>{t(linkLabelKey)}</span>
           <Icon name="mdi:open-in-new" class="h-3.5 w-3.5" aria-hidden="true" />
         </a>
       )
