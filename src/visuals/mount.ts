@@ -16,6 +16,7 @@ type VisualModule = {
 const loaders: Record<string, () => Promise<VisualModule>> = {
   "glyph-field": () => import("./glyph-field"),
   "project-ambient": () => import("./project-ambient"),
+  lattice: () => import("./lattice"),
 };
 
 const mounted = new Map<HTMLCanvasElement, Dispose>();

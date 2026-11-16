@@ -1,0 +1,76 @@
+---
+description: "Un roguelite de arenas 2D frenético en el que un mago caído se abre paso por una torre mágica, absorbiendo las armas de sus enemigos y volviéndolas contra oleadas cada vez más peligrosas."
+tags: ["2D", "Bullet Hell", "Arena Shooter", "Vista cenital", "Pixel Art"]
+links:
+  - label: "Tráiler de Grimoire of Madness"
+controls:
+  [
+    "Moverse: WASD",
+    "Apuntar y disparar: ratón",
+    "Cambiar de arma: 1, 2, Tab o rueda del ratón",
+    "Esquivar: Shift o clic derecho",
+    "Interactuar: E",
+  ]
+previews:
+  - alt: "Combate en una arena de Grimoire of Madness"
+    caption: "Abriéndose paso entre oleadas de enemigos"
+  - alt: "Combate contra un jefe en Grimoire of Madness"
+    caption: "Frente a un enemigo poderoso"
+  - alt: "Campo de tiro de Grimoire of Madness"
+    caption: "Probando armas mágicas"
+  - alt: "Arena de lava de Grimoire of Madness"
+    caption: "Sobreviviendo en la arena de lava"
+  - alt: "Disparo final en Grimoire of Madness"
+    caption: "Que el último disparo cuente"
+  - alt: "Tutorial de Grimoire of Madness"
+    caption: "Aprendiendo las mecánicas básicas"
+  - alt: "Árbol de habilidades de Grimoire of Madness"
+    caption: "Eligiendo mejoras en el árbol de habilidades"
+---
+
+## Presentación del proyecto
+
+Grimoire of Madness es un vertical slice universitario que desarrollamos en segundo curso, entre 2023 y 2024, a lo largo de seis meses. Nuestro grupo, Team Slay, estaba formado por tres programadores: un compañero centrado en la interfaz y el diseño de niveles, otro centrado en el combate, y yo.
+
+Como éramos un equipo pequeño que todavía estaba aprendiendo a encontrar la forma de trabajar más eficaz, nuestras responsabilidades se solaparon de forma natural y todos acabamos contribuyendo a muchas funcionalidades distintas. Esa flexibilidad fue clave para que el proyecto avanzara y para convertir un concepto ambicioso en un vertical slice jugable dentro del tiempo disponible.
+
+## Mi papel
+
+Me centré principalmente en los sistemas de gameplay, el comportamiento del jugador y la iluminación, y al mismo tiempo apoyé al resto del equipo allí donde hacía falta. Trabajar en un equipo de tres programadores implicó participar en varias partes de la implementación del juego y pensar en cómo cada sistema contribuía a la experiencia de combate en su conjunto.
+
+## Construir la identidad del juego
+
+No teníamos un equipo de arte, así que todos los sprites del juego salieron de Itch.io. Buscamos recursos que compartieran una misma sensibilidad de pixel art y los adaptamos cuando fue necesario con nuestros conocimientos limitados de diseño gráfico. La plataforma ofrecía suficientes recursos adecuados para que un pequeño equipo de estudiantes lograra un resultado visual sorprendentemente sólido sin invertir dinero en arte propio.
+
+Con el audio seguimos un enfoque parecido. Obtuvimos los sonidos de Soundsnap y de otras webs con recursos de uso libre. El reto principal no era solo encontrar recursos sueltos, sino conseguir que funcionaran juntos dentro de una atmósfera coherente.
+
+Nuestra dirección visual inicial buscaba mezclar influencias de juegos como _Cult of the Lamb_ y _Octopath Traveler_. Al reducirla a un alcance que pudiéramos abarcar de verdad, esa dirección se convirtió en la estética de pixel art y el tratamiento de la iluminación que se ven en la versión final.
+
+## Diseño del combate
+
+La parte más difícil del proyecto fue diseñar el combate. Grimoire of Madness es un roguelite de arenas basado en encuentros rápidos y frenéticos, en los que el jugador absorbe con su grimorio las armas de los enemigos derrotados y las imita con munición limitada.
+
+Esa premisa planteaba un problema de diseño exigente: el combate tenía que sentirse rápido y emocionante sin volverse repetitivo, y los enemigos debían suponer retos significativos sin abrumar al jugador. Iteramos una y otra vez sobre el comportamiento de las armas, la munición y los encuentros con enemigos hasta encontrar un equilibrio entre variedad, legibilidad y dificultad.
+
+## Diseñar el árbol de habilidades
+
+Me encargué de la estructura del árbol de habilidades, del diseño de las mejoras y de su equilibrio. Las mejoras se compran con la moneda que se obtiene en el combate y desbloquean nodos lineales en tres ramas distintas: la magia verde se centra en la curación y la salud, la magia negra en el daño, y la magia azul en las habilidades mágicas y los efectos pasivos.
+
+Este sistema dio al combate una capa de progresión y animó a cada jugador a desarrollar al mago según su estilo de juego. Las habilidades activas se representan con nodos en forma de rombo, y el jugador puede equipar una de ellas tal como se indica debajo de la información del nodo seleccionado. Las habilidades pasivas permanecen activas una vez compradas y crean una base persistente para el resto de la partida.
+
+Pese a las limitaciones de los recursos visuales, varias iteraciones convirtieron el árbol de habilidades en una funcionalidad atractiva y en uno de los pilares del juego. Refinamos su disposición y su respuesta visual hasta que el estado de cada nodo y las rutas disponibles se entendían de un vistazo. El resultado final aporta variedad y profundidad al combate sin abrumar al jugador con la estructura que hay detrás.
+
+<details>
+<summary>Limitaciones de diseño e iteración</summary>
+
+Un ejemplo de las limitaciones a las que nos enfrentamos fue la interfaz para cambiar de arma. Al principio del desarrollo planteamos un menú radial que habría permitido cambiar de arma de forma rápida y eficaz en pleno combate. Nuestros profesores consideraron que esa funcionalidad no encajaba con el nivel de complejidad que esperaba su público objetivo y descartaron la idea, así que tuvimos que adaptar el diseño y dedicar ese tiempo de desarrollo a una solución más convencional.
+
+Fue frustrante, porque creíamos que el menú radial podía mejorar mucho el gameplay, pero también formó parte del aprendizaje del proyecto. Tuvimos que equilibrar nuestros propios objetivos de diseño con los comentarios externos, el público esperado y la realidad de un calendario universitario de seis meses.
+
+</details>
+
+## Un compañero con propósito
+
+Una de las decisiones de diseño que más nos gustaron fue hacer que el jugador luchara junto a su compañero en lugar de tratar el grimorio como una simple interfaz de armas. Que un libro viviente acompañe al jugador allá donde vaya reduce la presión de una aventura de combate difícil y hace que la experiencia resulte más dinámica y personal.
+
+Estudiamos juegos como _Bloody Hell_, que usa un halo con un papel de compañero parecido, mientras desarrollábamos una solución que encajara con la identidad de Grimoire of Madness. El grimorio se convirtió a la vez en un pilar mecánico y en una parte importante de la atmósfera del juego.

@@ -70,6 +70,8 @@ export function initMagneticLinks() {
 }
 
 const MAX_TILT = 6;
+/** Matches the card video fade-out in global.css. */
+const VIDEO_FADE_OUT = 420;
 
 /** Project cards: 3D tilt, glare, and the preview video on hover or focus. */
 export function initInteractiveCards() {
@@ -84,21 +86,36 @@ export function initInteractiveCards() {
         "video[data-card-video]",
       );
       if (video && !reduced) {
+        // The loop fades in through scanlines (CSS) only once it is really
+        // playing, so a slow first load never shows a black frame. On leave
+        // it fades out first and pauses afterwards.
+        let wanted = false;
+        let stopTimer = 0;
         const play = () => {
-          card.dataset.playing = "true";
+          wanted = true;
+          window.clearTimeout(stopTimer);
           playLoop(video).then((started) => {
-            if (!started) delete card.dataset.playing;
+            if (started && wanted) card.dataset.playing = "true";
+            else if (!wanted) video.pause();
           });
         };
         const pause = () => {
+          wanted = false;
           delete card.dataset.playing;
-          video.pause();
+          window.clearTimeout(stopTimer);
+          stopTimer = window.setTimeout(() => {
+            if (!wanted) video.pause();
+          }, VIDEO_FADE_OUT);
         };
         card.addEventListener("pointerenter", (event) => {
           if (event.pointerType === "mouse") play();
         });
         card.addEventListener("pointerleave", pause);
-        card.addEventListener("focusin", play);
+        // Keyboard focus only: focus handed back after closing a devlog
+        // must not reopen the card.
+        card.addEventListener("focusin", (event) => {
+          if ((event.target as Element).matches(":focus-visible")) play();
+        });
         card.addEventListener("focusout", (event) => {
           if (!card.contains(event.relatedTarget as Node | null)) pause();
         });
@@ -179,6 +196,42 @@ export function initDocumentListeners() {
     const expanded = toggle.getAttribute("aria-expanded") === "true";
     toggle.setAttribute("aria-expanded", String(!expanded));
     panel?.classList.toggle("hidden", expanded);
+  });
+
+  // Copy-to-clipboard buttons. Messages come translated in the markup:
+  // <button data-copy="text" data-copy-success="…" data-copy-error="…"
+  //         data-copy-feedback="id-of-status-element">
+  let feedbackTimer = 0;
+  document.addEventListener("click", async (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLElement>(
+      "[data-copy]",
+    );
+    if (!button) return;
+    const feedback = document.getElementById(button.dataset.copyFeedback || "");
+    try {
+      await navigator.clipboard.writeText(button.dataset.copy || "");
+      if (feedback) feedback.textContent = button.dataset.copySuccess || "";
+    } catch {
+      if (feedback) feedback.textContent = button.dataset.copyError || "";
+    }
+    window.clearTimeout(feedbackTimer);
+    feedbackTimer = window.setTimeout(() => {
+      if (feedback) feedback.textContent = "";
+    }, 2500);
+  });
+
+  // Remember the language the visitor picks (read by the inline script in
+  // BaseHead on their next visit).
+  document.addEventListener("click", (event) => {
+    const link = (event.target as HTMLElement).closest<HTMLElement>(
+      "[data-lang-link]",
+    );
+    if (!link) return;
+    try {
+      localStorage.setItem("lang", link.dataset.langLink || "en");
+    } catch {
+      // Storage unavailable: the choice is simply not remembered.
+    }
   });
 
   // A few binary digits scatter from each mouse press.

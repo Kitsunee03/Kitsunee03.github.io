@@ -2,41 +2,36 @@
 import { ClientRouter } from "astro:transitions";
 import "@fontsource/ibm-plex-mono/latin-400.css";
 import "@fontsource/ibm-plex-mono/latin-700.css";
+import "@/styles/tailwind.css";
 import "@/styles/global.css";
 
 interface Props {
   title: string;
   description?: string;
+  noindex?: boolean;
 }
 
-import { SITE_DESCRIPTION, SITE_TITLE } from "@/consts";
+import { SITE_TITLE } from "@/consts";
+import { LANGUAGES, DEFAULT_LANG, getLang, switchLang } from "@/i18n";
 
+const lang = getLang(Astro.url);
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL("/og.png", Astro.site);
+const alternates = LANGUAGES.map((code) => ({
+  code,
+  href: new URL(switchLang(Astro.url, code), Astro.site).href,
+}));
+const ogLocale = { en: "en_US", es: "es_ES" }[lang];
 
-const {
-  title = SITE_TITLE,
-  description = SITE_DESCRIPTION,
-} = Astro.props;
+const { title = SITE_TITLE, description, noindex = false } = Astro.props;
 ---
-
-<script is:inline>
-  (() => {
-    try {
-      const stored = localStorage.getItem("lang");
-      const lang = stored === "es" || stored === "en" ? stored : "en";
-      document.documentElement.lang = lang;
-      document.documentElement.dataset.lang = lang;
-    } catch {
-      // ignore storage errors
-    }
-  })();
-</script>
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta name="theme-color" content="#000000" />
 <meta name="generator" content={Astro.generator} />
 <link rel="sitemap" href="/sitemap-index.xml" />
@@ -52,13 +47,60 @@ const {
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+{
+  alternates.map((alt) => (
+    <link rel="alternate" hreflang={alt.code} href={alt.href} />
+  ))
+}
+<link
+  rel="alternate"
+  hreflang="x-default"
+  href={alternates.find((alt) => alt.code === DEFAULT_LANG)?.href}
+/>
+
+<!-- GitHub Pages serves the root 404 for every missing URL, Spanish ones too. -->
+{
+  Astro.url.pathname.startsWith("/404") && (
+    <script is:inline>
+      if (location.pathname.startsWith("/es/")) location.replace("/es/404/");
+    </script>
+  )
+}
+
+<!--
+  A visitor who picked a language before lands in it when they arrive from
+  outside the site. Links within the site are always followed as they are.
+-->
+<script is:inline>
+  (() => {
+    try {
+      const stored = localStorage.getItem("lang");
+      const page = document.documentElement.lang;
+      if (!stored || stored === page) return;
+      const fromSite =
+        document.referrer &&
+        new URL(document.referrer).origin === location.origin;
+      if (fromSite) return;
+      const target = document.querySelector(
+        `link[rel="alternate"][hreflang="${stored}"]`,
+      );
+      // Same-origin path only: the alternate links carry the production host.
+      if (target)
+        location.replace(new URL(target.href).pathname + location.hash);
+    } catch {
+      // Storage or URL parsing unavailable: stay on this page.
+    }
+  })();
+</script>
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
 <meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex" />}
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
+<meta property="og:locale" content={ogLocale} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
@@ -82,12 +124,17 @@ const {
 </noscript>
 
 <!-- Google Analytics -->
-<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-ZYV9EVSY5R"></script>
+<script
+  is:inline
+  async
+  src="https://www.googletagmanager.com/gtag/js?id=G-ZYV9EVSY5R"></script>
 <script is:inline>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-ZYV9EVSY5R');
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
+  gtag("config", "G-ZYV9EVSY5R");
 </script>
 
 <!-- View Transitions  -->

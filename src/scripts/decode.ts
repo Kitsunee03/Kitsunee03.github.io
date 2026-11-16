@@ -1,7 +1,7 @@
 /**
  * Decode effect for section titles: the text resolves left to right out of
- * a few terminal glyphs, once. The real text stays the source of truth, so a
- * language switch mid-animation simply wins.
+ * a few terminal glyphs, once. If anything else rewrites the text
+ * mid-animation, that text wins.
  */
 const GLYPHS = "01<>/_#";
 const DURATION = 420;
@@ -16,7 +16,7 @@ export function decodeText(element: HTMLElement) {
   let shown = finalText;
 
   const step = (now: number) => {
-    // Something else (the language switcher) replaced the text: stop.
+    // Something else replaced the text: stop.
     if (element.textContent !== shown) {
       running.delete(element);
       return;

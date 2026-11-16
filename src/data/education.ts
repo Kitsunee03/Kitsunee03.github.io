@@ -1,35 +1,14 @@
+// Visible text for each entry lives in src/i18n/translations.ts under
+// `education.<id>` (title, institution, period, description).
 export interface Education {
   id: string;
-  title: string;
-  institution: string;
-  period: string;
-  description: string;
   icon: string;
+  /** Still ongoing: its timeline node keeps a slow signal pulse. */
+  current?: boolean;
 }
 
 export const EDUCATION: Education[] = [
-  {
-    id: "ddvja",
-    title: "DDVJA — Degree in Video Game Design and Development",
-    institution: "ENTI (Barcelona)",
-    period: "2023 — Present",
-    description: "Game development student in fourth year, focused on gameplay programming, game design, production, and rapid prototyping across multiple engines.",
-    icon: "mdi:school-outline",
-  },
-  {
-    id: "damviod",
-    title: "DAM-VIOD — Cross-platform Application Development",
-    institution: "ENTI (Barcelona)",
-    period: "2021 — 2023",
-    description: "Higher degree focused on application development, databases, and software engineering, with a specialization in video game development.",
-    icon: "mdi:laptop",
-  },
-  {
-    id: "bachillerato",
-    title: "Bachillerato Tecnológico",
-    institution: "INS Leonardo da Vinci (Sant Cugat del Vallès)",
-    period: "2019 — 2021",
-    description: "Technology-focused baccalaureate with foundations in math, physics, and early programming exposure.",
-    icon: "mdi:certificate-outline",
-  },
+  { id: "ddvja", icon: "mdi:school-outline", current: true },
+  { id: "damviod", icon: "mdi:laptop" },
+  { id: "bachillerato", icon: "mdi:certificate-outline" },
 ];

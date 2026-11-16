@@ -8,7 +8,13 @@ interface Dictionary {
 
 export const translations: Record<Lang, Dictionary> = {
   en: {
+    meta: {
+      description:
+        "Portfolio of Arnau Miragall Torra — gameplay programmer and game development student. Focused on gameplay systems and game design, with prototypes built in Unity, Unreal Engine, Phaser, C# and C++.",
+      portfolio: "Portfolio",
+    },
     nav: {
+      aria: "Main",
       home: "Home",
       projects: "Projects",
       about: "About Me",
@@ -16,8 +22,7 @@ export const translations: Record<Lang, Dictionary> = {
       menu: "Menu",
       skip: "Skip to content",
       language: {
-        aria: "Change language",
-        title: "Change language",
+        switch: "Switch to Spanish",
       },
     },
     hero: {
@@ -189,10 +194,10 @@ export const translations: Record<Lang, Dictionary> = {
         answer:
           "I gravitate toward survival and open-world experiences. My favorite series include Fallout, Metro, BioShock, Destiny, and The Legend of Zelda, so I enjoy exploration, systems, and strong atmosphere.",
       },
-      internships: {
-        question: "Are you open to internships or collaborations?",
+      collaborations: {
+        question: "Are you open to collaborations?",
         answer:
-          "I'm not actively looking for full-time work yet, but I'm open to messages and collaborations. I'll also be looking for external university internships soon.",
+          "I'm currently doing my university internship as a QC Trainee at Ubisoft Barcelona Mobile, so I'm not looking for other positions right now. I'm still happy to hear about collaborations, side projects, or just talk games.",
       },
       role: {
         question: "What role do you usually take in a team?",
@@ -216,8 +221,7 @@ export const translations: Record<Lang, Dictionary> = {
       },
     },
     contactSummary: {
-      title: "Get In Touch",
-      body: "Not looking for full-time work yet, but open to messages, collaborations, and upcoming university internships.",
+      body: "Currently a QC Trainee at Ubisoft Barcelona Mobile. Always open to messages, collaborations, and talking about games.",
     },
     projects: {
       title: "Projects",
@@ -272,9 +276,9 @@ export const translations: Record<Lang, Dictionary> = {
       copySuccess: "✓ Copied!",
       copyError: "Failed to copy",
       copyright: "All rights reserved.",
+      build: "last build",
     },
     game: {
-      section: "Play",
       aria: "Grapple mini-game",
       title: "A small rope toy",
       body: "Built on the same idea as the grapple gun I made for Junkonaut. Hold on an anchor (+) to latch and swing, let go to fly, and collect the scrap (*).",
@@ -293,7 +297,13 @@ export const translations: Record<Lang, Dictionary> = {
     },
   },
   es: {
+    meta: {
+      description:
+        "Portfolio de Arnau Miragall Torra, programador de gameplay y estudiante de desarrollo de videojuegos. Centrado en sistemas de gameplay y diseño de juegos, con prototipos hechos en Unity, Unreal Engine, Phaser, C# y C++.",
+      portfolio: "Portfolio",
+    },
     nav: {
+      aria: "Principal",
       home: "Inicio",
       projects: "Proyectos",
       about: "Sobre mí",
@@ -301,8 +311,7 @@ export const translations: Record<Lang, Dictionary> = {
       menu: "Menú",
       skip: "Saltar al contenido",
       language: {
-        aria: "Cambiar idioma",
-        title: "Cambiar idioma",
+        switch: "Cambiar a inglés",
       },
     },
     hero: {
@@ -484,10 +493,10 @@ export const translations: Record<Lang, Dictionary> = {
         answer:
           "Me atraen las experiencias de supervivencia y mundo abierto. Mis sagas favoritas incluyen Fallout, Metro, BioShock, Destiny y The Legend of Zelda, así que disfruto de la exploración, los sistemas y una atmósfera potente.",
       },
-      internships: {
-        question: "¿Estás abierto a prácticas o colaboraciones?",
+      collaborations: {
+        question: "¿Estás abierto a colaboraciones?",
         answer:
-          "No busco trabajo a tiempo completo todavía, pero estoy abierto a mensajes y colaboraciones. También estaré buscando prácticas universitarias externas pronto.",
+          "Ahora mismo hago mis prácticas universitarias como Trainee de QC en Ubisoft Barcelona Mobile, así que no busco otros puestos por ahora. Aun así, me encantará saber de colaboraciones, proyectos paralelos o simplemente hablar de juegos.",
       },
       role: {
         question: "¿Qué rol sueles tomar en un equipo?",
@@ -511,8 +520,7 @@ export const translations: Record<Lang, Dictionary> = {
       },
     },
     contactSummary: {
-      title: "Ponte en contacto",
-      body: "Todavía no busco trabajo a tiempo completo, pero estoy abierto a mensajes, colaboraciones y próximas prácticas universitarias.",
+      body: "Ahora mismo, Trainee de QC en Ubisoft Barcelona Mobile. Siempre abierto a mensajes, colaboraciones y a hablar de juegos.",
     },
     projects: {
       title: "Proyectos",
@@ -567,9 +575,9 @@ export const translations: Record<Lang, Dictionary> = {
       copySuccess: "✓ ¡Copiado!",
       copyError: "No se pudo copiar",
       copyright: "Todos los derechos reservados.",
+      build: "última compilación",
     },
     game: {
-      section: "Jugar",
       aria: "Minijuego de gancho",
       title: "Un pequeño juguete de cuerda",
       body: "Parte de la misma idea que el gancho que hice para Junkonaut. Mantén pulsado sobre un anclaje (+) para engancharte y balancearte, suelta para volar y recoge la chatarra (*).",

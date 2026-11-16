@@ -9,8 +9,7 @@
  * - full cleanup of observers, listeners and the frame request
  */
 
-export type Frame = {
-  ctx: CanvasRenderingContext2D;
+export type LoopFrame = {
   /** CSS pixel size of the canvas. */
   width: number;
   height: number;
@@ -20,7 +19,9 @@ export type Frame = {
   delta: number;
 };
 
-export type VisualSetup = {
+export type Frame = LoopFrame & { ctx: CanvasRenderingContext2D };
+
+type BaseSetup = {
   canvas: HTMLCanvasElement;
   fps?: number;
   maxDpr?: number;
@@ -29,6 +30,15 @@ export type VisualSetup = {
    * visitor explicitly starts, such as a game.
    */
   allowMotion?: boolean;
+};
+
+export type LoopSetup = BaseSetup & {
+  /** Called on mount and whenever the size changes; the backing store is already resized. */
+  resize?: (width: number, height: number, dpr: number) => void;
+  draw: (frame: LoopFrame) => void;
+};
+
+export type VisualSetup = BaseSetup & {
   /** Called on mount and whenever the CSS size changes. */
   resize?: (width: number, height: number) => void;
   draw: (frame: Frame) => void;
@@ -42,7 +52,7 @@ export const prefersReducedMotion = () =>
 export const isCoarsePointer = () =>
   window.matchMedia("(pointer: coarse)").matches;
 
-export function createVisual(setup: VisualSetup): Dispose {
+function createLoop(setup: LoopSetup): Dispose {
   const {
     canvas,
     fps = 30,
@@ -51,8 +61,6 @@ export function createVisual(setup: VisualSetup): Dispose {
     resize,
     draw,
   } = setup;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return () => {};
 
   const reduced = !allowMotion && prefersReducedMotion();
   const frameInterval = 1000 / fps;
@@ -68,7 +76,7 @@ export function createVisual(setup: VisualSetup): Dispose {
   const render = (delta: number) => {
     if (!width || !height) return;
     time += delta;
-    draw({ ctx, width, height, time, delta });
+    draw({ width, height, time, delta });
   };
 
   const fit = () => {
@@ -81,8 +89,7 @@ export function createVisual(setup: VisualSetup): Dispose {
     const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
     canvas.width = Math.max(1, Math.round(width * dpr));
     canvas.height = Math.max(1, Math.round(height * dpr));
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    resize?.(width, height);
+    resize?.(width, height, dpr);
     // Resizing clears the canvas, so repaint immediately.
     render(0);
   };
@@ -141,4 +148,19 @@ export function createVisual(setup: VisualSetup): Dispose {
     intersectionObserver.disconnect();
     document.removeEventListener("visibilitychange", sync);
   };
+}
+
+export function createVisual(setup: VisualSetup): Dispose {
+  const ctx = setup.canvas.getContext("2d");
+  if (!ctx) return () => {};
+  return createLoop({
+    ...setup,
+    resize(width, height, dpr) {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      setup.resize?.(width, height);
+    },
+    draw(frame) {
+      setup.draw({ ...frame, ctx });
+    },
+  });
 }

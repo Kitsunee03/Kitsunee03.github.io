@@ -1,5 +1,10 @@
 ---
-import { getCollection } from "astro:content";
+import {
+  getLang,
+  langStaticPaths,
+  localizePath,
+  useTranslations,
+} from "@/i18n";
 import Hero from "@/components/Hero.astro";
 import Section from "@/components/Section.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -9,27 +14,25 @@ import ToolCarousel from "@/components/ToolCarousel.astro";
 import ContactSummary from "@/components/ContactSummary.astro";
 import GrappleGame from "@/components/GrappleGame.astro";
 import { Icon } from "astro-icon/components";
-import { ABOUT_ME_SHORT, FULL_NAME } from "@/consts";
+import { FULL_NAME } from "@/consts";
 import { SKILLS } from "@/data/skills";
 import { EDUCATION } from "@/data/education";
+import { getProjects } from "@/lib/projects";
 
-const allProjects = await getCollection("projects");
-const featuredProjects = allProjects
-  .filter((p) => p.data.featured)
-  .sort((a, b) => a.data.order - b.data.order);
+export function getStaticPaths() {
+  return langStaticPaths();
+}
 
-const categoryLabels = {
-  engine: { label: "Game Engines", key: "home.categories.engine" },
-  programming: {
-    label: "Programming Languages",
-    key: "home.categories.programming",
-  },
-  tools: { label: "Tools & Workflow", key: "home.categories.tools" },
-};
+const lang = getLang(Astro.url);
+const t = useTranslations(lang);
+
+const featuredProjects = (await getProjects(lang)).filter(
+  (project) => project.data.featured,
+);
 const dropdownCategories = ["engine", "programming", "tools"] as const;
 ---
 
-<Layout title={`${FULL_NAME} — Portfolio`}>
+<Layout title={`${FULL_NAME} — ${t("meta.portfolio")}`}>
   <Hero />
 
   <!-- Tool Carousel -->
@@ -42,7 +45,12 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
   </Section>
 
   <!-- About Me Preview -->
-  <Section title="About Me" titleKey="home.sections.about" variant="primary">
+  <Section
+    title="About Me"
+    titleKey="home.sections.about"
+    variant="primary"
+    visual="lattice"
+  >
     <div
       class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center"
     >
@@ -56,28 +64,22 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
           >
           <img
             src="/images/mainPfp.webp"
-            alt="Main profile portrait"
-            data-i18n-attr="alt:images.mainPortrait"
             class="relative z-10 w-full h-full object-cover"
             loading="lazy"
             onerror="this.style.display='none'; this.previousElementSibling && this.previousElementSibling.classList.remove('opacity-0')"
+            alt={t("images.mainPortrait")}
           />
         </div>
       </div>
       <div class="md:col-span-2 space-y-4">
-        <p
-          class="text-[var(--text-secondary)] leading-relaxed"
-          data-i18n="home.about.short"
-        >
-          {ABOUT_ME_SHORT}
+        <p class="text-[var(--text-secondary)] leading-relaxed">
+          {t("home.about.short")}
         </p>
         <a
-          href="/about"
+          href={localizePath("/about", lang)}
           class="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-white transition-colors border-b border-[var(--border-color)] hover:border-white pb-0.5"
-          data-i18n="home.about.readMore"
+          >{t("home.about.readMore")}</a
         >
-          Read more about me →
-        </a>
       </div>
     </div>
   </Section>
@@ -99,6 +101,7 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
             engine={project.data.engine}
             image={project.data.image}
             video={project.data.video}
+            ambient={project.data.ambient}
           />
         ))
       }
@@ -106,13 +109,10 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
     <ProjectDetailModal projects={featuredProjects} />
     <div class="flex justify-center mt-8">
       <a
-        href="/projects"
+        href={localizePath("/projects", lang)}
         class="magnetic-link border border-[var(--border-color)] hover:border-white px-8 py-3 rounded-md transition-all hover:bg-white hover:text-black text-sm"
-        data-magnetic-link
-        data-i18n="home.projects.viewAll"
+        data-magnetic-link>{t("home.projects.viewAll")}</a
       >
-        View All Projects →
-      </a>
     </div>
   </Section>
 
@@ -121,13 +121,14 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
     title="About Me & My Work"
     titleKey="home.sections.aboutWork"
     variant="primary"
+    visual="lattice"
   >
     <div class="max-w-3xl mx-auto space-y-3">
       {
         dropdownCategories.map((cat, i) => {
           const items = SKILLS.filter((s) => s.category === cat);
           return (
-            <div class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors">
+            <div class="border border-[var(--border-color)] bg-[var(--bg-primary)] rounded-lg hover:border-[var(--border-hover)] transition-colors">
               <button
                 type="button"
                 class="accordion-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
@@ -137,12 +138,12 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
               >
                 <span class="text-[var(--text-secondary)]">
                   <span aria-hidden="true">❯ </span>
-                  <span data-i18n={categoryLabels[cat].key}>
-                    {categoryLabels[cat].label}
-                  </span>
+                  <span>{t(`home.categories.${cat}`)}</span>
                 </span>
-                <span class="accordion-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0"
-            aria-hidden="true">
+                <span
+                  class="accordion-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0"
+                  aria-hidden="true"
+                >
                   ▼
                 </span>
               </button>
@@ -155,6 +156,7 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
                           name={skill.icon}
                           class="w-8 h-8"
                           style={skill.color ? `color: ${skill.color}` : ""}
+                          aria-hidden="true"
                         />
                       </div>
                       <span class="text-xs text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] transition-colors text-center">
@@ -171,23 +173,22 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
 
       <!-- My Education -->
       <div
-        class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors"
+        class="border border-[var(--border-color)] bg-[var(--bg-primary)] rounded-lg hover:border-[var(--border-hover)] transition-colors"
       >
         <button
           type="button"
-                class="accordion-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
+          class="accordion-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
           data-accordion-toggle
           aria-controls="home-dd-edu"
           aria-expanded="false"
         >
           <span class="text-[var(--text-secondary)]">
             <span aria-hidden="true">❯ </span>
-            <span data-i18n="home.dropdown.education">My Education</span>
+            <span>{t("home.dropdown.education")}</span>
           </span>
           <span
             class="accordion-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0"
-            aria-hidden="true"
-            >▼</span
+            aria-hidden="true">▼</span
           >
         </button>
         <div id="home-dd-edu" class="home-dd-content hidden px-5 pb-5">
@@ -200,20 +201,13 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
                     class="w-5 h-5 text-[var(--text-muted)] mt-0.5 shrink-0"
                   />
                   <div>
-                    <p
-                      class="text-sm text-[var(--text-secondary)]"
-                      data-i18n={`education.${edu.id}.title`}
-                    >
-                      {edu.title}
+                    <p class="text-sm text-[var(--text-secondary)]">
+                      {t(`education.${edu.id}.title`)}
                     </p>
                     <p class="text-xs text-[var(--text-muted)]">
-                      <span data-i18n={`education.${edu.id}.institution`}>
-                        {edu.institution}
-                      </span>
+                      <span>{t(`education.${edu.id}.institution`)}</span>
                       <span aria-hidden="true"> · </span>
-                      <span data-i18n={`education.${edu.id}.period`}>
-                        {edu.period}
-                      </span>
+                      <span>{t(`education.${edu.id}.period`)}</span>
                     </p>
                   </div>
                 </div>
@@ -225,35 +219,29 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
 
       <!-- Teamwork -->
       <div
-        class="border border-[var(--border-color)] rounded-lg hover:border-[var(--border-hover)] transition-colors"
+        class="border border-[var(--border-color)] bg-[var(--bg-primary)] rounded-lg hover:border-[var(--border-hover)] transition-colors"
       >
         <button
           type="button"
-                class="accordion-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
+          class="accordion-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-[var(--bg-card)] transition-colors rounded-lg"
           data-accordion-toggle
           aria-controls="home-dd-team"
           aria-expanded="false"
         >
           <span class="text-[var(--text-secondary)]">
             <span aria-hidden="true">❯ </span>
-            <span data-i18n="home.dropdown.teamwork.title">Teamwork</span>
+            <span>{t("home.dropdown.teamwork.title")}</span>
           </span>
           <span
             class="accordion-chevron text-[var(--text-muted)] transition-transform duration-200 shrink-0"
-            aria-hidden="true"
-            >▼</span
+            aria-hidden="true">▼</span
           >
         </button>
         <div id="home-dd-team" class="home-dd-content hidden px-5 pb-5">
           <p
             class="text-sm text-[var(--text-muted)] leading-relaxed pt-2 pl-4 border-l border-[var(--border-color)]"
-            data-i18n="home.dropdown.teamwork.body"
           >
-            Calm and introverted, so I listen first and share honest feedback
-            when it helps the project. Used to university teams (3-8 people)
-            working with Agile methods (Scrum/Kanban) and tools like Jira,
-            GitLab, and GitHub. I enjoy bridging gameplay programming, game
-            design, and production to keep the vision coherent.
+            {t("home.dropdown.teamwork.body")}
           </p>
         </div>
       </div>
@@ -266,7 +254,12 @@ const dropdownCategories = ["engine", "programming", "tools"] as const;
   </Section>
 
   <!-- Contact Summary -->
-  <Section title="Contact" titleKey="home.sections.contact" variant="primary">
+  <Section
+    title="Contact"
+    titleKey="home.sections.contact"
+    variant="primary"
+    visual="lattice"
+  >
     <ContactSummary />
   </Section>
 </Layout>

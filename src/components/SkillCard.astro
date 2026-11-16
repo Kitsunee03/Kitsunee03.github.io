@@ -1,32 +1,55 @@
 ---
+import { getLang, useTranslations } from "@/i18n";
 import { Icon } from "astro-icon/components";
 
 type Props = {
+  id: string;
   name: string;
   icon: string;
   color?: string;
-  description?: string;
   descriptionKey?: string;
 };
 
-const { name, icon, color, description, descriptionKey = "" } = Astro.props;
+const { id, name, icon, color, descriptionKey } = Astro.props;
+const t = useTranslations(getLang(Astro.url));
+const tooltipId = `skill-tip-${id}`;
 ---
 
-<div class="relative flex flex-col items-center gap-2 group transition-transform duration-200 hover:scale-110 hover:z-30">
-  <div class="w-16 h-16 grid place-items-center rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)] group-hover:border-[var(--border-hover)] transition-all duration-200">
-    <Icon name={icon} class="w-9 h-9" style={color ? `color: ${color}` : ""} />
+<!--
+  Focusable so keyboard users get the same description as a mouse hover;
+  the tooltip is also linked as the element's description for screen readers.
+-->
+<div
+  class="skill-card relative flex flex-col items-center gap-2 group transition-transform duration-200 hover:scale-110 focus-visible:scale-110 hover:z-30 focus-visible:z-30 rounded-lg"
+  tabindex={descriptionKey ? 0 : undefined}
+  aria-describedby={descriptionKey ? tooltipId : undefined}
+>
+  <div
+    class="w-16 h-16 grid place-items-center rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)] group-hover:border-[var(--border-hover)] group-focus-visible:border-[var(--border-hover)] transition-all duration-200"
+  >
+    <Icon
+      name={icon}
+      class="w-9 h-9"
+      style={color ? `color: ${color}` : ""}
+      aria-hidden="true"
+    />
   </div>
-  <span class="text-xs text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] transition-colors text-center">
+  <span
+    class="text-xs text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] group-focus-visible:text-[var(--text-secondary)] transition-colors text-center"
+  >
     {name}
   </span>
-  {description && (
-    <div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg p-3 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-lg">
-      <p
-        class="text-xs text-[var(--text-muted)] text-center leading-relaxed"
-        data-i18n={descriptionKey || undefined}
+  {
+    descriptionKey && (
+      <div
+        id={tooltipId}
+        role="tooltip"
+        class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg p-3 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 pointer-events-none transition-opacity duration-200 z-50 shadow-lg"
       >
-        {description}
-      </p>
-    </div>
-  )}
+        <p class="text-xs text-[var(--text-muted)] text-center leading-relaxed">
+          {t(descriptionKey)}
+        </p>
+      </div>
+    )
+  }
 </div>
