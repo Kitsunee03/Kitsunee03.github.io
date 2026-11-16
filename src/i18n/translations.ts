@@ -23,8 +23,6 @@ export const translations: Record<Lang, Dictionary> = {
       skip: "Skip to content",
       language: {
         switch: "Switch to Spanish",
-        aria: "Change language",
-        title: "Change language",
       },
     },
     hero: {
@@ -281,7 +279,6 @@ export const translations: Record<Lang, Dictionary> = {
       build: "last build",
     },
     game: {
-      section: "Play",
       aria: "Grapple mini-game",
       title: "A small rope toy",
       body: "Built on the same idea as the grapple gun I made for Junkonaut. Hold on an anchor (+) to latch and swing, let go to fly, and collect the scrap (*).",
@@ -315,8 +312,6 @@ export const translations: Record<Lang, Dictionary> = {
       skip: "Saltar al contenido",
       language: {
         switch: "Cambiar a inglés",
-        aria: "Cambiar idioma",
-        title: "Cambiar idioma",
       },
     },
     hero: {
@@ -583,7 +578,6 @@ export const translations: Record<Lang, Dictionary> = {
       build: "última compilación",
     },
     game: {
-      section: "Jugar",
       aria: "Minijuego de gancho",
       title: "Un pequeño juguete de cuerda",
       body: "Parte de la misma idea que el gancho que hice para Junkonaut. Mantén pulsado sobre un anclaje (+) para engancharte y balancearte, suelta para volar y recoge la chatarra (*).",

@@ -111,7 +111,11 @@ export function initInteractiveCards() {
           if (event.pointerType === "mouse") play();
         });
         card.addEventListener("pointerleave", pause);
-        card.addEventListener("focusin", play);
+        // Keyboard focus only: focus handed back after closing a devlog
+        // must not reopen the card.
+        card.addEventListener("focusin", (event) => {
+          if ((event.target as Element).matches(":focus-visible")) play();
+        });
         card.addEventListener("focusout", (event) => {
           if (!card.contains(event.relatedTarget as Node | null)) pause();
         });

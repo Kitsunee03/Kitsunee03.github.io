@@ -498,14 +498,10 @@ code {
   background: var(--border-hover);
 }
 
-img,
-.no-selection {
+img {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   -webkit-user-drag: none;
 }
@@ -557,7 +553,7 @@ img,
 }
 
 .interactive-card:hover .card-cover,
-.interactive-card:focus-within .card-cover {
+.interactive-card:has(:focus-visible) .card-cover {
   transform: scale(1.05);
 }
 
@@ -714,7 +710,7 @@ figure:has(> div > video[data-failed]) {
 }
 
 .interactive-card:hover .project-description p,
-.interactive-card:focus-within .project-description p {
+.interactive-card:has(:focus-visible) .project-description p {
   -webkit-line-clamp: unset;
   max-height: 12rem;
 }

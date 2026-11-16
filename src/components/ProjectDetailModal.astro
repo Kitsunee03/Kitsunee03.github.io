@@ -3,7 +3,7 @@ import { getLang, useTranslations } from "@/i18n";
 import { Icon } from "astro-icon/components";
 import VideoLoop from "./VideoLoop.astro";
 import { render } from "astro:content";
-import type { LocalizedProject } from "@/lib/projects";
+import type { LocalizedProject, ProjectData } from "@/lib/projects";
 
 type Props = {
   projects: LocalizedProject[];
@@ -13,6 +13,7 @@ const { projects } = Astro.props;
 const lang = getLang(Astro.url);
 const t = useTranslations(lang);
 const itchLabel = t("projects.modal.visit");
+type ProjectLink = NonNullable<ProjectData["links"]>[number];
 const isVideo = (src: string) => /\.(mp4|webm)$/i.test(src);
 const getYoutubeThumbnail = (url: string) => {
   const match = url.match(
@@ -34,42 +35,22 @@ const getLinkIcon = (link: { kind?: string; url: string }) => {
     return "simple-icons:youtube";
   if (kind === "github" || link.url.includes("github.com"))
     return "simple-icons:github";
-  if (kind === "linktree" || link.url.includes("linktr.ee"))
-    return "mdi:link-variant";
   return "mdi:link-variant";
 };
 const renderedProjects = await Promise.all(
   projects.map(async (project) => {
     const { Content } = await render(project.source);
-    const links = project.data.links?.length
-      ? project.data.links.map((link) => ({
-          ...link,
-          thumbnail: link.thumbnail || getYoutubeThumbnail(link.url),
-        }))
-      : project.data.link
-        ? [
-            {
-              label: itchLabel,
-              url: project.data.link,
-              kind: "itch",
-              thumbnail: undefined,
-            },
-          ]
-        : [];
-    const allLinks =
-      project.data.link && project.data.links?.length
-        ? [
-            ...links,
-            {
-              label: itchLabel,
-              url: project.data.link,
-              kind: "itch",
-              thumbnail: undefined,
-            },
-          ]
-        : links;
+    const links: ProjectLink[] = [
+      ...(project.data.links ?? []).map((link) => ({
+        ...link,
+        thumbnail: link.thumbnail || getYoutubeThumbnail(link.url),
+      })),
+      ...(project.data.link
+        ? [{ label: itchLabel, url: project.data.link, kind: "itch" }]
+        : []),
+    ];
 
-    return { project, Content, links: allLinks };
+    return { project, Content, links };
   }),
 );
 ---
@@ -420,7 +401,11 @@ const renderedProjects = await Promise.all(
     }, 200);
   };
 
-  const openModal = (projectId: string, trigger: HTMLElement) => {
+  const openModal = (
+    projectId: string,
+    trigger: HTMLElement,
+    fromKeyboard: boolean,
+  ) => {
     refreshElements();
     if (!modal || !dialog) return;
     const project = Array.from(
@@ -429,7 +414,9 @@ const renderedProjects = await Promise.all(
     if (!project) return;
 
     window.clearTimeout(closeTimer);
-    lastTrigger = trigger;
+    // Focus goes back to the card only for keyboard users; after a mouse
+    // click it would keep the card expanded.
+    lastTrigger = fromKeyboard ? trigger : null;
     modal
       .querySelectorAll<HTMLElement>(".project-detail-view")
       .forEach((view) => view.classList.add("hidden"));
@@ -475,7 +462,8 @@ const renderedProjects = await Promise.all(
       if (trigger) {
         event.preventDefault();
         const projectId = trigger.dataset.projectId;
-        if (projectId) openModal(projectId, trigger);
+        // detail is 0 for clicks made with Enter or Space.
+        if (projectId) openModal(projectId, trigger, event.detail === 0);
         return;
       }
       if (target === modal || target.closest("#project-detail-close"))
@@ -489,9 +477,12 @@ const renderedProjects = await Promise.all(
         return;
       }
       if (event.key !== "Tab") return;
-      const focusable = dialog.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
-      );
+      // Hidden project views share the dialog, so skip what is not shown.
+      const focusable = Array.from(
+        dialog.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((element) => element.getClientRects().length > 0);
       if (!focusable.length) return;
       const first = focusable[0];
       const last = focusable[focusable.length - 1];

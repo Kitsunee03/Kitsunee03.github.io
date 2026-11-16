@@ -7,9 +7,6 @@
  * - devicePixelRatio capped, backing store resized with the element
  * - a single static frame when the visitor prefers reduced motion
  * - full cleanup of observers, listeners and the frame request
- *
- * `createLoop` is context-agnostic (used by WebGL visuals);
- * `createVisual` adds a ready-scaled 2D context on top of it.
  */
 
 export type LoopFrame = {
@@ -55,7 +52,7 @@ export const prefersReducedMotion = () =>
 export const isCoarsePointer = () =>
   window.matchMedia("(pointer: coarse)").matches;
 
-export function createLoop(setup: LoopSetup): Dispose {
+function createLoop(setup: LoopSetup): Dispose {
   const {
     canvas,
     fps = 30,

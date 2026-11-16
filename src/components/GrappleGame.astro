@@ -120,6 +120,7 @@ const t = useTranslations(lang);
         start.addEventListener("click", async () => {
           stopCurrent?.();
           const { mount } = await import("@/visuals/grapple-game");
+          if (dispose) return;
           overlay.hidden = true;
           root.setAttribute("data-playing", "");
           canvas.tabIndex = 0;
